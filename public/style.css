@@ -1653,3 +1653,254 @@ footer .logo-center .brand-logo{width:150px;}
     padding:20px;
   }
 }
+
+
+
+
+
+
+
+/* ============================================================
+   BALL FOR LIFE — MOBILE DESKTOP-STYLE OVERRIDES
+   Keep mobile visually close to desktop
+   ============================================================ */
+
+@media (max-width: 720px) {
+
+  /* Keep desktop-style page width */
+  .wrap {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  /* ---------- HEADER ---------- */
+
+  .nav-grid {
+    height: 68px;
+  }
+
+  .nav-right {
+    gap: 10px;
+  }
+
+  header .logo-center .brand-logo {
+    width: 100px;
+  }
+
+  .currency-select {
+    height: 27px;
+    max-width: 68px;
+    font-size: 9px;
+  }
+
+  /* ---------- HERO ---------- */
+
+  .hero {
+    height: 82vh;
+    min-height: 600px;
+  }
+
+  .hero-slide {
+    background-size: cover;
+    background-position: center center;
+  }
+
+  .hero-brand-lockup {
+    width: min(72vw, 420px);
+  }
+
+  .hero-drop {
+    left: 18px;
+    bottom: 32px;
+  }
+
+  .hero-drop span {
+    font-size: 10px;
+  }
+
+  .hero .btn-solid-light {
+    padding: 13px 22px;
+    font-size: 10px;
+  }
+
+  /* ---------- SECTIONS ---------- */
+
+  .section-pad {
+    padding: 60px 0;
+  }
+
+  .section-head {
+    margin-bottom: 28px;
+    gap: 12px;
+  }
+
+  .section-head h2 {
+    font-size: 30px;
+  }
+
+  .section-head p {
+    font-size: 12px;
+    max-width: 270px;
+  }
+
+  /* ---------- PRODUCTS ----------
+     IMPORTANT: preserve desktop grid feeling
+  */
+
+  .pgrid,
+  .hero + .section-pad .pgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 10px;
+  }
+
+  .pcard .img,
+  .hero + .section-pad .pcard .img,
+  .shop-layout .pcard .img {
+    aspect-ratio: 7 / 8;
+    margin-bottom: 10px;
+  }
+
+  .pcard .p-name {
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  .pcard .p-tag {
+    font-size: 8.5px;
+  }
+
+  .pcard .p-price {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .pcard .meta-row {
+    gap: 5px;
+  }
+
+  /* Quick Add cannot rely on hover on phones */
+  .pcard .quick {
+    font-size: 9px;
+    padding: 9px 0;
+  }
+
+  /* ---------- CATEGORY SECTION ---------- */
+
+  .cat-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .cat-col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .cat-card {
+    min-height: 340px !important;
+  }
+
+  .cat-col .cat-card {
+    min-height: 210px !important;
+  }
+
+  .cat-card .cat-inner {
+    padding: 18px;
+  }
+
+  .cat-card h3 {
+    font-size: 20px;
+  }
+
+  .cat-card .arrow {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* ---------- NEWSLETTER ---------- */
+
+  .newsletter-sec {
+    padding: 80px 18px;
+  }
+
+  .newsletter-sec h2 {
+    font-size: 38px;
+  }
+
+  .newsletter-sec p {
+    font-size: 13px;
+    max-width: 350px;
+  }
+
+  /* ---------- FOOTER ---------- */
+
+  footer {
+    padding-top: 54px;
+  }
+
+  .footer-top {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px 20px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .footer-brand p {
+    max-width: 300px;
+  }
+
+  .footer-bottom {
+    align-items: flex-start;
+  }
+
+  .pay-row {
+    justify-content: flex-start;
+  }
+
+  /* ---------- PRODUCT PAGE ---------- */
+
+  .product-hero {
+    padding: 24px 14px 50px;
+  }
+
+  .product-media-panel {
+    min-height: 470px;
+  }
+
+  .product-main-image {
+    width: min(92vw, 520px);
+    max-height: 470px;
+  }
+
+  .product-info-panel,
+  .product-buy-panel {
+    max-width: none;
+    width: 100%;
+  }
+}
+
+
+@media (max-width: 420px) {
+
+  /* STILL keep two products across */
+  .pgrid,
+  .hero + .section-pad .pgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 8px;
+  }
+
+  .wrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .pcard .p-name {
+    font-size: 10.5px;
+  }
+
+  .pcard .p-price {
+    font-size: 9.5px;
+  }
+}
