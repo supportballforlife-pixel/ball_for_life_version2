@@ -146,6 +146,9 @@ Deno.serve(async (req) => {
           from: fromEmail,
           to: [SUPPORT_TO_EMAIL],
           reply_to: email,
+          headers: {
+            'Reply-To': email,
+          },
           subject: `Ball For Life Support — ${reason}${orderNumber ? ` — Order ${orderNumber}` : ''}`,
           html: `
             <div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#111">
