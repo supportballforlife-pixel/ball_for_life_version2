@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ball For Life — Inspired by the Fear of Being Average</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<style id="header-thinner-update">
+/* Header height refinement */
+.nav-grid{height:74px !important;}
+.logo-center img{max-height:42px; width:auto; object-fit:contain;}
+@media (max-width:720px){
+  .nav-grid{height:70px !important;}
+  .logo-center img{max-height:38px;}
+}
+</style>
+
+
+<style id="hero-slideshow-style">
+/* Homepage hero slideshow */
+.hero, .hero-section, .home-hero {
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+}
+</style>
+
+
+<style id="remove-legacy-23-logo">
+.hero-logo, .logo-23, .mark-23, .legacy-logo, [class*="23-logo"], [id*="23-logo"] {
+  display: none !important;
+}
+</style>
+
+</head>
+<body class="home-page">
+
+<div class="announce" aria-live="polite"><span class="announce-message" data-free-shipping="50">Free shipping on all orders over £50.00 - new drop live now</span></div>
+
+<header>
+  <div class="wrap nav-grid">
+    <div class="nav-left">
+      <div class="burger"><span></span><span></span><span></span></div>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <div class="nav-item">
+          <span>Shop <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
+          <div class="nav-dropdown">
+            <div class="nav-dropdown-inner">
+              <a href="shop.html">New Arrivals</a>
+              <a href="shop.html?cat=hoodies">Hoodies</a>
+              <a href="shop.html?cat=tracksuits">Tracksuits</a>
+              <a href="shop.html?cat=tees">Graphic Tees</a>
+            </div>
+          </div>
+        </div>
+        <a href="#about">About Us</a>
+      </nav>
+    </div>
+
+    <a href="index.html" class="logo-center">
+      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+    </a>
+
+    <div class="nav-right">
+      <a href="#" class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </a>
+      <a href="login.html" class="icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      </a>
+      <select class="currency-select" data-currency-select aria-label="Currency">
+        <option value="GBP">GBP</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+      </select>
+      <a href="#" class="cart-link" data-cart-open aria-label="Cart">
+        My Cart <span class="cart-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-drawer">
+  <a href="index.html" class="mobile-brand" aria-label="Ball For Life home"><img src="brand-logo.png" class="brand-logo" alt="Ball For Life"></a>
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="shop.html">New Arrivals</a>
+  <a href="shop.html?cat=hoodies">Hoodies</a>
+  <a href="shop.html?cat=tracksuits">Tracksuits</a>
+  <a href="#about">About Us</a>
+</div>
+<div class="drawer-overlay"></div>
+
+<!-- ================= HERO ================= -->
+<section class="hero campaign-panel tone-a" id="hero">
+  <div class="grain"></div>
+  <div class="wrap">
+    <div class="hero-brand-lockup">
+      <img src="brand-logo.png" alt="Ball For Life">
+    </div>
+
+    <div class="hero-drop">
+      <span>New drop out now</span>
+      <a href="shop.html" class="btn btn-solid-light">Shop All</a>
+    </div>
+  </div>
+  <div class="hero-dots">
+    
+    
+    
+  </div>
+</section>
+
+<!-- ================= NEW ARRIVALS ================= -->
+<section class="section-pad reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2 class="display">New Arrivals</h2>
+      </div>
+      <p>The latest pieces in rotation — engineered for the court, worn on the block.</p>
+    </div>
+
+    <div class="pgrid reveal-stagger">
+
+      <a href="product.html?id=anthony-edwards-snow-washed-oversized-cotton-t-shirt" class="pcard">
+        <div class="img">
+          <img src="graphic tee/Anthony-Edwards-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Anthony Edwards Snow Washed Oversized Cotton T-Shirt">
+          <div class="quick" data-quick-add data-name="Anthony Edwards Snow Washed Oversized Cotton T-Shirt" data-price="27.99" data-mark="AE">Quick Add</div>
+        </div>
+        <div class="meta-row">
+          <div><div class="p-name">Anthony Edwards Tee</div><div class="p-tag">Graphic Tees</div></div>
+          <div class="p-price" data-money-gbp="27.99">£27.99</div>
+        </div>
+      </a>
+
+      <a href="product.html?id=sga-snow-washed-oversized-cotton-t-shirt" class="pcard">
+        <div class="img">
+          <img src="graphic tee/SGA-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="SGA Snow Washed Oversized Cotton T-Shirt">
+          <div class="quick" data-quick-add data-name="SGA Snow Washed Oversized Cotton T-Shirt" data-price="27.99" data-mark="SGA">Quick Add</div>
+        </div>
+        <div class="meta-row">
+          <div><div class="p-name">SGA Tee</div><div class="p-tag">Graphic Tees</div></div>
+          <div class="p-price" data-money-gbp="27.99">£27.99</div>
+        </div>
+      </a>
+
+      <a href="product.html?id=no-wasted-potential-snow-washed-oversized-cotton-t-shirt" class="pcard">
+        <div class="img">
+          <img src="graphic tee/No-Wasted-Potential-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="No Wasted Potential Snow Washed Oversized Cotton T-Shirt">
+          <div class="quick" data-quick-add data-name="No Wasted Potential Snow Washed Oversized Cotton T-Shirt" data-price="27.99" data-mark="NWP">Quick Add</div>
+        </div>
+        <div class="meta-row">
+          <div><div class="p-name">No Wasted Potential Tee</div><div class="p-tag">Graphic Tees</div></div>
+          <div class="p-price" data-money-gbp="27.99">£27.99</div>
+        </div>
+      </a>
+
+      <a href="product.html?id=lamelo-ball-snow-washed-oversized-cotton-t-shirt" class="pcard">
+        <div class="img">
+          <img src="graphic tee/LaMelo-Ball-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="LaMelo Ball Snow Washed Oversized Cotton T-Shirt">
+          <div class="quick" data-quick-add data-name="LaMelo Ball Snow Washed Oversized Cotton T-Shirt" data-price="27.99" data-mark="LM">Quick Add</div>
+        </div>
+        <div class="meta-row">
+          <div><div class="p-name">LaMelo Ball Tee</div><div class="p-tag">Graphic Tees</div></div>
+          <div class="p-price" data-money-gbp="27.99">£27.99</div>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="center-text mt-lg">
+      <a href="shop.html" class="btn btn-outline-dark btn-arrow">View All New Arrivals <span class="a">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SHOP BY CATEGORY ================= -->
+<section class="section-pad reveal" id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">The Lineup</div>
+        <h2 class="display">Shop by Category</h2>
+      </div>
+      <p>Graphic tees are live now. More Ball For Life pieces are loading up next.</p>
+    </div>
+
+    <div class="cat-grid">
+      <a href="shop.html?cat=tees" class="cat-card" style="min-height:520px;">
+        <div class="img-zoom" style="position:absolute; inset:0; background:url('hero-2.jpg') center center / cover no-repeat;">
+        </div>
+        <div class="cat-inner">
+          <h3 class="display">Graphic Tees</h3>
+          <span class="arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+
+      <div class="cat-col">
+        <a href="#" class="cat-card coming-soon-card" style="min-height:248px;" aria-label="Tracksuits coming soon">
+          <div class="img-zoom coming-soon-bg" style="position:absolute; inset:0;">
+          </div>
+          <img class="coming-soon-watermark" src="brand-logo.png" alt="">
+          <div class="cat-inner">
+            <div>
+              <span class="coming-soon-label">Coming Soon</span>
+              <h3 class="display">Tracksuits</h3>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="cat-card coming-soon-card" style="min-height:248px;" aria-label="Hoodies coming soon">
+          <div class="img-zoom coming-soon-bg" style="position:absolute; inset:0;">
+          </div>
+          <img class="coming-soon-watermark" src="brand-logo.png" alt="">
+          <div class="cat-inner">
+            <div>
+              <span class="coming-soon-label">Coming Soon</span>
+              <h3 class="display">Hoodies</h3>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= NEWSLETTER ================= -->
+<section class="newsletter-sec reveal">
+  <div class="wrap">
+    <div class="eyebrow" style="color:rgba(255,255,255,0.55); font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:16px;">Stay in Rotation</div>
+    <h2 class="display">Join the Movement</h2>
+    <p>Be the first to know about new drops, exclusive releases, and everything Ball For Life.</p>
+    <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Joined ✓';">
+      <input type="email" placeholder="your@email.com" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo-center">
+      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+    </div>
+        <p>Inspired by the fear of being average.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/ball_for_life_store/" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.tiktok.com/@ball_for_life_store" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.6 3 2.3 4.6 5 5"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M15 8h-2a2 2 0 0 0-2 2v10M9 13h6"/><path d="M15 8V5a2 2 0 0 1 2-2h1"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M11 10l4 2-4 2v-4Z" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Contact</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">FAQ</a>
+        <a href="#">Shipping & Returns</a>
+        <a href="#">Size Guide</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Conditions</a>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html?cat=hoodies">Hoodies</a>
+        <a href="shop.html?cat=tracksuits">Tracksuits</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Ball For Life. All rights reserved.</span>
+      <div class="pay-row" aria-label="Accepted payment methods">
+        <img class="pay-logo" src="visa.svg" alt="Visa">
+        <img class="pay-logo" src="mastercard-alt.svg" alt="Mastercard">
+        <img class="pay-logo" src="maestro.svg" alt="Maestro">
+        <img class="pay-logo" src="apple-pay.svg" alt="Apple Pay">
+        <img class="pay-logo" src="klarna.svg" alt="Klarna">
+        <img class="pay-logo" src="discover.svg" alt="Discover">
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= CART DRAWER ================= -->
+<div class="cart-overlay drawer-overlay"></div>
+<div class="cart-drawer">
+  <div class="cart-head">
+    <h3>Your Bag</h3>
+    <svg class="cart-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l16 16M20 4L4 20"/></svg>
+  </div>
+  <div class="cart-items"></div>
+  <div class="cart-foot">
+    <div class="cart-subtotal"><span>Subtotal</span><span class="val">£0.00</span></div>
+    <a href="#" class="btn btn-solid-dark">Checkout</a>
+  </div>
+</div>
+
+<!-- ================= FIRST VISIT POPUP ================= -->
+<div class="signup-modal" data-signup-modal aria-hidden="true">
+  <div class="signup-modal-backdrop" data-signup-close></div>
+  <section class="signup-modal-panel" role="dialog" aria-modal="true" aria-labelledby="signup-modal-title">
+    <div class="signup-modal-image">
+      <img src="IMG_5580.jpg" alt="Ball For Life latest drop">
+    </div>
+    <div class="signup-modal-content">
+      <button class="signup-modal-close" type="button" data-signup-close aria-label="Close signup popup">
+        <span></span><span></span>
+      </button>
+      <img class="signup-modal-logo" src="brand-logo.png" alt="Ball For Life">
+      <h2 id="signup-modal-title">Subscribe for the latest Ball For Life drops</h2>
+      <form class="signup-modal-form" data-signup-form>
+        <input type="email" placeholder="Join our mailing list" aria-label="Email address" required>
+        <button type="submit">Sign up</button>
+      </form>
+      <p>*By signing up you're joining the Ball For Life mailing list and can unsubscribe at any time.</p>
+    </div>
+  </section>
+</div>
+
+<!-- Homepage hero automatic slideshow -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const hero = document.querySelector(".hero");
+  if (!hero) return;
+
+  const heroImages = [
+    "hero-basketball-court.jpg",
+    "hero-2.jpg",
+    "hero-4.jpg"
+  ];
+
+  let currentHero = 0;
+
+  function showHero(index) {
+    hero.style.backgroundImage = `url('${heroImages[index]}')`;
+  }
+
+  showHero(currentHero);
+
+  setInterval(() => {
+    currentHero = (currentHero + 1) % heroImages.length;
+    showHero(currentHero);
+  }, 3000);
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="supabase-core.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

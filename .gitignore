@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+desktop.ini
+
+node_modules/
+.env
+.env.*
+!.env.example
+
+supabase/.branches/
+supabase/.temp/
+supabase/ball-for-life-v2/

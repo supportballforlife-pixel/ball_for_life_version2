@@ -1,0 +1,1655 @@
+/* ============================================================
+   BALL FOR LIFE — shared stylesheet
+   ============================================================ */
+
+:root{
+  --black:#0A0A0A;
+  --near-black:#141412;
+  --white:#FFFFFF;
+  --paper:#F4F3EE;
+  --line-dark:#2A2A26;
+  --line-light:#DEDCD2;
+  --grey:#8C8C86;
+  --grey-dark:#55554F;
+  --accent:#1F1F1B;
+  --radius:0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--white);
+  color:var(--black);
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block; max-width:100%;}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer; border:none; background:none;}
+ul{list-style:none;}
+input{font-family:inherit;}
+
+.display{font-family:'Archivo Black','Inter',sans-serif; text-transform:uppercase; letter-spacing:-0.01em;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+
+::selection{background:var(--accent); color:var(--white);}
+
+.wrap{max-width:1280px; margin:0 auto; padding:0 40px;}
+@media (max-width:720px){ .wrap{padding:0 20px;} }
+
+/* -------------------- BADGE / EMBLEM -------------------- */
+.emblem{width:34px; height:34px;}
+.emblem circle, .emblem path, .emblem line{stroke:currentColor; fill:none; stroke-width:1.4;}
+
+/* -------------------- ANNOUNCEMENT BAR -------------------- */
+.announce{
+  background:var(--black); color:var(--white);
+  text-align:center; font-family:'Inter',sans-serif; font-weight:700;
+  font-size:13px; letter-spacing:0.01em;
+  padding:11px 0;
+}
+
+/* -------------------- HEADER -------------------- */
+header{
+  position:sticky; top:0; z-index:200;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line-light);
+}
+body.home-page header{
+  position:absolute;
+  top:38px;
+  left:0;
+  right:0;
+  color:var(--white);
+  background:transparent;
+  backdrop-filter:none;
+  border-bottom:0;
+}
+body.home-page .nav-dropdown-inner{color:var(--black);}
+body.home-page header .brand-logo{filter:none;}
+body.home-page header .cart-count{background:var(--white); color:var(--black);}
+body.home-page header .icon-btn svg,
+body.home-page header .nav-caret{stroke:currentColor;}
+body.home-page header .burger span{background:var(--white);}
+body.home-page header .currency-select{
+  border-color:rgba(255,255,255,0.45);
+  background:rgba(0,0,0,0.12);
+  color:var(--white);
+}
+.nav-grid{
+  display:grid; grid-template-columns:1fr auto 1fr;
+  align-items:center; height:74px;
+}
+.nav-left{display:flex; align-items:center; gap:28px;}
+.nav-right{display:flex; align-items:center; justify-content:flex-end; gap:22px;}
+.nav-links{display:flex; gap:30px; font-size:13px; letter-spacing:0.02em; text-transform:uppercase; font-weight:700;}
+.nav-item{position:relative;}
+.nav-links a, .nav-item > span{position:relative; padding-bottom:3px; opacity:0.9; transition:opacity .2s ease; display:inline-flex; align-items:center; gap:5px; cursor:pointer;}
+.nav-links a:hover, .nav-item:hover > span{opacity:1;}
+.nav-caret{width:9px; height:9px; margin-top:1px; transition:transform .2s ease;}
+.nav-item:hover .nav-caret{transform:rotate(180deg);}
+.nav-dropdown{
+  position:absolute; top:100%; left:50%; transform:translateX(-50%); padding-top:18px;
+  opacity:0; pointer-events:none; transition:opacity .2s ease;
+}
+.nav-item:hover .nav-dropdown{opacity:1; pointer-events:auto;}
+.nav-dropdown-inner{
+  background:var(--white); border:1px solid var(--line-light); min-width:190px; padding:14px 0;
+}
+.nav-dropdown-inner a{
+  display:block; padding:9px 22px; font-size:12.5px; letter-spacing:0.02em; font-weight:500; opacity:0.85;
+}
+.nav-dropdown-inner a:hover{opacity:1; background:var(--paper);}
+.logo-center{
+  font-family:'Archivo Black',sans-serif; font-size:19px; letter-spacing:0.01em; text-transform:uppercase;
+  display:flex; align-items:center; gap:9px; white-space:nowrap;
+}
+.logo-center .emblem{width:34px; height:34px; color:var(--black);}
+.icon-btn{width:20px; height:20px; opacity:0.85; transition:opacity .2s ease; position:relative;}
+.icon-btn:hover{opacity:1;}
+.currency-select{
+  height:30px;
+  border:1px solid var(--line-light);
+  background:var(--white);
+  color:var(--black);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  font-weight:500;
+  padding:0 24px 0 9px;
+  text-transform:uppercase;
+  outline:none;
+}
+.currency-select:focus{border-color:var(--black);}
+.cart-link{
+  display:flex; align-items:center; gap:9px; font-size:13px; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.02em; opacity:0.9; transition:opacity .2s ease;
+}
+.cart-link:hover{opacity:1;}
+.cart-count{
+  background:var(--black); color:var(--white);
+  font-family:'Inter',sans-serif; font-weight:700; font-size:11px; width:19px; height:19px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+}
+.burger{display:none; width:22px; height:16px; position:relative; cursor:pointer;}
+.burger span{position:absolute; left:0; width:100%; height:1.4px; background:var(--black); transition:all .3s ease;}
+.burger span:nth-child(1){top:0;}
+.burger span:nth-child(2){top:50%; transform:translateY(-50%);}
+.burger span:nth-child(3){bottom:0;}
+@media (max-width:860px){
+  .nav-links, .search-toggle-text{display:none;}
+  .burger{display:block;}
+  .nav-left{gap:0;}
+  .nav-right{gap:12px;}
+  .currency-select{height:28px; max-width:74px; padding-left:7px; font-size:10px;}
+}
+
+/* mobile drawer */
+.mobile-drawer{
+  position:fixed; inset:0 0 0 auto; width:min(340px,86vw); height:100vh;
+  background:var(--white); z-index:300; transform:translateX(100%);
+  transition:transform .35s ease; padding:100px 30px 30px; border-left:1px solid var(--line-light);
+}
+.mobile-drawer.open{transform:translateX(0);}
+.mobile-drawer a{display:block; font-family:'Archivo Black',sans-serif; font-size:22px; text-transform:uppercase; padding:14px 0; border-bottom:1px solid var(--line-light);}
+.drawer-overlay{position:fixed; inset:0; background:rgba(10,10,10,0.4); z-index:290; opacity:0; pointer-events:none; transition:opacity .3s ease;}
+.drawer-overlay.open{opacity:1; pointer-events:auto;}
+
+/* -------------------- CAMPAIGN PANEL (abstract "photography") -------------------- */
+.campaign-panel{
+  position:relative; overflow:hidden; background:var(--near-black);
+}
+.campaign-panel.tone-a{
+  background:
+    radial-gradient(ellipse 120% 90% at 20% -10%, #2b2b26 0%, transparent 60%),
+    radial-gradient(ellipse 90% 70% at 100% 110%, #1c1c18 0%, transparent 55%),
+    linear-gradient(160deg,#0A0A0A 0%, #17170f 55%, #0A0A0A 100%);
+}
+.campaign-panel.tone-b{
+  background:
+    radial-gradient(ellipse 100% 80% at 80% 0%, #201f18 0%, transparent 55%),
+    linear-gradient(200deg,#111 0%, #0A0A0A 100%);
+}
+.campaign-panel.tone-paper{
+  background:
+    radial-gradient(ellipse 90% 70% at 10% 10%, rgba(0,0,0,0.05), transparent 60%),
+    var(--paper);
+}
+.campaign-panel .court-lines{position:absolute; inset:0; opacity:0.35; pointer-events:none;}
+.campaign-panel .grain{
+  position:absolute; inset:0; pointer-events:none; opacity:0.5; mix-blend-mode:overlay;
+  background-image:repeating-radial-gradient(circle at 30% 40%, rgba(255,255,255,0.05) 0 1px, transparent 1px 5px);
+}
+.campaign-panel .num-mark{
+  position:absolute; font-family:'Archivo Black',sans-serif; color:rgba(255,255,255,0.06);
+  line-height:1; user-select:none; pointer-events:none;
+}
+
+/* -------------------- HERO -------------------- */
+.hero{height:calc(100vh - 38px); min-height:620px; display:flex; align-items:stretch; color:var(--white);}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 65% 55% at 50% 52%, rgba(255,255,255,0.08), transparent 58%),
+    linear-gradient(180deg, rgba(0,0,0,0.36) 0%, rgba(0,0,0,0.14) 42%, rgba(0,0,0,0.64) 100%);
+}
+.hero .wrap{width:100%; min-height:100%; padding-bottom:52px; position:relative; z-index:2; display:flex; align-items:center; justify-content:center;}
+.hero-tag{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+  color:rgba(255,255,255,0.65); margin-bottom:22px; display:flex; align-items:center; gap:10px;
+}
+.hero-tag .dot{width:5px; height:5px; background:var(--accent); border-radius:50%;}
+.hero h1{font-size:clamp(48px,9vw,132px); line-height:0.9;}
+.hero-sub{
+  margin-top:26px; display:flex; justify-content:space-between; align-items:flex-end; gap:30px; flex-wrap:wrap;
+}
+.hero-sub p{max-width:360px; font-size:14.5px; line-height:1.6; color:rgba(255,255,255,0.72);}
+.hero-brand-lockup{
+  width:min(74vw, 760px);
+  opacity:0.72;
+  mix-blend-mode:screen;
+  filter:drop-shadow(0 14px 28px rgba(0,0,0,0.24));
+}
+.hero-brand-lockup img{
+  width:100%;
+  height:auto;
+  filter:none;
+}
+.hero-drop{
+  position:absolute;
+  left:clamp(22px, 4vw, 54px);
+  bottom:clamp(34px, 6vh, 72px);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px;
+}
+.hero-drop span{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.03em;
+  text-transform:uppercase;
+  text-shadow:0 2px 16px rgba(0,0,0,0.55);
+}
+
+.hero-arrow{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:3;
+  width:48px; height:48px; border-radius:50%; border:1px solid rgba(255,255,255,0.5);
+  display:flex; align-items:center; justify-content:center; color:var(--white);
+  background:rgba(255,255,255,0.06); transition:all .2s ease;
+}
+.hero-arrow:hover{background:var(--white); color:var(--black); border-color:var(--white);}
+.hero-arrow svg{width:18px; height:18px;}
+.hero-arrow.prev{left:28px;}
+.hero-arrow.next{right:28px;}
+@media (max-width:720px){ .hero-arrow{width:38px; height:38px;} .hero-arrow.prev{left:14px;} .hero-arrow.next{right:14px;} }
+
+.hero-dots{position:absolute; bottom:26px; left:50%; transform:translateX(-50%); z-index:3; display:flex; gap:9px;}
+.hero-dot{width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.4); cursor:pointer; transition:background .2s ease;}
+.hero-dot.active{background:var(--white);}
+
+/* -------------------- BUTTONS -------------------- */
+.btn{
+  display:inline-flex; align-items:center; gap:9px; padding:16px 30px;
+  font-size:12.5px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600;
+  transition:all .25s ease; white-space:nowrap; border:1px solid transparent;
+}
+.btn-solid-light{background:var(--white); color:var(--black);}
+.btn-solid-light:hover{background:var(--accent); color:var(--white);}
+.btn-solid-dark{background:var(--black); color:var(--white);}
+.btn-solid-dark:hover{background:var(--accent);}
+.btn-outline-light{border-color:rgba(255,255,255,0.55); color:var(--white);}
+.btn-outline-light:hover{border-color:var(--white); background:rgba(255,255,255,0.08);}
+.btn-outline-dark{border-color:var(--black); color:var(--black);}
+.btn-outline-dark:hover{border-color:var(--accent); color:var(--accent);}
+.btn-sm{padding:11px 20px; font-size:11.5px;}
+.btn-arrow{gap:12px;}
+.btn-arrow .a{transition:transform .25s ease;}
+.btn-arrow:hover .a{transform:translateX(4px);}
+
+/* -------------------- SECTION HEADS -------------------- */
+.section-pad{padding:110px 0;}
+@media (max-width:720px){ .section-pad{padding:76px 0;} }
+.section-head{
+  display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:56px;
+}
+.section-head .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--grey); margin-bottom:14px;}
+.section-head h2{font-size:clamp(32px,4.6vw,54px);}
+.section-head p{color:var(--grey-dark); font-size:14px; max-width:300px; line-height:1.55;}
+
+.divider{height:1px; background:var(--line-light);}
+.divider-dashed{
+  height:1px; width:100%;
+  background-image:repeating-linear-gradient(to right, var(--grey) 0 9px, transparent 9px 20px);
+  opacity:0.4;
+}
+
+/* -------------------- PRODUCT GRID -------------------- */
+.pgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:34px 26px;}
+@media (max-width:980px){ .pgrid{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:520px){ .pgrid{grid-template-columns:1fr;} }
+
+.pcard{display:block; position:relative;}
+.pcard .img{
+  aspect-ratio:4/5; position:relative; overflow:hidden; background:var(--paper); margin-bottom:16px;
+}
+.pcard .img .num-mark{font-size:150px; top:50%; left:50%; transform:translate(-50%,-50%);}
+.pcard .img img, .pcard .img .swatch-fill{width:100%; height:100%; object-fit:cover;}
+.pcard .quick{
+  position:absolute; left:0; right:0; bottom:0; background:var(--black); color:var(--white);
+  text-align:center; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; padding:12px 0;
+  transform:translateY(100%); transition:transform .3s ease;
+}
+.pcard:hover .quick{transform:translateY(0);}
+.pcard:hover .img .num-mark{transform:translate(-50%,-50%) scale(1.06); }
+.pcard .meta-row{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+.pcard .p-name{font-size:14.5px; font-weight:600; margin-bottom:4px;}
+.pcard .p-tag{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--grey); text-transform:uppercase;}
+.pcard .p-price{font-family:'IBM Plex Mono',monospace; font-size:13.5px;}
+
+/* -------------------- CAMPAIGN (mid-page) -------------------- */
+.campaign{color:var(--white); padding:150px 0; position:relative;}
+.campaign h2{font-size:clamp(34px,6vw,72px); line-height:1.02; max-width:900px;}
+.campaign p{margin-top:26px; max-width:460px; font-size:15px; line-height:1.7; color:rgba(255,255,255,0.72);}
+.campaign .btn{margin-top:36px;}
+
+/* -------------------- CATEGORY GRID -------------------- */
+.cat-grid{display:grid; grid-template-columns:1.15fr 0.85fr; gap:24px;}
+.cat-col{display:grid; gap:24px;}
+@media (max-width:860px){ .cat-grid{grid-template-columns:1fr;} }
+.cat-card{
+  position:relative; overflow:hidden; min-height:340px; display:flex; align-items:flex-end; color:var(--white);
+}
+.cat-card .cat-inner{position:relative; z-index:2; padding:28px; width:100%; display:flex; justify-content:space-between; align-items:flex-end;}
+.cat-card h3{font-size:clamp(22px,3vw,32px);}
+.cat-card .arrow{
+  width:42px; height:42px; border:1px solid rgba(255,255,255,0.5); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .25s ease;
+}
+.cat-card:hover .arrow{background:var(--white); border-color:var(--white);}
+.cat-card:hover .arrow svg{stroke:var(--black);}
+.cat-card .img-zoom{position:absolute; inset:0; transition:transform .6s ease;}
+.cat-card:hover .img-zoom{transform:scale(1.06);}
+.cat-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.58) 100%);
+  pointer-events:none;
+}
+.cat-card .cat-inner{z-index:2;}
+.coming-soon-card{
+  cursor:default;
+  pointer-events:none;
+}
+.coming-soon-bg{
+  background:
+    radial-gradient(ellipse 58% 50% at 72% 34%, rgba(255,255,255,0.14), transparent 62%),
+    linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.72) 100%),
+    url('hero-basketball-court.jpg') center center / cover no-repeat;
+  filter:saturate(0.86) contrast(1.05);
+}
+.coming-soon-watermark{
+  position:absolute;
+  z-index:1;
+  width:min(68%, 360px);
+  left:50%;
+  top:48%;
+  transform:translate(-50%, -50%);
+  opacity:0.28;
+  mix-blend-mode:screen;
+  filter:drop-shadow(0 12px 22px rgba(0,0,0,0.22));
+  pointer-events:none;
+}
+.coming-soon-card h3{
+  opacity:0.78;
+}
+.coming-soon-label{
+  display:block;
+  margin-bottom:9px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.9);
+}
+
+/* -------------------- NEWSLETTER -------------------- */
+.newsletter-sec{background:var(--black); color:var(--white); padding:120px 0; text-align:center;}
+.newsletter-sec h2{font-size:clamp(34px,6vw,68px);}
+.newsletter-sec p{margin:20px auto 40px; max-width:440px; color:rgba(255,255,255,0.68); font-size:14.5px; line-height:1.6;}
+.newsletter-form{display:flex; max-width:420px; margin:0 auto; border-bottom:1px solid rgba(255,255,255,0.4);}
+.newsletter-form input{
+  flex:1; background:transparent; border:none; color:var(--white); padding:14px 0; font-size:14px; outline:none;
+}
+.newsletter-form input::placeholder{color:rgba(255,255,255,0.45);}
+.newsletter-form button{color:var(--white); font-size:12.5px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600; padding:14px 4px;}
+.newsletter-form button:hover{color:var(--accent);}
+
+/* -------------------- FOOTER -------------------- */
+footer{background:var(--white); padding:76px 0 0;}
+.footer-top{display:grid; grid-template-columns:1.5fr repeat(4,1fr); gap:40px; padding-bottom:56px;}
+@media (max-width:900px){ .footer-top{grid-template-columns:repeat(2,1fr);} }
+.footer-brand .logo-center{margin-bottom:16px;}
+.footer-brand p{font-size:13px; color:var(--grey-dark); line-height:1.6; max-width:260px;}
+.footer-col h4{font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--grey); margin-bottom:18px;}
+.footer-col a{display:block; font-size:13.5px; margin-bottom:11px; color:var(--near-black); opacity:0.85;}
+.footer-col a:hover{color:var(--accent); opacity:1;}
+.footer-social{display:flex; gap:14px; margin-top:18px;}
+.footer-social a{width:34px; height:34px; border:1px solid var(--line-light); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all .2s ease;}
+.footer-social a:hover{background:var(--black); border-color:var(--black);}
+.footer-social a:hover svg{stroke:var(--white);}
+.footer-social svg{width:15px; height:15px; stroke:var(--black); fill:none; stroke-width:1.5;}
+
+.footer-bottom{
+  border-top:1px solid var(--line-light); padding:26px 0; display:flex; justify-content:space-between;
+  align-items:center; gap:20px; flex-wrap:wrap; font-size:12px; color:var(--grey);
+}
+.pay-row{display:flex; gap:8px; flex-wrap:wrap;}
+.pay-chip{
+  border:1px solid var(--line-light); padding:6px 10px; font-family:'IBM Plex Mono',monospace; font-size:10px;
+  letter-spacing:0.04em; color:var(--grey-dark); text-transform:uppercase;
+}
+
+/* -------------------- CART DRAWER -------------------- */
+.cart-drawer{
+  position:fixed; inset:0 0 0 auto; width:min(420px,92vw); height:100vh; background:var(--white); z-index:400;
+  transform:translateX(100%); transition:transform .4s ease; display:flex; flex-direction:column;
+  border-left:1px solid var(--line-light);
+}
+.cart-drawer.open{transform:translateX(0);}
+.cart-head{display:flex; justify-content:space-between; align-items:center; padding:26px 28px; border-bottom:1px solid var(--line-light);}
+.cart-head h3{font-family:'Archivo Black',sans-serif; font-size:16px; text-transform:uppercase;}
+.cart-close{width:20px; height:20px; cursor:pointer;}
+.cart-items{flex:1; overflow-y:auto; padding:10px 28px;}
+.cart-item{display:flex; gap:14px; padding:18px 0; border-bottom:1px solid var(--line-light);}
+.cart-item .thumb{width:70px; height:82px; background:var(--paper); flex-shrink:0; position:relative; overflow:hidden;}
+.cart-item .thumb .num-mark{font-size:44px; top:50%; left:50%; transform:translate(-50%,-50%);}
+.cart-item .info{flex:1; display:flex; flex-direction:column; justify-content:center; gap:5px;}
+.cart-item .info .nm{font-size:13.5px; font-weight:600;}
+.cart-item .info .sub{font-size:11.5px; color:var(--grey); font-family:'IBM Plex Mono',monospace;}
+.cart-item .rm{font-size:11px; text-decoration:underline; color:var(--grey-dark); align-self:flex-start; margin-top:2px;}
+.cart-empty{padding:60px 0; text-align:center; color:var(--grey); font-size:13.5px;}
+.cart-foot{padding:24px 28px 30px; border-top:1px solid var(--line-light);}
+.cart-subtotal{display:flex; justify-content:space-between; font-size:14px; margin-bottom:18px; font-family:'IBM Plex Mono',monospace;}
+.cart-foot .btn{width:100%; justify-content:center;}
+
+/* -------------------- FIRST VISIT POPUP -------------------- */
+.signup-modal{
+  position:fixed;
+  inset:0;
+  z-index:700;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .22s ease, visibility .22s ease;
+}
+.signup-modal.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.signup-modal-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.52);
+  backdrop-filter:blur(2px);
+}
+.signup-modal-panel{
+  position:relative;
+  z-index:1;
+  width:min(860px, 92vw);
+  min-height:430px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  background:var(--white);
+  color:var(--black);
+  box-shadow:0 34px 90px rgba(0,0,0,0.38);
+  transform:translateY(14px) scale(.985);
+  transition:transform .22s ease;
+}
+.signup-modal.open .signup-modal-panel{transform:translateY(0) scale(1);}
+.signup-modal-image{position:relative; overflow:hidden; background:var(--black);}
+.signup-modal-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.28));
+}
+.signup-modal-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.signup-modal-content{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:48px clamp(28px, 3vw, 52px);
+  text-align:center;
+}
+.signup-modal-close{
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:48px;
+  height:48px;
+  border:2px dotted var(--black);
+  display:grid;
+  place-items:center;
+}
+.signup-modal-close span{
+  position:absolute;
+  width:21px;
+  height:2px;
+  background:var(--black);
+}
+.signup-modal-close span:first-child{transform:rotate(45deg);}
+.signup-modal-close span:last-child{transform:rotate(-45deg);}
+.signup-modal-logo{
+  width:92px;
+  margin-bottom:22px;
+  filter:none;
+  background:var(--black);
+  padding:8px 12px;
+}
+.signup-modal h2{
+  max-width:390px;
+  font-size:clamp(24px, 2.4vw, 34px);
+  line-height:1.08;
+  letter-spacing:0;
+  margin-bottom:26px;
+}
+.signup-modal-form{
+  width:100%;
+  max-width:350px;
+  display:grid;
+  gap:16px;
+}
+.signup-modal-form input{
+  width:100%;
+  height:58px;
+  border:1px solid var(--line-light);
+  padding:0 22px;
+  text-align:center;
+  font-size:15px;
+  outline:none;
+}
+.signup-modal-form input:focus{border-color:var(--black);}
+.signup-modal-form button{
+  width:100%;
+  height:58px;
+  background:var(--black);
+  color:var(--white);
+  font-size:16px;
+  font-weight:800;
+}
+.signup-modal-content p{
+  margin-top:26px;
+  max-width:390px;
+  font-size:14px;
+  line-height:1.55;
+  font-weight:800;
+}
+@media (max-width:760px){
+  .signup-modal{padding:18px;}
+  .signup-modal-panel{
+    grid-template-columns:1fr;
+    width:min(430px, 94vw);
+    min-height:0;
+  }
+  .signup-modal-image{height:260px;}
+  .signup-modal-content{padding:42px 24px 34px;}
+  .signup-modal-close{width:48px; height:48px;}
+  .signup-modal-logo{width:92px; margin-bottom:22px;}
+  .signup-modal h2{font-size:26px; margin-bottom:24px;}
+  .signup-modal-form input,
+  .signup-modal-form button{height:58px; font-size:15px;}
+  .signup-modal-content p{font-size:13px; margin-top:24px;}
+}
+
+/* -------------------- REVEAL ANIMATION -------------------- */
+.reveal{opacity:0; transform:translateY(28px); transition:opacity .8s ease, transform .8s ease;}
+.reveal.in{opacity:1; transform:translateY(0);}
+.reveal-stagger > *{opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease;}
+.reveal-stagger.in > *{opacity:1; transform:translateY(0);}
+.reveal-stagger.in > *:nth-child(1){transition-delay:.02s;}
+.reveal-stagger.in > *:nth-child(2){transition-delay:.09s;}
+.reveal-stagger.in > *:nth-child(3){transition-delay:.16s;}
+.reveal-stagger.in > *:nth-child(4){transition-delay:.23s;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important;}
+}
+
+/* -------------------- PAGE HEADER (shop/product) -------------------- */
+.page-head{padding:64px 0 40px; border-bottom:1px solid var(--line-light);}
+.breadcrumb{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--grey); text-transform:uppercase; margin-bottom:14px;}
+.breadcrumb a:hover{color:var(--accent);}
+.page-head h1{font-size:clamp(34px,5vw,58px);}
+
+/* -------------------- SHOP LAYOUT -------------------- */
+.shop-layout{display:grid; grid-template-columns:220px 1fr; gap:50px; padding:56px 0 120px;}
+@media (max-width:860px){ .shop-layout{grid-template-columns:1fr;} }
+.filters h4{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--grey); margin-bottom:16px;}
+.filters ul{margin-bottom:36px;}
+.filters li{margin-bottom:11px;}
+.filters label{display:flex; align-items:center; gap:9px; font-size:13.5px; cursor:pointer;}
+.filters input[type=checkbox]{accent-color:var(--black); width:14px; height:14px;}
+
+/* -------------------- AUTH PAGE -------------------- */
+.auth-main{
+  min-height:calc(100vh - 112px);
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) minmax(420px, 0.82fr);
+  background:var(--white);
+}
+.auth-visual{
+  position:relative;
+  min-height:720px;
+  overflow:hidden;
+  background:var(--black);
+}
+.auth-visual::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.52));
+}
+.auth-visual > img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.auth-visual-mark{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:1;
+  width:min(68%, 520px);
+  transform:translate(-50%, -50%);
+  opacity:0.38;
+  mix-blend-mode:screen;
+  pointer-events:none;
+}
+.auth-visual-mark img{width:100%; filter:none;}
+.auth-panel{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:34px;
+  padding:72px clamp(30px, 5vw, 76px);
+}
+.auth-copy .eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--grey);
+  margin-bottom:14px;
+}
+.auth-copy h1{
+  font-size:clamp(38px, 5vw, 68px);
+  line-height:0.95;
+}
+.auth-copy p{
+  max-width:420px;
+  margin-top:18px;
+  color:var(--grey-dark);
+  font-size:14.5px;
+  line-height:1.65;
+}
+.auth-form{
+  display:grid;
+  gap:18px;
+  max-width:460px;
+  margin-top:28px;
+}
+.auth-tabs{
+  width:min(460px, 100%);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border:1px solid var(--line-light);
+  margin-top:30px;
+}
+.auth-tabs button{
+  height:48px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--grey-dark);
+}
+.auth-tabs button.active{
+  background:var(--black);
+  color:var(--white);
+}
+.auth-form label{
+  display:grid;
+  gap:8px;
+}
+.auth-form label span{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--grey);
+}
+.auth-form input[type=email],
+.auth-form input[type=password],
+.checkout-form input,
+.checkout-form textarea{
+  height:54px;
+  border:1px solid var(--line-light);
+  padding:0 16px;
+  font-size:15px;
+  outline:none;
+}
+.checkout-form textarea{
+  min-height:112px;
+  padding:14px 16px;
+  resize:vertical;
+}
+.auth-form input:focus,
+.checkout-form input:focus,
+.checkout-form textarea:focus{border-color:var(--black);}
+.auth-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  font-size:12.5px;
+  color:var(--grey-dark);
+}
+.auth-row a{text-decoration:underline;}
+.auth-check{
+  display:flex !important;
+  grid-template-columns:none !important;
+  align-items:center;
+  gap:8px !important;
+}
+.auth-note{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  color:var(--grey);
+  margin-top:18px;
+}
+.auth-note[data-type="success"]{color:#0f755b;}
+.auth-note[data-type="warning"]{color:#9a6a12;}
+.auth-note[data-type="error"]{color:#b3261e;}
+.auth-account{
+  display:grid;
+  gap:18px;
+  max-width:560px;
+}
+.auth-account[hidden]{display:none;}
+.auth-account .btn{justify-content:center;}
+.auth-form[hidden]{display:none;}
+button:disabled{
+  opacity:0.62;
+  cursor:not-allowed;
+}
+.reward-card,
+.orders-panel{
+  border:1px solid var(--line-light);
+  padding:24px;
+  background:var(--white);
+}
+.reward-label,
+.orders-head span{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  color:var(--grey);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+}
+.reward-card h2,
+.orders-panel h2{
+  font-size:23px;
+  margin-top:8px;
+}
+.reward-card p{
+  margin-top:10px;
+  color:var(--grey-dark);
+  font-size:13.5px;
+  line-height:1.55;
+}
+.reward-total{
+  margin-top:22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:var(--grey-dark);
+}
+.reward-total strong{
+  color:var(--black);
+  font-size:16px;
+}
+.reward-bar{
+  height:9px;
+  background:var(--paper);
+  margin-top:14px;
+  overflow:hidden;
+}
+.reward-bar span{
+  display:block;
+  width:0;
+  height:100%;
+  background:var(--black);
+  transition:width .3s ease;
+}
+.reward-status{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  margin-top:14px;
+  font-size:12px;
+  color:var(--grey-dark);
+}
+.reward-status strong{
+  color:var(--black);
+  text-align:right;
+}
+.orders-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:18px;
+}
+.order-list{
+  display:grid;
+  gap:10px;
+}
+.order-card{
+  border-top:1px solid var(--line-light);
+  padding-top:14px;
+  display:grid;
+  gap:8px;
+}
+.order-card > div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.order-card strong{
+  font-size:13px;
+}
+.order-card span,
+.auth-empty{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  color:var(--grey-dark);
+}
+.admin-main{
+  padding:76px 40px 120px;
+}
+.admin-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:24px;
+  margin-bottom:28px;
+  border-bottom:1px solid var(--line-light);
+  padding-bottom:34px;
+}
+.admin-head .eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11.5px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--grey);
+  margin-bottom:12px;
+}
+.admin-head h1{
+  font-size:clamp(40px, 6vw, 76px);
+}
+.admin-head p{
+  margin-top:14px;
+  color:var(--grey-dark);
+  font-size:14px;
+}
+.admin-message{
+  margin-bottom:22px;
+}
+.admin-guard{
+  border:1px solid var(--line-light);
+  padding:34px;
+  max-width:520px;
+}
+.admin-guard h2{
+  font-size:28px;
+  margin-bottom:12px;
+}
+.admin-guard p{
+  color:var(--grey-dark);
+  line-height:1.6;
+  margin-bottom:24px;
+}
+.admin-app[hidden]{display:none;}
+.admin-orders{
+  display:grid;
+  gap:16px;
+}
+.admin-order{
+  border:1px solid var(--line-light);
+  padding:22px;
+  background:var(--white);
+}
+.admin-order-top{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:20px;
+  border-bottom:1px solid var(--line-light);
+  padding-bottom:16px;
+}
+.admin-order-top > div{
+  display:grid;
+  gap:5px;
+}
+.admin-order-top > div:last-child{
+  text-align:right;
+}
+.admin-order-top strong{
+  font-size:15px;
+}
+.admin-order-top span,
+.admin-order-items span,
+.admin-order-controls label span{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--grey-dark);
+}
+.admin-order-items{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  padding:16px 0;
+}
+.admin-order-items span{
+  border:1px solid var(--line-light);
+  padding:7px 9px;
+  background:var(--paper);
+}
+.admin-order-controls{
+  display:grid;
+  grid-template-columns:minmax(160px, 220px) minmax(150px, 200px) 1fr auto;
+  gap:12px;
+  align-items:end;
+}
+.admin-order-controls label{
+  display:grid;
+  gap:8px;
+}
+.admin-order-controls select,
+.admin-order-controls input{
+  height:44px;
+  border:1px solid var(--line-light);
+  padding:0 12px;
+  font-family:inherit;
+  font-size:13px;
+  background:var(--white);
+}
+.admin-order-meta{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:16px 0;
+}
+.admin-order-meta div{
+  border:1px solid var(--line-light);
+  background:var(--paper);
+  padding:12px;
+  display:grid;
+  gap:5px;
+}
+.admin-order-meta strong{
+  font-size:12px;
+}
+.admin-order-meta span{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--grey-dark);
+}
+@media (max-width:760px){
+  .admin-main{padding:52px 20px 90px;}
+  .admin-head{align-items:flex-start; flex-direction:column;}
+  .admin-order-top,
+  .admin-order-controls{grid-template-columns:1fr;}
+  .admin-order-top > div:last-child{text-align:left;}
+  .admin-order-meta{grid-template-columns:1fr;}
+}
+.auth-create{
+  max-width:460px;
+  border-top:1px solid var(--line-light);
+  padding-top:30px;
+}
+.auth-create h2{
+  font-size:24px;
+  margin-bottom:10px;
+}
+.auth-create p{
+  color:var(--grey-dark);
+  font-size:13.5px;
+  line-height:1.6;
+  margin-bottom:20px;
+}
+@media (max-width:940px){
+  .auth-main{grid-template-columns:1fr;}
+  .auth-visual{min-height:360px;}
+  .auth-panel{padding:54px 24px 72px;}
+}
+@media (max-width:520px){
+  .auth-row{align-items:flex-start; flex-direction:column;}
+  .auth-visual{min-height:280px;}
+}
+
+/* -------------------- PRODUCT DETAIL -------------------- */
+.pd-layout{display:grid; grid-template-columns:1fr 1fr; gap:64px; padding:56px 0 120px;}
+@media (max-width:860px){ .pd-layout{grid-template-columns:1fr; gap:32px;} }
+.pd-gallery{display:grid; gap:10px;}
+.pd-main-img{aspect-ratio:4/5; position:relative; overflow:hidden; background:var(--paper);}
+.pd-thumbs{display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+.pd-thumb{aspect-ratio:1/1; background:var(--paper); position:relative; overflow:hidden; cursor:pointer; opacity:0.6; transition:opacity .2s ease;}
+.pd-thumb.active, .pd-thumb:hover{opacity:1;}
+.pd-info .cat-eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--grey); margin-bottom:10px;}
+.pd-info h1{font-size:clamp(28px,3.6vw,42px); margin-bottom:14px;}
+.pd-price{font-family:'IBM Plex Mono',monospace; font-size:19px; margin-bottom:24px;}
+.pd-desc{font-size:14.5px; line-height:1.7; color:var(--grey-dark); max-width:440px; margin-bottom:34px;}
+.pd-block{margin-bottom:28px;}
+.pd-block h4{font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--grey); margin-bottom:14px; display:flex; justify-content:space-between;}
+.pd-block h4 a{text-decoration:underline; color:var(--grey-dark); font-weight:400; text-transform:none; letter-spacing:0;}
+.size-row{display:flex; gap:10px; flex-wrap:wrap;}
+.size-btn{
+  width:52px; height:44px; border:1px solid var(--line-light); display:flex; align-items:center; justify-content:center;
+  font-size:12.5px; font-family:'IBM Plex Mono',monospace; transition:all .2s ease;
+}
+.size-btn.active, .size-btn:hover{border-color:var(--black); background:var(--black); color:var(--white);}
+.qty-row{display:flex; align-items:center; border:1px solid var(--line-light); width:130px;}
+.qty-row button{flex:1; padding:12px 0; font-size:16px;}
+.qty-row span{flex:1; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:13px;}
+.pd-add{width:100%; justify-content:center; padding:18px; margin-bottom:14px;}
+.pd-meta-list{font-size:12.5px; color:var(--grey-dark); line-height:2.1; border-top:1px solid var(--line-light); padding-top:20px; margin-top:30px;}
+
+/* -------------------- misc utility -------------------- */
+.center-text{text-align:center;}
+.mt-lg{margin-top:80px;}
+/* -------------------- PAYMENT LOGOS -------------------- */
+.pay-row{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.pay-logo{
+  width:48px;
+  height:30px;
+  object-fit:contain;
+  display:block;
+  background:var(--white);
+  border:1px solid var(--line-light);
+  padding:4px 6px;
+}
+@media (max-width:720px){
+  .footer-bottom{gap:16px;}
+  .pay-row{justify-content:flex-start;}
+  .pay-logo{width:44px;height:28px;}
+}
+
+
+/* -------------------- BRAND LOGO -------------------- */
+.logo-center{line-height:0;}
+.brand-logo{display:block; width:150px; height:auto; max-width:100%; filter:invert(1);}
+/* Keep the header logo compact so it stays fully inside the navigation bar. */
+header .logo-center .brand-logo{width:112px;}
+footer .logo-center .brand-logo{width:150px;}
+.mobile-brand{display:block; border-bottom:1px solid var(--line-light); padding:0 0 28px !important; margin-bottom:20px; line-height:0;}
+.mobile-brand .brand-logo{width:210px;}
+@media (max-width:860px){
+  header .logo-center .brand-logo{width:104px;}
+}
+@media (max-width:520px){
+  header .logo-center .brand-logo{width:96px;}
+  .mobile-brand .brand-logo{width:180px;}
+}
+
+.announce-message{display:inline-block;transition:opacity .18s ease,transform .18s ease;}
+.announce-message.is-changing{opacity:0;transform:translateY(-3px);}
+
+
+/* Custom basketball-court hero image */
+.hero,
+.hero-section,
+.home-hero {
+  background-image: url('hero-basketball-court.jpg') !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+}
+/* Smooth hero slideshow */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.hero-slide.active {
+  opacity: 1;
+}
+
+/* Keep all hero content above the images */
+.hero .wrap,
+.hero .grain,
+.hero .hero-arrow,
+.hero .hero-dots {
+  position: relative;
+  z-index: 2;
+}
+
+.hero .hero-arrow {
+  position: absolute;
+}
+
+/* Glass effect for the hero Shop Now button */
+.hero .btn-solid-light {
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: white;
+
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.hero .btn-solid-light:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+@media (max-width:720px){
+  .hero{height:calc(100vh - 38px); min-height:560px;}
+  .hero-brand-lockup{width:min(82vw, 480px);}
+  .hero-drop{bottom:34px;}
+  .hero .btn-solid-light{padding:13px 22px;}
+}
+
+@media (max-width:520px){
+  body.home-page .nav-grid{grid-template-columns:auto 1fr auto;}
+  body.home-page .nav-right .icon-btn{display:none;}
+  body.home-page .cart-link{
+    gap:6px;
+    font-size:0;
+    white-space:nowrap;
+  }
+  body.home-page .cart-link::before{
+    content:"Cart";
+    font-size:11px;
+  }
+}
+
+/* Reduce space between hero and New Arrivals */
+.hero + .section-pad {
+  padding-top: 25px;
+  padding-bottom: 10px;
+}
+
+.hero + .section-pad + .section-pad {
+  padding-top: 36px;
+}
+
+/* Make New Arrivals slightly more compact */
+.hero + .section-pad .section-head {
+  margin-bottom: 35px;
+}
+
+.hero + .section-pad .pgrid {
+  gap: 34px 18px;
+}
+
+.hero + .section-pad .pcard .img {
+  aspect-ratio: 7 / 8;
+}
+
+.shop-layout .pcard .img {
+  aspect-ratio: 7 / 8;
+}
+
+/* -------------------- NEW PRODUCT PAGE -------------------- */
+.product-app{
+  min-height:calc(100vh - 118px);
+  background:var(--white);
+}
+.product-loading{
+  padding:80px 40px;
+  text-align:center;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  text-transform:uppercase;
+  color:var(--grey);
+}
+.product-hero{
+  min-height:calc(100vh - 118px);
+  display:grid;
+  grid-template-columns:minmax(220px, 0.82fr) minmax(360px, 1.46fr) minmax(260px, 0.9fr);
+  align-items:center;
+  gap:36px;
+  padding:38px clamp(22px, 4vw, 58px) 54px;
+}
+.product-info-panel{
+  align-self:center;
+  max-width:330px;
+}
+.product-kicker,
+.product-picker-label,
+.product-option-head{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+.product-kicker{
+  color:var(--grey);
+  margin-bottom:16px;
+}
+.product-info-panel h1{
+  font-family:'Inter',sans-serif;
+  font-size:18px;
+  line-height:1.15;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:0;
+  margin-bottom:8px;
+}
+.product-price{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+  color:var(--grey-dark);
+  margin-bottom:24px;
+}
+.product-accordion{
+  border-top:1px solid var(--line-dark);
+}
+.product-accordion details{
+  border-bottom:1px solid var(--line-dark);
+}
+.product-accordion summary{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:36px;
+  cursor:pointer;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.02em;
+}
+.product-accordion summary::-webkit-details-marker{display:none;}
+.product-accordion summary::after{
+  content:"+";
+  font-size:16px;
+  line-height:1;
+}
+.product-accordion details[open] summary::after{
+  content:"-";
+}
+.product-accordion p{
+  padding:0 18px 14px 0;
+  color:var(--grey-dark);
+  font-size:12px;
+  line-height:1.55;
+}
+.product-media-panel{
+  position:relative;
+  min-height:min(690px, calc(100vh - 172px));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.product-main-image{
+  width:min(620px, 82vw);
+  max-height:min(680px, calc(100vh - 170px));
+  object-fit:contain;
+}
+.product-side-nav{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:38px;
+  height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  color:var(--black);
+  opacity:0.72;
+  transition:opacity .2s ease, transform .2s ease;
+}
+.product-side-nav:hover{
+  opacity:1;
+  transform:translateY(-50%) scale(1.06);
+}
+.product-side-prev{left:6px;}
+.product-side-next{right:6px;}
+.product-side-label{
+  position:absolute;
+  bottom:8px;
+  left:50%;
+  transform:translateX(-50%);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  text-transform:uppercase;
+  color:var(--grey);
+}
+.product-buy-panel{
+  align-self:center;
+}
+.product-picker-label{
+  display:block;
+  margin-bottom:8px;
+  color:var(--grey);
+}
+.product-picker{
+  width:100%;
+  border:1px solid var(--line-dark);
+  background:var(--white);
+  min-height:36px;
+  padding:0 10px;
+  font-size:11px;
+  text-transform:uppercase;
+  margin-bottom:22px;
+}
+.product-option-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin-bottom:10px;
+  color:var(--grey-dark);
+}
+.product-option-head strong{
+  color:var(--black);
+  font-weight:500;
+  text-align:right;
+}
+.product-swatches{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:20px;
+}
+.product-swatch{
+  width:24px;
+  height:24px;
+  border:1px solid transparent;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.product-swatch span{
+  display:block;
+  width:16px;
+  height:16px;
+  border:1px solid rgba(0,0,0,0.2);
+}
+.product-swatch.active{
+  border-color:var(--black);
+}
+.product-size-head{
+  margin-top:2px;
+}
+.product-sizes{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:0;
+  border:1px solid var(--line-dark);
+  margin-bottom:16px;
+}
+.product-size{
+  min-height:34px;
+  border-right:1px solid var(--line-dark);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+}
+.product-size:last-child{border-right:0;}
+.product-size.active,
+.product-size:hover{
+  background:var(--black);
+  color:var(--white);
+}
+.product-qty{
+  display:grid;
+  grid-template-columns:38px 1fr 38px;
+  border:1px solid var(--line-dark);
+  height:36px;
+  margin-bottom:10px;
+}
+.product-qty button{
+  font-size:16px;
+}
+.product-qty-value{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-left:1px solid var(--line-dark);
+  border-right:1px solid var(--line-dark);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12px;
+}
+.product-add{
+  width:100%;
+  min-height:38px;
+  background:var(--black);
+  color:var(--white);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  transition:background .2s ease;
+}
+.product-add:hover{
+  background:var(--line-dark);
+}
+.product-pay-row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:7px;
+  margin-top:12px;
+}
+.product-pay-row img{
+  width:34px;
+  height:22px;
+  object-fit:contain;
+}
+@media (max-width:1020px){
+  .product-hero{
+    grid-template-columns:1fr;
+    gap:20px;
+    padding-top:32px;
+  }
+  .product-info-panel,
+  .product-buy-panel{
+    max-width:640px;
+    width:100%;
+    margin:0 auto;
+  }
+  .product-media-panel{
+    order:-1;
+    min-height:420px;
+  }
+  .product-main-image{
+    width:min(540px, 94vw);
+    max-height:520px;
+  }
+}
+@media (max-width:560px){
+  .product-hero{
+    padding:22px 18px 44px;
+  }
+  .product-media-panel{
+    min-height:360px;
+  }
+  .product-main-image{
+    max-height:380px;
+  }
+  .product-side-prev{left:-8px;}
+  .product-side-next{right:-8px;}
+  .product-info-panel h1{
+    font-size:16px;
+  }
+}
+
+/* -------------------- CHECKOUT -------------------- */
+.checkout-main{
+  padding:70px 40px 120px;
+}
+.checkout-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:24px;
+  margin-bottom:34px;
+}
+.checkout-head h1,
+.order-success h1{
+  font-size:clamp(38px, 6vw, 82px);
+  line-height:0.92;
+  margin:8px 0 12px;
+}
+.checkout-head p,
+.order-success p,
+.checkout-summary p{
+  color:var(--grey-dark);
+  max-width:560px;
+  line-height:1.65;
+}
+.checkout-layout{
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) minmax(320px, 420px);
+  gap:24px;
+  align-items:start;
+}
+.checkout-form,
+.checkout-summary,
+.order-success-card{
+  border:1px solid var(--line-light);
+  background:var(--white);
+  padding:26px;
+}
+.checkout-form{
+  display:grid;
+  gap:28px;
+}
+.checkout-section{
+  display:grid;
+  gap:16px;
+}
+.checkout-section h2,
+.checkout-summary h2{
+  font-size:18px;
+  margin-bottom:2px;
+}
+.checkout-form label{
+  display:grid;
+  gap:8px;
+}
+.checkout-form label span,
+.checkout-item span,
+.checkout-total span,
+.order-created-details span{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  text-transform:uppercase;
+  color:var(--grey-dark);
+}
+.checkout-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.checkout-summary{
+  position:sticky;
+  top:98px;
+}
+.checkout-items{
+  display:grid;
+  gap:14px;
+  margin:20px 0;
+}
+.checkout-item{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  border-bottom:1px solid var(--line-light);
+  padding-bottom:14px;
+}
+.checkout-item div{
+  display:grid;
+  gap:5px;
+}
+.checkout-item strong{
+  font-size:13px;
+}
+.checkout-total{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-top:2px solid var(--black);
+  padding-top:16px;
+  margin-bottom:16px;
+}
+.checkout-total strong{
+  font-size:18px;
+}
+.order-success{
+  min-height:calc(100vh - 112px);
+  display:grid;
+  grid-template-columns:minmax(0, 0.9fr) minmax(320px, 520px);
+  gap:34px;
+  align-items:center;
+  padding:70px 40px 120px;
+}
+.order-success-card{
+  position:relative;
+  overflow:hidden;
+  display:grid;
+  gap:22px;
+}
+.order-created-mark{
+  position:absolute;
+  inset:auto -38px -54px auto;
+  width:210px;
+  opacity:0.055;
+  pointer-events:none;
+}
+.order-created-mark img{
+  width:100%;
+}
+.order-created-details{
+  display:grid;
+  gap:8px;
+  position:relative;
+}
+.order-created-details strong{
+  font-size:24px;
+}
+.order-created-actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  position:relative;
+}
+.order-created-actions .btn{
+  justify-content:center;
+  min-width:150px;
+}
+@media (max-width:860px){
+  .checkout-main,
+  .order-success{
+    padding:52px 20px 90px;
+  }
+  .checkout-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .checkout-layout,
+  .order-success{
+    grid-template-columns:1fr;
+  }
+  .checkout-summary{
+    position:static;
+  }
+}
+@media (max-width:560px){
+  .checkout-fields{
+    grid-template-columns:1fr;
+  }
+  .checkout-form,
+  .checkout-summary,
+  .order-success-card{
+    padding:20px;
+  }
+}

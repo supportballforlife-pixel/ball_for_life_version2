@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Created - Ball For Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page order-created-page">
+
+<div class="announce" aria-live="polite"><span class="announce-message" data-free-shipping="50">Free shipping on all orders over £50.00 - new drop live now</span></div>
+
+<header>
+  <div class="wrap nav-grid">
+    <div class="nav-left">
+      <div class="burger"><span></span><span></span><span></span></div>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="login.html">Account</a>
+      </nav>
+    </div>
+    <a href="index.html" class="logo-center">
+      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+    </a>
+    <div class="nav-right">
+      <select class="currency-select" data-currency-select aria-label="Currency">
+        <option value="GBP">GBP</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+      </select>
+      <a href="#" class="cart-link" data-cart-open aria-label="Cart">
+        My Cart <span class="cart-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-drawer">
+  <a href="index.html" class="mobile-brand" aria-label="Ball For Life home"><img src="brand-logo.png" class="brand-logo" alt="Ball For Life"></a>
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="login.html">Account</a>
+</div>
+<div class="drawer-overlay"></div>
+
+<main class="order-success wrap">
+  <section>
+    <div class="eyebrow">Order created</div>
+    <h1 class="display">Almost done</h1>
+    <p>Your order has been saved. Use the payment button to pay securely, then your account/admin tracking can be updated.</p>
+  </section>
+
+  <section class="order-success-card">
+    <div class="order-created-mark">
+      <img src="brand-logo.png" alt="">
+    </div>
+    <div class="order-created-details" data-order-created-details>
+      <strong>Loading order...</strong>
+    </div>
+    <div class="order-created-actions">
+      <a href="#" class="btn btn-solid-dark" data-payment-link>Pay now</a>
+      <a href="login.html" class="btn btn-outline-dark">View account</a>
+    </div>
+    <p class="auth-note" data-payment-message data-type=""></p>
+  </section>
+</main>
+
+<div class="cart-overlay drawer-overlay"></div>
+<div class="cart-drawer">
+  <div class="cart-head"><h3>Your Bag</h3><svg class="cart-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l16 16M20 4L4 20"/></svg></div>
+  <div class="cart-items"></div>
+  <div class="cart-foot">
+    <div class="cart-subtotal"><span>Subtotal</span><span class="val">£0.00</span></div>
+    <a href="#" class="btn btn-solid-dark">Checkout</a>
+  </div>
+</div>
+
+<script src="payment-config.js"></script>
+<script src="script.js"></script>
+<script src="order-created.js"></script>
+</body>
+</html>
