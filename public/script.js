@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!announcement) return;
   const messages = () => [
     `Free shipping on all orders over ${window.__bfl_money ? window.__bfl_money(50) : '£50.00'} - new drop live now`,
-    'Sign up to get 10% off and free shipping on your first order',
+    'Sign up to get exclusive member offer',
     'Pay with Klarna'
   ];
   let index = 0;
