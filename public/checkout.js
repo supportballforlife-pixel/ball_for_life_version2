@@ -93,8 +93,14 @@
     const payload = {
       order_number: order.order_number,
       subtotal_gbp: order.subtotal_gbp,
-      shipping_country: order.shipping_country,
+      items: order.items,
       customer_email: order.shipping_email,
+      shipping_name: order.shipping_name,
+      shipping_phone: order.shipping_phone,
+      shipping_address: order.shipping_address,
+      shipping_city: order.shipping_city,
+      shipping_postcode: order.shipping_postcode,
+      shipping_country: order.shipping_country,
     };
 
     const config = window.BFL_SUPABASE || {};
@@ -147,19 +153,23 @@
 
     const { data } = await client.auth.getSession();
     currentUser = data.session?.user || null;
-    if (!currentUser) {
-      window.location.href = 'login.html?checkout=1';
-      return;
-    }
 
     const emailInput = form?.querySelector('input[name="email"]');
-    if (emailInput && !emailInput.value) emailInput.value = currentUser.email || '';
-    setMessage('Ready to create your order. Stripe will only receive the order total and order number.', 'success');
+    if (emailInput && currentUser?.email && !emailInput.value) {
+      emailInput.value = currentUser.email;
+    }
+
+    setMessage(
+      currentUser
+        ? 'Signed in — this order will be linked to your account.'
+        : 'Guest checkout — no account required.',
+      'success'
+    );
   }
 
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (!currentUser || !cart.length || !client) return;
+    if (!cart.length || !client) return;
 
     const data = new FormData(form);
     const orderNumber = `BFL-${Date.now().toString().slice(-8)}`;
@@ -173,7 +183,7 @@
     }
 
     const order = {
-      user_id: currentUser.id,
+      user_id: currentUser?.id || null,
       order_number: orderNumber,
       items: cart,
       subtotal_gbp: total,
@@ -210,18 +220,13 @@
     order.payment_url = paymentUrl || null;
     order.payment_reference = paymentReference;
 
-    const { error } = await client.from('orders').insert(order);
+    // The Edge Function now creates the order securely for both guests and signed-in customers.
+    // Use the server-returned order when available so the local confirmation matches Supabase.
+    const savedOrder = checkoutSession?.order
+      ? { ...order, ...checkoutSession.order }
+      : order;
 
-    if (error) {
-      setMessage(`Could not create order: ${error.message}`, 'error');
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = 'Create order & pay';
-      }
-      return;
-    }
-
-    sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(order));
+    sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(savedOrder));
     localStorage.setItem(CART_KEY, '[]');
     window.__bfl_cart__ = [];
     window.location.href = `order-created.html?order=${encodeURIComponent(orderNumber)}`;
