@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!announcement) return;
   const messages = () => [
     `Free shipping on all orders over ${window.__bfl_money ? window.__bfl_money(50) : '£50.00'} - new drop live now`,
-    'Sign up and enjoy member exclusive rewards and offer',
+    'Sign up to get 10% off and free shipping on your first order',
     'Pay with Klarna'
   ];
   let index = 0;
@@ -232,8 +232,88 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 5000);
 })();
 
-// First visit email popup
+// Email marketing signup — popup + homepage newsletter
 (function () {
+  const NEWSLETTER_FUNCTION_URL =
+    'https://jhjhzqwwsrymeijaxfob.supabase.co/functions/v1/newsletter-signup';
+
+  async function saveMarketingEmail(email, source) {
+    const response = await fetch(NEWSLETTER_FUNCTION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, source })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Unable to subscribe right now.');
+    }
+
+    return data;
+  }
+
+  async function submitSignupForm(form, source, statusEl, onSuccess) {
+    const input = form.querySelector('input[type="email"]');
+    const button = form.querySelector('button[type="submit"]');
+    if (!input || !button) return;
+
+    const email = input.value.trim().toLowerCase();
+    if (!email || !input.checkValidity()) {
+      input.reportValidity();
+      return;
+    }
+
+    const originalText = button.textContent;
+    button.disabled = true;
+    button.textContent = 'Joining...';
+
+    if (statusEl) {
+      statusEl.textContent = '';
+      statusEl.classList.remove('is-error');
+    }
+
+    try {
+      const result = await saveMarketingEmail(email, source);
+
+      button.textContent = 'Joined ✓';
+      input.value = '';
+
+      if (statusEl) {
+        statusEl.textContent = result.already_subscribed
+          ? 'You’re already on the list.'
+          : 'You’re in. Welcome to Ball For Life.';
+      }
+
+      if (typeof onSuccess === 'function') onSuccess(result);
+
+      setTimeout(() => {
+        button.disabled = false;
+        button.textContent = originalText;
+      }, 1800);
+    } catch (error) {
+      console.error('Newsletter signup failed:', error);
+      button.disabled = false;
+      button.textContent = originalText;
+
+      if (statusEl) {
+        statusEl.textContent = 'Could not sign you up right now. Please try again.';
+        statusEl.classList.add('is-error');
+      }
+    }
+  }
+
+  // Homepage newsletter
+  const newsletterForm = document.querySelector('[data-newsletter-form]');
+  if (newsletterForm) {
+    const newsletterStatus = document.querySelector('[data-newsletter-status]');
+    newsletterForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      submitSignupForm(newsletterForm, 'homepage_newsletter', newsletterStatus);
+    });
+  }
+
+  // First-visit popup
   if (document.body.classList.contains('auth-page')) return;
 
   let modal = document.querySelector('[data-signup-modal]');
@@ -243,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="signup-modal-backdrop" data-signup-close></div>
         <section class="signup-modal-panel" role="dialog" aria-modal="true" aria-labelledby="signup-modal-title">
           <div class="signup-modal-image">
-            <img src="IMG_5580.jpg" alt="Ball For Life latest drop">
+            <img src="IMG_5580.JPG" alt="Ball For Life latest drop">
           </div>
           <div class="signup-modal-content">
             <button class="signup-modal-close" type="button" data-signup-close aria-label="Close signup popup">
@@ -252,9 +332,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <img class="signup-modal-logo" src="brand-logo.png" alt="Ball For Life">
             <h2 id="signup-modal-title">Subscribe for the latest Ball For Life drops</h2>
             <form class="signup-modal-form" data-signup-form>
-              <input type="email" placeholder="Join our mailing list" aria-label="Email address" required>
+              <input type="email" name="email" placeholder="Join our mailing list" aria-label="Email address" required>
               <button type="submit">Sign up</button>
             </form>
+            <p class="signup-status" data-signup-status aria-live="polite"></p>
             <p>*By signing up you're joining the Ball For Life mailing list and can unsubscribe at any time.</p>
           </div>
         </section>
@@ -264,7 +345,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const closeButtons = modal.querySelectorAll('[data-signup-close]');
-  const form = modal.querySelector('[data-signup-form]');
+  const popupForm = modal.querySelector('[data-signup-form]');
+  const popupStatus = modal.querySelector('[data-signup-status]');
+  const SIGNUP_SEEN_KEY = '__bfl_signup_seen__';
 
   function openModal() {
     modal.classList.add('open');
@@ -279,23 +362,26 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   closeButtons.forEach((button) => button.addEventListener('click', closeModal));
+
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && modal.classList.contains('open')) closeModal();
   });
 
-  form?.addEventListener('submit', (event) => {
+  popupForm?.addEventListener('submit', (event) => {
     event.preventDefault();
-    const button = form.querySelector('button');
-    if (button) button.textContent = 'Joined';
-    setTimeout(closeModal, 700);
+    submitSignupForm(
+      popupForm,
+      'first_visit_popup',
+      popupStatus,
+      () => setTimeout(closeModal, 900)
+    );
   });
 
-  const SIGNUP_SEEN_KEY = '__bfl_signup_seen__';
-
-if (!localStorage.getItem(SIGNUP_SEEN_KEY)) {
-  localStorage.setItem(SIGNUP_SEEN_KEY, 'true');
-  setTimeout(openModal, 450);
-}
+  // Show only on the first visit in this browser/device.
+  if (!localStorage.getItem(SIGNUP_SEEN_KEY)) {
+    localStorage.setItem(SIGNUP_SEEN_KEY, 'true');
+    setTimeout(openModal, 450);
+  }
 })();
 
 // Homepage hero automatic slideshow with smooth fade
