@@ -1,0 +1,168 @@
+BALL FOR LIFE — CONTACT FORM SETUP
+=====================================
+
+What this setup does
+--------------------
+Customer submits contact.html
+        ↓
+Supabase Edge Function receives it
+        ↓
+support_requests table stores the support case
+        ↓
+Resend emails supportballforlife@gmail.com
+        ↓
+Gmail Reply goes DIRECTLY to the customer's email
+
+
+FILES
+-----
+1. public/contact.html
+2. supabase/support_requests.sql
+3. supabase/functions/contact-support/index.ts
+
+
+STEP 1 — CREATE THE SUPABASE TABLE
+----------------------------------
+Open:
+Supabase Dashboard > your project > SQL Editor > New query
+
+Open supabase/support_requests.sql from this package.
+Paste the WHOLE file into the SQL editor and click Run.
+
+You should then see:
+Table Editor > support_requests
+
+
+STEP 2 — ADD YOUR RESEND API KEY TO SUPABASE
+---------------------------------------------
+IMPORTANT: DO NOT put your Resend API key in contact.html or GitHub.
+
+Open:
+Supabase Dashboard > Edge Functions > Secrets
+
+Add:
+
+Name:
+RESEND_API_KEY
+
+Value:
+your real Resend API key beginning with re_
+
+
+STEP 3 — CHOOSE THE RESEND SENDER
+----------------------------------
+BEST / PRODUCTION SETUP:
+Verify ballforlife.store inside Resend.
+
+After verification, add another Supabase Edge Function secret:
+
+Name:
+SUPPORT_FROM_EMAIL
+
+Value:
+Ball For Life Support <support@ballforlife.store>
+
+You do NOT need a support@ballforlife.store Gmail inbox just to use it as the sending
+address through Resend. Replies from Gmail will go to the customer's address because
+the function sets Resend's reply_to field to the customer email.
+
+TESTING:
+If you have not verified the domain yet, the function falls back to:
+Ball For Life Support <onboarding@resend.dev>
+
+Resend's test sender can have restrictions. For real customer messages, verify your
+domain and use SUPPORT_FROM_EMAIL.
+
+
+STEP 4 — CREATE THE EDGE FUNCTION
+---------------------------------
+Option A — Supabase Dashboard (easiest if available):
+Supabase Dashboard > Edge Functions > Deploy a new function / Create function
+Name it EXACTLY:
+
+contact-support
+
+Replace its index.ts code with:
+supabase/functions/contact-support/index.ts
+
+The endpoint must be public (JWT verification OFF) because customers do not need to
+be logged in to contact you.
+
+The function itself writes to the database server-side. Your secret database key is
+never sent to the browser.
+
+
+Option B — Supabase CLI:
+From your project folder:
+
+supabase functions deploy contact-support --no-verify-jwt
+
+Then check:
+Supabase Dashboard > Edge Functions > contact-support
+
+
+STEP 5 — REPLACE YOUR CONTACT PAGE
+----------------------------------
+Copy:
+public/contact.html
+
+into your website's actual public folder and replace your old contact.html.
+
+It is already pointed at this project:
+
+https://jhjhzqwwsrymeijaxfob.supabase.co/functions/v1/contact-support
+
+
+STEP 6 — GITHUB / CLOUDFLARE
+----------------------------
+GitHub Desktop:
+Commit > Push origin
+
+Cloudflare will redeploy the public/contact.html page.
+
+The Supabase Edge Function is deployed through Supabase, NOT Cloudflare.
+
+
+STEP 7 — TEST IT
+----------------
+Go to your live Contact page.
+Submit a test message using an email address you can access.
+
+Check all 3:
+
+1. Website says:
+   "Message sent..."
+
+2. Supabase:
+   Table Editor > support_requests
+   A new row should appear.
+
+3. Gmail:
+   supportballforlife@gmail.com
+   You should receive a "Ball For Life Support" email.
+
+Press Reply in Gmail.
+Check the recipient: it should be the CUSTOMER'S EMAIL, not Resend.
+
+
+IF THE DATABASE SAVES BUT GMAIL DOES NOT RECEIVE IT
+---------------------------------------------------
+Check:
+Supabase > Edge Functions > contact-support > Logs
+
+Also check:
+- RESEND_API_KEY exists in Edge Function Secrets.
+- Your Resend API key is active.
+- ballforlife.store is verified in Resend.
+- SUPPORT_FROM_EMAIL uses an address on your verified domain.
+
+The support request remains stored in Supabase even if Resend fails.
+
+
+SECURITY NOTES
+--------------
+- Resend secret stays only in Supabase Secrets.
+- Supabase server/secret key stays only inside the Edge Function environment.
+- contact.html contains NO secret keys.
+- The support_requests table has RLS enabled and no public table policies.
+- A hidden honeypot field is included to reduce basic bot spam.

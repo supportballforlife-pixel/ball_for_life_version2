@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Size Guide — Ball For Life</title>
+  <meta name="description" content="Ball For Life size guide information. Each product has its own size guide on the product page.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .size-guide-page{background:var(--white);color:var(--black);}
+
+    .size-guide-hero{
+      min-height:calc(100vh - 74px);
+      display:flex;
+      align-items:center;
+      border-bottom:1px solid var(--line-light);
+      background:var(--white);
+      padding:80px 0;
+    }
+
+    .size-guide-inner{
+      max-width:860px;
+    }
+
+    .size-guide-kicker{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--grey);
+      margin-bottom:18px;
+    }
+
+    .size-guide-hero h1{
+      font-family:'Archivo Black','Inter',sans-serif;
+      text-transform:uppercase;
+      font-size:clamp(46px,8vw,96px);
+      line-height:.94;
+      letter-spacing:-.02em;
+      margin-bottom:28px;
+    }
+
+    .size-guide-copy{
+      max-width:650px;
+      color:var(--grey-dark);
+      font-size:15px;
+      line-height:1.75;
+    }
+
+    .size-guide-copy strong{
+      color:var(--black);
+      font-weight:600;
+    }
+
+    .size-guide-note{
+      margin-top:34px;
+      border:1px solid var(--line-light);
+      background:var(--paper);
+      padding:24px 26px;
+      max-width:650px;
+    }
+
+    .size-guide-note span{
+      display:block;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--grey);
+      margin-bottom:10px;
+    }
+
+    .size-guide-note p{
+      font-size:14px;
+      line-height:1.65;
+      color:var(--black);
+    }
+
+    .size-guide-actions{
+      margin-top:32px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    @media(max-width:720px){
+      .size-guide-hero{
+        min-height:calc(100vh - 66px);
+        padding:60px 0;
+      }
+      .size-guide-hero h1{
+        font-size:46px;
+      }
+      .size-guide-copy{
+        font-size:14px;
+      }
+      .size-guide-note{
+        padding:20px;
+      }
+    }
+  </style>
+</head>
+
+<body class="size-guide-page">
+
+<header>
+  <div class="wrap nav-grid">
+    <div class="nav-left">
+      <div class="burger" aria-label="Open menu"><span></span><span></span><span></span></div>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+
+        <div class="nav-item">
+          <span>
+            Shop
+            <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </span>
+
+          <div class="nav-dropdown">
+            <div class="nav-dropdown-inner">
+              <a href="shop.html">New Arrivals</a>
+              <a href="shop.html?cat=hoodies">Hoodies</a>
+              <a href="shop.html?cat=tracksuits">Tracksuits</a>
+              <a href="shop.html?cat=tees">Graphic Tees</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="index.html#about">About Us</a>
+      </nav>
+    </div>
+
+    <a href="index.html" class="logo-center">
+      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+    </a>
+
+    <div class="nav-right">
+      <a href="#" class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M21 21l-4.3-4.3"/>
+        </svg>
+      </a>
+
+      <a href="login.html" class="icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+        </svg>
+      </a>
+
+      <select class="currency-select" data-currency-select aria-label="Currency">
+        <option value="GBP">GBP</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+      </select>
+
+      <a href="#" class="cart-link" data-cart-open aria-label="Cart">
+        My Cart <span class="cart-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-drawer">
+  <a href="index.html" class="mobile-brand" aria-label="Ball For Life home">
+    <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+  </a>
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="shop.html">New Arrivals</a>
+  <a href="shop.html?cat=hoodies">Hoodies</a>
+  <a href="shop.html?cat=tracksuits">Tracksuits</a>
+  <a href="shop.html?cat=tees">Graphic Tees</a>
+  <a href="index.html#about">About Us</a>
+</div>
+<div class="drawer-overlay"></div>
+
+<main>
+  <section class="size-guide-hero">
+    <div class="wrap">
+      <div class="size-guide-inner">
+        <div class="size-guide-kicker">Customer Care / 03</div>
+        <h1>Size Guide</h1>
+
+        <div class="size-guide-copy">
+          Each Ball For Life product has its <strong>own individual size guide</strong>.
+          Please check the size information shown on the specific product page before placing your order,
+          as measurements and fit may vary between different products and styles.
+        </div>
+
+        <div class="size-guide-note">
+          <span>Before you order</span>
+          <p>
+            We recommend comparing the measurements on the product page with a similar item you already own
+            to help you choose the best fit.
+          </p>
+        </div>
+
+        <div class="size-guide-actions">
+          <a href="shop.html" class="btn btn-solid-dark">Shop Products</a>
+          <a href="faq.html" class="btn btn-outline-dark">View FAQ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+
+      <div class="footer-brand">
+        <div class="logo-center">
+          <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+        </div>
+
+        <p>Inspired by the fear of being average.</p>
+
+        <div class="footer-social">
+          <a href="https://www.instagram.com/ball_for_life_store/" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
+          </a>
+
+          <a href="https://www.tiktok.com/@ball_for_life_store" aria-label="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.6 3 2.3 4.6 5 5"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about-us.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="#">Careers</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="faq.html">FAQ</a>
+        <a href="shipping-returns.html">Shipping &amp; Returns</a>
+        <a href="size-guide.html">Size Guide</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-conditions.html">Terms &amp; Conditions</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html?cat=tees">Graphic Tees</a>
+        <a href="shop.html?cat=hoodies">Hoodies</a>
+        <a href="shop.html?cat=tracksuits">Tracksuits</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Ball For Life. All rights reserved.</span>
+
+      <div class="pay-row" aria-label="Accepted payment methods">
+        <img class="pay-logo" src="visa.svg" alt="Visa">
+        <img class="pay-logo" src="mastercard-alt.svg" alt="Mastercard">
+        <img class="pay-logo" src="maestro.svg" alt="Maestro">
+        <img class="pay-logo" src="apple-pay.svg" alt="Apple Pay">
+        <img class="pay-logo" src="klarna.svg" alt="Klarna">
+        <img class="pay-logo" src="discover.svg" alt="Discover">
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<div class="cart-overlay drawer-overlay"></div>
+
+<div class="cart-drawer">
+  <div class="cart-head">
+    <h3>Your Bag</h3>
+    <svg class="cart-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M4 4l16 16M20 4L4 20"/>
+    </svg>
+  </div>
+
+  <div class="cart-items"></div>
+
+  <div class="cart-foot">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span class="val">£0.00</span>
+    </div>
+    <a href="#" class="btn btn-solid-dark">Checkout</a>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

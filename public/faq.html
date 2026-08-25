@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ — Ball For Life</title>
+  <meta name="description" content="Frequently asked questions about Ball For Life orders, shipping, returns, sizing, payments and products.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .faq-page{background:var(--white);color:var(--black);}
+
+    .faq-hero{
+      padding:88px 0 72px;
+      border-bottom:1px solid var(--line-light);
+      background:var(--white);
+    }
+
+    .faq-kicker{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--grey);
+      margin-bottom:18px;
+    }
+
+    .faq-hero h1{
+      font-family:'Archivo Black','Inter',sans-serif;
+      text-transform:uppercase;
+      font-size:clamp(48px,8vw,104px);
+      line-height:.9;
+      letter-spacing:-.02em;
+    }
+
+    .faq-intro{
+      max-width:620px;
+      margin-top:24px;
+      color:var(--grey-dark);
+      font-size:14.5px;
+      line-height:1.7;
+    }
+
+    .faq-layout{
+      display:grid;
+      grid-template-columns:220px minmax(0,780px);
+      gap:80px;
+      align-items:start;
+      padding:72px 0 120px;
+    }
+
+    .faq-nav{
+      position:sticky;
+      top:98px;
+      border-top:1px solid var(--line-light);
+    }
+
+    .faq-nav a{
+      display:block;
+      padding:13px 0;
+      border-bottom:1px solid var(--line-light);
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10.5px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      color:var(--grey-dark);
+    }
+
+    .faq-nav a:hover{color:var(--black);}
+
+    .faq-group{
+      margin-bottom:58px;
+    }
+
+    .faq-group:last-child{margin-bottom:0;}
+
+    .faq-group-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:20px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--line-dark);
+    }
+
+    .faq-group-number{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10px;
+      letter-spacing:.08em;
+      color:var(--grey);
+      text-transform:uppercase;
+      margin-bottom:10px;
+    }
+
+    .faq-group h2{
+      font-family:'Archivo Black','Inter',sans-serif;
+      text-transform:uppercase;
+      font-size:clamp(28px,3.3vw,42px);
+      line-height:1;
+    }
+
+    .faq-item{
+      border-bottom:1px solid var(--line-light);
+    }
+
+    .faq-item summary{
+      list-style:none;
+      min-height:68px;
+      padding:20px 0;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:600;
+      line-height:1.45;
+    }
+
+    .faq-item summary::-webkit-details-marker{display:none;}
+
+    .faq-item summary::after{
+      content:"+";
+      flex:0 0 auto;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:19px;
+      font-weight:400;
+    }
+
+    .faq-item[open] summary::after{content:"−";}
+
+    .faq-answer{
+      padding:0 44px 22px 0;
+      color:var(--grey-dark);
+      font-size:14px;
+      line-height:1.72;
+    }
+
+    .faq-answer p{margin-bottom:12px;}
+    .faq-answer p:last-child{margin-bottom:0;}
+
+    .faq-answer a{
+      color:var(--black);
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+
+    .faq-callout{
+      margin-top:42px;
+      background:var(--black);
+      color:var(--white);
+      padding:34px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:28px;
+    }
+
+    .faq-callout .eyebrow{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10px;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.55);
+      margin-bottom:10px;
+    }
+
+    .faq-callout h3{
+      font-family:'Archivo Black','Inter',sans-serif;
+      text-transform:uppercase;
+      font-size:26px;
+      line-height:1;
+    }
+
+    .faq-callout p{
+      margin-top:10px;
+      max-width:500px;
+      color:rgba(255,255,255,.7);
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    @media(max-width:860px){
+      .faq-hero{padding:64px 0 52px;}
+      .faq-layout{
+        grid-template-columns:1fr;
+        gap:42px;
+        padding:52px 0 88px;
+      }
+      .faq-nav{
+        position:static;
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:0 18px;
+      }
+    }
+
+    @media(max-width:520px){
+      .faq-hero{padding:50px 0 42px;}
+      .faq-hero h1{font-size:54px;}
+      .faq-layout{padding:42px 0 72px;}
+      .faq-group{margin-bottom:48px;}
+      .faq-group h2{font-size:28px;}
+      .faq-item summary{
+        min-height:62px;
+        padding:18px 0;
+        font-size:13px;
+      }
+      .faq-answer{
+        padding-right:20px;
+        font-size:13px;
+      }
+      .faq-callout{
+        padding:26px 22px;
+        align-items:flex-start;
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+
+<body class="faq-page">
+
+<header>
+  <div class="wrap nav-grid">
+    <div class="nav-left">
+      <div class="burger" aria-label="Open menu"><span></span><span></span><span></span></div>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+
+        <div class="nav-item">
+          <span>
+            Shop
+            <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </span>
+
+          <div class="nav-dropdown">
+            <div class="nav-dropdown-inner">
+              <a href="shop.html">New Arrivals</a>
+              <a href="shop.html?cat=hoodies">Hoodies</a>
+              <a href="shop.html?cat=tracksuits">Tracksuits</a>
+              <a href="shop.html?cat=tees">Graphic Tees</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="index.html#about">About Us</a>
+      </nav>
+    </div>
+
+    <a href="index.html" class="logo-center">
+      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+    </a>
+
+    <div class="nav-right">
+      <a href="#" class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M21 21l-4.3-4.3"/>
+        </svg>
+      </a>
+
+      <a href="login.html" class="icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+        </svg>
+      </a>
+
+      <select class="currency-select" data-currency-select aria-label="Currency">
+        <option value="GBP">GBP</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+      </select>
+
+      <a href="#" class="cart-link" data-cart-open aria-label="Cart">
+        My Cart <span class="cart-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-drawer">
+  <a href="index.html" class="mobile-brand" aria-label="Ball For Life home">
+    <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+  </a>
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="shop.html">New Arrivals</a>
+  <a href="shop.html?cat=hoodies">Hoodies</a>
+  <a href="shop.html?cat=tracksuits">Tracksuits</a>
+  <a href="shop.html?cat=tees">Graphic Tees</a>
+  <a href="index.html#about">About Us</a>
+</div>
+<div class="drawer-overlay"></div>
+
+<main>
+
+  <section class="faq-hero">
+    <div class="wrap">
+      <div class="faq-kicker">Customer Care / 02</div>
+      <h1>FAQ</h1>
+      <p class="faq-intro">
+        Everything you need to know about ordering from Ball For Life — from delivery and sizing
+        to payments, returns and product care.
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="faq-layout">
+
+      <aside class="faq-nav" aria-label="FAQ sections">
+        <a href="#orders">Orders</a>
+        <a href="#shipping">Shipping</a>
+        <a href="#returns">Returns</a>
+        <a href="#products">Products & Sizing</a>
+        <a href="#payments">Payments</a>
+        <a href="#account">Account & Discounts</a>
+      </aside>
+
+      <div>
+
+        <section class="faq-group" id="orders">
+          <div class="faq-group-head">
+            <div>
+              <div class="faq-group-number">01 / ORDERS</div>
+              <h2>Orders</h2>
+            </div>
+          </div>
+
+          <details class="faq-item">
+            <summary>How do I know if my order has gone through?</summary>
+            <div class="faq-answer">
+              <p>After successfully completing checkout, you should receive confirmation that your order has been created. Please make sure the email address used at checkout is correct so you can receive order updates.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I change or cancel my order after placing it?</summary>
+            <div class="faq-answer">
+              <p>Contact us as soon as possible if you need to change or cancel an order. Once an order has entered processing or has been dispatched, we may not be able to make changes.</p>
+              <p>This does not affect any rights you may have under applicable consumer law.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>I entered the wrong delivery address. What should I do?</summary>
+            <div class="faq-answer">
+              <p>Contact us immediately with your order number and the correct address. If the parcel has not yet been dispatched, we will do our best to update it. Once an order has been handed to the courier, an address change may no longer be possible.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I order more than one item at a time?</summary>
+            <div class="faq-answer">
+              <p>Yes. You can add multiple products, colours and sizes to your bag before checking out.</p>
+            </div>
+          </details>
+        </section>
+
+
+        <section class="faq-group" id="shipping">
+          <div class="faq-group-head">
+            <div>
+              <div class="faq-group-number">02 / SHIPPING</div>
+              <h2>Shipping</h2>
+            </div>
+          </div>
+
+          <details class="faq-item">
+            <summary>How long does delivery normally take?</summary>
+            <div class="faq-answer">
+              <p>Most orders are expected to arrive within <strong>4–7 working days after dispatch</strong>.</p>
+              <p>In some cases, particularly for overseas or international shipments, delivery can take up to <strong>3 weeks</strong> because of international transit, customs or courier delays.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>My parcel has not arrived after 3 weeks. What should I do?</summary>
+            <div class="faq-answer">
+              <p>Please contact us as soon as possible with your order number so that we can investigate the shipment.</p>
+              <p>If an order is confirmed as lost or undelivered, we will provide an appropriate resolution, which may include a replacement or full refund, subject to your applicable consumer rights.</p>
+              <p>For full details, read our <a href="shipping-returns.html">Shipping &amp; Returns Policy</a>.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What happens if I wait too long to report a missing parcel?</summary>
+            <div class="faq-answer">
+              <p>Please report delivery problems promptly. If you do not contact us within <strong>2 months of the expected delivery date</strong>, our ability to investigate the shipment with the courier may be limited.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Do you ship internationally?</summary>
+            <div class="faq-answer">
+              <p>Ball For Life may fulfil orders to supported destinations shown during checkout. Delivery times for overseas orders can be longer than domestic deliveries.</p>
+            </div>
+          </details>
+        </section>
+
+
+        <section class="faq-group" id="returns">
+          <div class="faq-group-head">
+            <div>
+              <div class="faq-group-number">03 / RETURNS</div>
+              <h2>Returns</h2>
+            </div>
+          </div>
+
+          <details class="faq-item">
+            <summary>When can I request a return?</summary>
+            <div class="faq-answer">
+              <p>Under our store returns policy, a return request may be considered if your item arrives seriously damaged or defective, if you receive the wrong product, or if we send the wrong colour or size compared with your confirmed order.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How long do I have to report an issue?</summary>
+            <div class="faq-answer">
+              <p>Please contact us within <strong>7 days of receiving your order</strong> and include your order number plus clear photographs or videos showing the problem.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What counts as serious damage?</summary>
+            <div class="faq-answer">
+              <p>Potential examples include substantial tears, major holes, unusable components, significant printing defects, severe staining or another fault that materially affects the product.</p>
+              <p>Small packaging marks, loose threads or minor variations that do not materially affect the product may not be considered serious damage under our store policy.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Where can I read the full return policy?</summary>
+            <div class="faq-answer">
+              <p>You can find the full details on our <a href="shipping-returns.html">Shipping &amp; Returns</a> page.</p>
+            </div>
+          </details>
+        </section>
+
+
+        <section class="faq-group" id="products">
+          <div class="faq-group-head">
+            <div>
+              <div class="faq-group-number">04 / PRODUCTS & SIZING</div>
+              <h2>Products &amp; Sizing</h2>
+            </div>
+          </div>
+
+          <details class="faq-item">
+            <summary>How do I choose the right size?</summary>
+            <div class="faq-answer">
+              <p>Check the size information shown on the product page before ordering. If a dedicated size guide is available, use the garment measurements rather than relying only on the size name.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Will every colour look exactly the same as it does on my screen?</summary>
+            <div class="faq-answer">
+              <p>We aim to show product colours as accurately as possible, but screens and display settings can make colours appear slightly different. Small colour variations can also occur between production batches.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How should I care for my Ball For Life tee?</summary>
+            <div class="faq-answer">
+              <p>Always follow the care label supplied with the garment. As a general rule, washing carefully, avoiding excessive heat and keeping printed garments away from harsh treatments will help preserve the fabric and graphic for longer.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Will sold-out products come back?</summary>
+            <div class="faq-answer">
+              <p>Some items may be restocked while others may be limited drops. Keep an eye on the website and Ball For Life social channels for release and restock updates.</p>
+            </div>
+          </details>
+        </section>
+
+
+        <section class="faq-group" id="payments">
+          <div class="faq-group-head">
+            <div>
+              <div class="faq-group-number">05 / PAYMENTS</div>
+              <h2>Payments</h2>
+            </div>
+          </div>
+
+          <details class="faq-item">
+            <summary>Which payment methods do you accept?</summary>
+            <div class="faq-answer">
+              <p>Available payment methods are shown during checkout. Your site currently displays support for major methods including Visa, Mastercard, Maestro, Apple Pay, Klarna and Discover.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I pay in a different currency?</summary>
+            <div class="faq-answer">
+              <p>The store supports GBP, USD and EUR display options. The final amount and any conversion applied by your bank or payment provider can depend on the payment method used.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Why was my payment declined?</summary>
+            <div class="faq-answer">
+              <p>A payment can be declined for several reasons, including incorrect card details, insufficient funds, bank security checks or payment-provider restrictions. Check your details and try again, or contact your bank or payment provider if the issue continues.</p>
+            </div>
+          </details>
+        </section>
+
+
+        <section class="faq-group" id="account">
+          <div class="faq-group-head">
+            <div>
+              <div class="faq-group-number">06 / ACCOUNT & DISCOUNTS</div>
+              <h2>Account &amp; Discounts</h2>
+            </div>
+          </div>
+
+          <details class="faq-item">
+            <summary>Do I need an account to shop?</summary>
+            <div class="faq-answer">
+              <p>If guest checkout is available at the time you order, you can complete a purchase without creating an account. An account can make it easier to keep your details and order information together.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How do I hear about new drops?</summary>
+            <div class="faq-answer">
+              <p>Subscribe to the Ball For Life newsletter and follow the brand on Instagram and TikTok to keep up with new drops, restocks and announcements.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Where do I enter a discount code?</summary>
+            <div class="faq-answer">
+              <p>If a promotion or discount code is available, enter it at the relevant stage of checkout. Promotional offers may have their own eligibility requirements and expiry dates.</p>
+            </div>
+          </details>
+        </section>
+
+        <div class="faq-callout">
+          <div>
+            <div class="eyebrow">Still need help?</div>
+            <h3>We're here to sort it.</h3>
+            <p>If your question is about a specific order, include your order number and as much information as possible when contacting Ball For Life.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</main>
+
+
+<footer>
+  <div class="wrap">
+
+    <div class="footer-top">
+
+      <div class="footer-brand">
+        <div class="logo-center">
+          <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+        </div>
+
+        <p>Inspired by the fear of being average.</p>
+
+        <div class="footer-social">
+          <a href="https://www.instagram.com/ball_for_life_store/" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
+          </a>
+
+          <a href="https://www.tiktok.com/@ball_for_life_store" aria-label="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.6 3 2.3 4.6 5 5"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about-us.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="#">Careers</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="faq.html">FAQ</a>
+        <a href="shipping-returns.html">Shipping &amp; Returns</a>
+        <a href="size-guide.html">Size Guide</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-conditions.html">Terms &amp; Conditions</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html?cat=tees">Graphic Tees</a>
+        <a href="shop.html?cat=hoodies">Hoodies</a>
+        <a href="shop.html?cat=tracksuits">Tracksuits</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Ball For Life. All rights reserved.</span>
+
+      <div class="pay-row" aria-label="Accepted payment methods">
+        <img class="pay-logo" src="visa.svg" alt="Visa">
+        <img class="pay-logo" src="mastercard-alt.svg" alt="Mastercard">
+        <img class="pay-logo" src="maestro.svg" alt="Maestro">
+        <img class="pay-logo" src="apple-pay.svg" alt="Apple Pay">
+        <img class="pay-logo" src="klarna.svg" alt="Klarna">
+        <img class="pay-logo" src="discover.svg" alt="Discover">
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+
+<div class="cart-overlay drawer-overlay"></div>
+
+<div class="cart-drawer">
+  <div class="cart-head">
+    <h3>Your Bag</h3>
+    <svg class="cart-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M4 4l16 16M20 4L4 20"/>
+    </svg>
+  </div>
+
+  <div class="cart-items"></div>
+
+  <div class="cart-foot">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span class="val">£0.00</span>
+    </div>
+    <a href="#" class="btn btn-solid-dark">Checkout</a>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

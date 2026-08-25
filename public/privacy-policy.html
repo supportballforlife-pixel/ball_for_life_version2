@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Privacy Policy — Ball For Life</title>
+  <meta name="description" content="Ball For Life privacy policy covering customer accounts, orders, payments, delivery details and marketing emails.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .privacy-page{
+      background:var(--white);
+      color:var(--black);
+    }
+
+    .privacy-hero{
+      padding:88px 0 72px;
+      border-bottom:1px solid var(--line-light);
+      background:var(--white);
+    }
+
+    .privacy-kicker{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--grey);
+      margin-bottom:18px;
+    }
+
+    .privacy-hero h1{
+      font-family:'Archivo Black','Inter',sans-serif;
+      text-transform:uppercase;
+      font-size:clamp(44px,7vw,92px);
+      line-height:.94;
+      letter-spacing:-.02em;
+      max-width:980px;
+    }
+
+    .privacy-intro{
+      max-width:680px;
+      margin-top:24px;
+      color:var(--grey-dark);
+      font-size:14.5px;
+      line-height:1.75;
+    }
+
+    .privacy-updated{
+      margin-top:20px;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10.5px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:var(--grey);
+    }
+
+    .privacy-layout{
+      display:grid;
+      grid-template-columns:230px minmax(0,780px);
+      gap:80px;
+      align-items:start;
+      padding:72px 0 120px;
+    }
+
+    .privacy-nav{
+      position:sticky;
+      top:98px;
+      border-top:1px solid var(--line-light);
+    }
+
+    .privacy-nav a{
+      display:block;
+      padding:13px 0;
+      border-bottom:1px solid var(--line-light);
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10.5px;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+      color:var(--grey-dark);
+    }
+
+    .privacy-nav a:hover{color:var(--black);}
+
+    .privacy-section{
+      padding:0 0 52px;
+      margin-bottom:52px;
+      border-bottom:1px solid var(--line-light);
+    }
+
+    .privacy-section:last-child{
+      margin-bottom:0;
+      padding-bottom:0;
+      border-bottom:0;
+    }
+
+    .privacy-number{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--grey);
+      margin-bottom:14px;
+    }
+
+    .privacy-section h2{
+      font-family:'Archivo Black','Inter',sans-serif;
+      text-transform:uppercase;
+      font-size:clamp(27px,3.2vw,42px);
+      line-height:1;
+      margin-bottom:24px;
+    }
+
+    .privacy-section h3{
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      margin:26px 0 10px;
+    }
+
+    .privacy-section p{
+      font-size:14px;
+      line-height:1.75;
+      color:var(--grey-dark);
+      margin-bottom:16px;
+    }
+
+    .privacy-section p:last-child{margin-bottom:0;}
+
+    .privacy-section strong{
+      color:var(--black);
+      font-weight:600;
+    }
+
+    .privacy-list{
+      display:grid;
+      gap:10px;
+      margin:18px 0 22px;
+    }
+
+    .privacy-list li{
+      position:relative;
+      padding-left:18px;
+      font-size:14px;
+      line-height:1.65;
+      color:var(--grey-dark);
+    }
+
+    .privacy-list li::before{
+      content:"—";
+      position:absolute;
+      left:0;
+      color:var(--black);
+    }
+
+    .privacy-callout{
+      margin-top:26px;
+      border:1px solid var(--line-light);
+      background:var(--paper);
+      padding:22px 24px;
+    }
+
+    .privacy-callout .label{
+      display:block;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--grey);
+      margin-bottom:10px;
+    }
+
+    .privacy-callout p{
+      margin:0;
+      color:var(--black);
+    }
+
+    .privacy-contact{
+      border:1px solid var(--line-light);
+      padding:22px 24px;
+      margin-top:20px;
+    }
+
+    .privacy-contact span{
+      display:block;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--grey);
+      margin-bottom:8px;
+    }
+
+    .privacy-contact a{
+      font-size:15px;
+      font-weight:600;
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+
+    @media(max-width:860px){
+      .privacy-hero{padding:64px 0 52px;}
+
+      .privacy-layout{
+        grid-template-columns:1fr;
+        gap:42px;
+        padding:52px 0 88px;
+      }
+
+      .privacy-nav{
+        position:static;
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:0 18px;
+      }
+    }
+
+    @media(max-width:520px){
+      .privacy-hero{padding:50px 0 42px;}
+      .privacy-hero h1{font-size:40px;}
+      .privacy-layout{padding:42px 0 72px;}
+      .privacy-section{padding-bottom:40px;margin-bottom:40px;}
+      .privacy-section h2{font-size:28px;}
+    }
+  </style>
+</head>
+
+<body class="privacy-page">
+
+<header>
+  <div class="wrap nav-grid">
+
+    <div class="nav-left">
+      <div class="burger" aria-label="Open menu"><span></span><span></span><span></span></div>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+
+        <div class="nav-item">
+          <span>
+            Shop
+            <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </span>
+
+          <div class="nav-dropdown">
+            <div class="nav-dropdown-inner">
+              <a href="shop.html">New Arrivals</a>
+              <a href="shop.html?cat=hoodies">Hoodies</a>
+              <a href="shop.html?cat=tracksuits">Tracksuits</a>
+              <a href="shop.html?cat=tees">Graphic Tees</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="index.html#about">About Us</a>
+      </nav>
+    </div>
+
+    <a href="index.html" class="logo-center">
+      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+    </a>
+
+    <div class="nav-right">
+
+      <a href="#" class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M21 21l-4.3-4.3"/>
+        </svg>
+      </a>
+
+      <a href="login.html" class="icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+        </svg>
+      </a>
+
+      <select class="currency-select" data-currency-select aria-label="Currency">
+        <option value="GBP">GBP</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+      </select>
+
+      <a href="#" class="cart-link" data-cart-open aria-label="Cart">
+        My Cart <span class="cart-count">0</span>
+      </a>
+    </div>
+
+  </div>
+</header>
+
+<div class="mobile-drawer">
+  <a href="index.html" class="mobile-brand" aria-label="Ball For Life home">
+    <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+  </a>
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="shop.html">New Arrivals</a>
+  <a href="shop.html?cat=hoodies">Hoodies</a>
+  <a href="shop.html?cat=tracksuits">Tracksuits</a>
+  <a href="shop.html?cat=tees">Graphic Tees</a>
+  <a href="index.html#about">About Us</a>
+</div>
+
+<div class="drawer-overlay"></div>
+
+<main>
+
+  <section class="privacy-hero">
+    <div class="wrap">
+      <div class="privacy-kicker">Legal / 01</div>
+
+      <h1>Privacy Policy</h1>
+
+      <p class="privacy-intro">
+        Ball For Life respects your privacy. This policy explains what personal information we collect,
+        why we use it, which service providers help us operate the store, and the choices and rights
+        available to you.
+      </p>
+
+      <div class="privacy-updated">Last updated: 25 August 2026</div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="privacy-layout">
+
+      <aside class="privacy-nav" aria-label="Privacy policy sections">
+        <a href="#who-we-are">Who We Are</a>
+        <a href="#information">Information We Collect</a>
+        <a href="#use">How We Use It</a>
+        <a href="#payments">Payments</a>
+        <a href="#marketing">Marketing</a>
+        <a href="#providers">Service Providers</a>
+        <a href="#storage">Data Retention</a>
+        <a href="#rights">Your Rights</a>
+        <a href="#security">Security</a>
+        <a href="#contact">Contact</a>
+      </aside>
+
+      <div>
+
+        <section class="privacy-section" id="who-we-are">
+          <div class="privacy-number">01 / WHO WE ARE</div>
+          <h2>Ball For Life</h2>
+
+          <p>
+            Ball For Life is a <strong>UK-based sole trader business</strong> operating the Ball For Life
+            online store.
+          </p>
+
+          <p>
+            For privacy questions or requests relating to your personal information, you can contact us at
+            <strong>supportballforlife@gmail.com</strong>.
+          </p>
+
+          <p>
+            We do not publish our home or trading address on this privacy page. Where the law requires us
+            to provide additional business information to a customer or authority, we will do so through
+            the appropriate channel.
+          </p>
+        </section>
+
+
+        <section class="privacy-section" id="information">
+          <div class="privacy-number">02 / INFORMATION WE COLLECT</div>
+          <h2>Personal Information</h2>
+
+          <p>
+            The information we collect depends on how you use the website. This can include:
+          </p>
+
+          <ul class="privacy-list">
+            <li>Your name.</li>
+            <li>Your email address.</li>
+            <li>Your delivery address and other delivery details.</li>
+            <li>Account login and account-related information.</li>
+            <li>Order history and products purchased.</li>
+            <li>Information you provide when contacting customer support.</li>
+            <li>Marketing subscription information where you choose to join our mailing list.</li>
+            <li>Technical information needed to operate and secure the website, such as basic browser, device or network information where collected by our hosting or security providers.</li>
+          </ul>
+
+          <div class="privacy-callout">
+            <span class="label">Important</span>
+            <p>
+              Creating an account, placing an order or providing your email address for delivery and order
+              purposes does <strong>not</strong> automatically subscribe you to marketing emails.
+            </p>
+          </div>
+        </section>
+
+
+        <section class="privacy-section" id="use">
+          <div class="privacy-number">03 / HOW WE USE INFORMATION</div>
+          <h2>Why We Need It</h2>
+
+          <p>We may use your personal information to:</p>
+
+          <ul class="privacy-list">
+            <li>Create and manage your Ball For Life account.</li>
+            <li>Process and fulfil your orders.</li>
+            <li>Store the delivery information needed to send your parcel.</li>
+            <li>Communicate with you about your order, payment, delivery or account.</li>
+            <li>Respond to support requests, returns, delivery issues or disputes.</li>
+            <li>Prevent fraud, misuse or security problems.</li>
+            <li>Keep business and transaction records where required by law.</li>
+            <li>Send marketing messages where you have separately chosen to subscribe.</li>
+          </ul>
+
+          <p>
+            Depending on the situation, we may process information because it is necessary to perform our
+            contract with you, to comply with a legal obligation, for our legitimate business interests,
+            or because you have given consent.
+          </p>
+        </section>
+
+
+        <section class="privacy-section" id="payments">
+          <div class="privacy-number">04 / PAYMENTS</div>
+          <h2>Stripe</h2>
+
+          <p>
+            Ball For Life uses <strong>Stripe</strong> to process payments.
+          </p>
+
+          <p>
+            Payment card information is handled by Stripe through its payment systems. Ball For Life does
+            not need to store your full card number, security code or complete payment-card details in our
+            own website database.
+          </p>
+
+          <p>
+            Stripe may collect and process information necessary to complete your payment, carry out fraud
+            prevention, authenticate transactions and comply with financial and legal requirements.
+            Stripe's own privacy terms apply to the information it processes directly.
+          </p>
+        </section>
+
+
+        <section class="privacy-section" id="marketing">
+          <div class="privacy-number">05 / MARKETING</div>
+          <h2>Email Marketing</h2>
+
+          <p>
+            If you specifically subscribe to Ball For Life marketing emails, we will use the email address
+            you provide to send information such as new drops, restocks, promotions and brand updates.
+          </p>
+
+          <p>
+            Marketing consent is separate from the email address we may need for your account, order,
+            delivery or customer service.
+          </p>
+
+          <p>
+            If you create an account or place an order but <strong>do not opt in to marketing</strong>, we
+            may still keep your email address where it is needed for your account, order records, delivery,
+            support or other legitimate business purposes, but we will not use it to send marketing emails
+            simply because you purchased from us.
+          </p>
+
+          <p>
+            You can withdraw your marketing consent at any time by using an unsubscribe option in a
+            marketing email where available, or by contacting us at supportballforlife@gmail.com.
+          </p>
+        </section>
+
+
+        <section class="privacy-section" id="providers">
+          <div class="privacy-number">06 / SERVICE PROVIDERS</div>
+          <h2>Who Helps Run The Store</h2>
+
+          <p>
+            We use third-party service providers to operate Ball For Life. These providers may process
+            personal information on our behalf or directly as part of providing their services.
+          </p>
+
+          <h3>Supabase</h3>
+          <p>
+            We use <strong>Supabase</strong> for parts of our backend, including customer account and order
+            information. This can include your name, email address, delivery details and other information
+            needed to manage your account and fulfil your order.
+          </p>
+
+          <h3>Stripe</h3>
+          <p>
+            We use <strong>Stripe</strong> to securely process payments and payment-related information.
+          </p>
+
+          <h3>Cloudflare</h3>
+          <p>
+            We use <strong>Cloudflare</strong> to host and deliver parts of our website and to help with
+            website performance, availability and security.
+          </p>
+
+          <p>
+            We may also share limited information with delivery companies, customer-service providers,
+            professional advisers, authorities or other providers where necessary to fulfil an order,
+            operate the business, protect our rights or comply with the law.
+          </p>
+        </section>
+
+
+        <section class="privacy-section" id="cookies">
+          <div class="privacy-number">07 / COOKIES & ANALYTICS</div>
+          <h2>Website Technology</h2>
+
+          <p>
+            Ball For Life is <strong>not currently using third-party advertising or analytics tools</strong>
+            such as Google Analytics, Meta Pixel or TikTok Pixel.
+          </p>
+
+          <p>
+            The website may still use essential browser storage, cookies or similar technologies where
+            needed for features such as your shopping bag, currency preferences, account functionality,
+            security or remembering whether you have already seen certain website notices.
+          </p>
+
+          <p>
+            If we introduce additional analytics or advertising technology in the future, we will update
+            this policy and, where required, provide appropriate cookie or consent controls.
+          </p>
+        </section>
+
+
+        <section class="privacy-section" id="storage">
+          <div class="privacy-number">08 / DATA RETENTION</div>
+          <h2>How Long We Keep Data</h2>
+
+          <p>
+            We keep personal information only for as long as reasonably necessary for the purpose it was
+            collected, including to fulfil orders, maintain customer accounts, provide support, prevent
+            fraud, resolve disputes and meet tax, accounting or other legal obligations.
+          </p>
+
+          <p>
+            Different types of information may need to be kept for different periods. When information is
+            no longer required, we will take reasonable steps to delete it, anonymise it or otherwise stop
+            using it where appropriate.
+          </p>
+        </section>
+
+
+        <section class="privacy-section" id="international">
+          <div class="privacy-number">09 / INTERNATIONAL PROCESSING</div>
+          <h2>Where Data May Be Processed</h2>
+
+          <p>
+            Some of the technology providers we use operate internationally. This means personal
+            information may be processed or stored outside the UK.
+          </p>
+
+          <p>
+            Where required, we rely on appropriate safeguards or the protections provided by our service
+            providers and applicable data-protection law when personal information is transferred
+            internationally.
+          </p>
+        </section>
+
+
+        <section class="privacy-section" id="rights">
+          <div class="privacy-number">10 / YOUR RIGHTS</div>
+          <h2>Your Privacy Rights</h2>
+
+          <p>
+            Depending on the circumstances and applicable law, you may have rights relating to your
+            personal information, including the right to:
+          </p>
+
+          <ul class="privacy-list">
+            <li>Ask what personal information we hold about you.</li>
+            <li>Request a copy of your personal information.</li>
+            <li>Ask us to correct inaccurate or incomplete information.</li>
+            <li>Ask us to delete personal information in certain circumstances.</li>
+            <li>Ask us to restrict how personal information is used in certain circumstances.</li>
+            <li>Object to certain uses of your personal information.</li>
+            <li>Withdraw consent where our processing is based on consent.</li>
+            <li>Request data portability where that right applies.</li>
+          </ul>
+
+          <p>
+            We may need to verify your identity before completing a privacy request.
+          </p>
+
+          <p>
+            You may also have the right to complain to the UK data-protection regulator if you believe your
+            personal information has been handled unlawfully.
+          </p>
+        </section>
+
+
+        <section class="privacy-section" id="security">
+          <div class="privacy-number">11 / SECURITY</div>
+          <h2>Protecting Your Information</h2>
+
+          <p>
+            We take reasonable steps to protect customer information and use established third-party
+            providers for important parts of the store, including Stripe for payments, Supabase for backend
+            data and Cloudflare for hosting and website delivery.
+          </p>
+
+          <p>
+            No online system can be guaranteed to be completely secure. You should keep your login details
+            confidential and contact us if you believe your account or personal information has been
+            compromised.
+          </p>
+        </section>
+
+
+        <section class="privacy-section" id="changes">
+          <div class="privacy-number">12 / CHANGES</div>
+          <h2>Updates To This Policy</h2>
+
+          <p>
+            We may update this Privacy Policy when our services, technology, legal obligations or business
+            practices change. The latest version will be published on this page with an updated revision
+            date.
+          </p>
+        </section>
+
+
+        <section class="privacy-section" id="contact">
+          <div class="privacy-number">13 / CONTACT</div>
+          <h2>Privacy Questions</h2>
+
+          <p>
+            If you have a question about this Privacy Policy, want to exercise a privacy right or want to
+            ask how your information is being used, contact Ball For Life using the email address below.
+          </p>
+
+          <div class="privacy-contact">
+            <span>Privacy & Customer Support</span>
+            <a href="mailto:supportballforlife@gmail.com">supportballforlife@gmail.com</a>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+
+<footer>
+  <div class="wrap">
+
+    <div class="footer-top">
+
+      <div class="footer-brand">
+        <div class="logo-center">
+          <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+        </div>
+
+        <p>Inspired by the fear of being average.</p>
+
+        <div class="footer-social">
+          <a href="https://www.instagram.com/ball_for_life_store/" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
+          </a>
+
+          <a href="https://www.tiktok.com/@ball_for_life_store" aria-label="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.6 3 2.3 4.6 5 5"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html#about">About Us</a>
+        <a href="#">Contact</a>
+        <a href="#">Careers</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="faq.html">FAQ</a>
+        <a href="shipping-returns.html">Shipping &amp; Returns</a>
+        <a href="size-guide.html">Size Guide</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html?cat=tees">Graphic Tees</a>
+        <a href="shop.html?cat=hoodies">Hoodies</a>
+        <a href="shop.html?cat=tracksuits">Tracksuits</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Ball For Life. All rights reserved.</span>
+
+      <div class="pay-row" aria-label="Accepted payment methods">
+        <img class="pay-logo" src="visa.svg" alt="Visa">
+        <img class="pay-logo" src="mastercard-alt.svg" alt="Mastercard">
+        <img class="pay-logo" src="maestro.svg" alt="Maestro">
+        <img class="pay-logo" src="apple-pay.svg" alt="Apple Pay">
+        <img class="pay-logo" src="klarna.svg" alt="Klarna">
+        <img class="pay-logo" src="discover.svg" alt="Discover">
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+
+<div class="cart-overlay drawer-overlay"></div>
+
+<div class="cart-drawer">
+
+  <div class="cart-head">
+    <h3>Your Bag</h3>
+    <svg class="cart-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M4 4l16 16M20 4L4 20"/>
+    </svg>
+  </div>
+
+  <div class="cart-items"></div>
+
+  <div class="cart-foot">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span class="val">£0.00</span>
+    </div>
+
+    <a href="#" class="btn btn-solid-dark">Checkout</a>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

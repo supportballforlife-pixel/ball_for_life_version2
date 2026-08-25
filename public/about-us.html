@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>About Us — Ball For Life</title>
+  <meta name="description" content="The story behind Ball For Life — a basketball-inspired streetwear brand built on the fear of being average.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .about-page{background:var(--white);color:var(--black);}
+
+    .about-hero{
+      display:grid;
+      grid-template-columns:minmax(0,1.05fr) minmax(420px,.95fr);
+      min-height:calc(100vh - 74px);
+      border-bottom:1px solid var(--line-light);
+    }
+
+    .about-image{
+      position:relative;
+      min-height:720px;
+      overflow:hidden;
+      background:var(--black);
+    }
+
+    .about-image img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .about-image::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.24));
+      pointer-events:none;
+    }
+
+    .about-copy{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:72px clamp(34px,5vw,86px);
+    }
+
+    .about-kicker{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--grey);
+      margin-bottom:18px;
+    }
+
+    .about-copy h1{
+      font-family:'Archivo Black','Inter',sans-serif;
+      text-transform:uppercase;
+      font-size:clamp(42px,5.8vw,82px);
+      line-height:.93;
+      letter-spacing:-.02em;
+      margin-bottom:30px;
+    }
+
+    .about-lead{
+      max-width:620px;
+      font-size:18px;
+      line-height:1.55;
+      font-weight:600;
+      color:var(--black);
+      margin-bottom:24px;
+    }
+
+    .about-copy p{
+      max-width:620px;
+      color:var(--grey-dark);
+      font-size:14.5px;
+      line-height:1.8;
+      margin-bottom:18px;
+    }
+
+    .about-quote{
+      margin-top:18px;
+      padding-top:26px;
+      border-top:1px solid var(--line-light);
+      font-family:'IBM Plex Mono',monospace;
+      font-size:12px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      color:var(--black);
+    }
+
+    .about-story{
+      padding:100px 0 120px;
+    }
+
+    .about-story-grid{
+      display:grid;
+      grid-template-columns:240px minmax(0,760px);
+      gap:80px;
+      align-items:start;
+    }
+
+    .about-story-label{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10.5px;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:var(--grey);
+      padding-top:8px;
+    }
+
+    .about-story-copy h2{
+      font-family:'Archivo Black','Inter',sans-serif;
+      text-transform:uppercase;
+      font-size:clamp(34px,4.5vw,60px);
+      line-height:.98;
+      margin-bottom:28px;
+    }
+
+    .about-story-copy p{
+      color:var(--grey-dark);
+      font-size:15px;
+      line-height:1.85;
+      margin-bottom:20px;
+    }
+
+    .about-manifesto{
+      margin-top:46px;
+      padding:38px 40px;
+      background:rgba(248,248,246,.68);
+      border:1px solid rgba(20,20,20,.10);
+      box-shadow:0 14px 40px rgba(0,0,0,.045);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+    }
+
+    .about-manifesto span{
+      display:block;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--grey);
+      margin-bottom:16px;
+    }
+
+    .about-manifesto h3{
+      font-family:'Inter',sans-serif;
+      text-transform:none;
+      font-size:clamp(25px,3.2vw,40px);
+      font-weight:500;
+      letter-spacing:-.025em;
+      line-height:1.12;
+      max-width:700px;
+      color:var(--black);
+    }
+
+    .about-manifesto p{
+      margin-top:20px;
+      color:var(--grey-dark);
+      max-width:650px;
+      line-height:1.75;
+      font-size:14px;
+    }
+
+    .about-final{
+      border-top:1px solid var(--line-light);
+      padding:90px 0 110px;
+      text-align:center;
+    }
+
+    .about-final .eyebrow{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10.5px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--grey);
+      margin-bottom:18px;
+    }
+
+    .about-final h2{
+      font-family:'Archivo Black','Inter',sans-serif;
+      text-transform:uppercase;
+      font-size:clamp(40px,7vw,88px);
+      line-height:.92;
+      max-width:900px;
+      margin:0 auto 26px;
+    }
+
+    .about-final p{
+      max-width:650px;
+      margin:0 auto 32px;
+      color:var(--grey-dark);
+      line-height:1.75;
+      font-size:14.5px;
+    }
+
+    @media(max-width:940px){
+      .about-hero{
+        grid-template-columns:1fr;
+      }
+
+      .about-image{
+        min-height:560px;
+        order:1;
+      }
+
+      .about-copy{
+        order:2;
+        padding:58px 24px 70px;
+      }
+
+      .about-story{
+        padding:72px 0 90px;
+      }
+
+      .about-story-grid{
+        grid-template-columns:1fr;
+        gap:22px;
+      }
+    }
+
+    @media(max-width:520px){
+      .about-image{min-height:440px;}
+      .about-copy{padding:46px 20px 58px;}
+      .about-copy h1{font-size:44px;}
+      .about-lead{font-size:16px;}
+      .about-story{padding:58px 0 72px;}
+      .about-story-copy h2{font-size:34px;}
+      .about-manifesto{padding:28px 22px;}
+      .about-final{padding:68px 0 82px;}
+      .about-final h2{font-size:46px;}
+    }
+  </style>
+</head>
+
+<body class="about-page">
+
+<header>
+  <div class="wrap nav-grid">
+    <div class="nav-left">
+      <div class="burger" aria-label="Open menu"><span></span><span></span><span></span></div>
+
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+
+        <div class="nav-item">
+          <span>
+            Shop
+            <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </span>
+
+          <div class="nav-dropdown">
+            <div class="nav-dropdown-inner">
+              <a href="shop.html">New Arrivals</a>
+              <a href="shop.html?cat=hoodies">Hoodies</a>
+              <a href="shop.html?cat=tracksuits">Tracksuits</a>
+              <a href="shop.html?cat=tees">Graphic Tees</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="about-us.html">About Us</a>
+      </nav>
+    </div>
+
+    <a href="index.html" class="logo-center">
+      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+    </a>
+
+    <div class="nav-right">
+      <a href="#" class="icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="M21 21l-4.3-4.3"/>
+        </svg>
+      </a>
+
+      <a href="login.html" class="icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+        </svg>
+      </a>
+
+      <select class="currency-select" data-currency-select aria-label="Currency">
+        <option value="GBP">GBP</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+      </select>
+
+      <a href="#" class="cart-link" data-cart-open aria-label="Cart">
+        My Cart <span class="cart-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-drawer">
+  <a href="index.html" class="mobile-brand" aria-label="Ball For Life home">
+    <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+  </a>
+  <a href="index.html">Home</a>
+  <a href="shop.html">Shop</a>
+  <a href="shop.html">New Arrivals</a>
+  <a href="shop.html?cat=hoodies">Hoodies</a>
+  <a href="shop.html?cat=tracksuits">Tracksuits</a>
+  <a href="shop.html?cat=tees">Graphic Tees</a>
+  <a href="about-us.html">About Us</a>
+</div>
+<div class="drawer-overlay"></div>
+
+<main>
+
+  <section class="about-hero">
+    <div class="about-image">
+      <img src="hero-basketball-court.jpg" alt="Ball For Life basketball-inspired streetwear">
+    </div>
+
+    <div class="about-copy">
+      <div class="about-kicker">Our Story / Ball For Life</div>
+      <h1>More Than<br>A Game.</h1>
+
+      <p class="about-lead">
+        Ball For Life is a basketball-inspired streetwear brand built around one idea:
+        <strong>the fear of being average.</strong>
+      </p>
+
+      <p>
+        That line is not just something we put on clothes. It is the reason this brand exists.
+        Ball For Life started from wanting more than the normal route — more than waking up,
+        repeating the same day and settling for what everyone else expects.
+      </p>
+
+      <p>
+        I wanted to start something from me. Build something by myself. Take the risk of trying,
+        even if it means failing along the way.
+      </p>
+
+      <div class="about-quote">Inspired by the fear of being average.</div>
+    </div>
+  </section>
+
+
+  <section class="about-story">
+    <div class="wrap">
+      <div class="about-story-grid">
+
+        <div class="about-story-label">01 / Why Ball For Life</div>
+
+        <div class="about-story-copy">
+          <h2>Basketball Was Never Just A Sport.</h2>
+
+          <p>
+            For me, basketball has always been more than a game. It gave me purpose. It gave me
+            friendships, connections and memories I would never have had without it.
+          </p>
+
+          <p>
+            It also taught me something bigger than basketball itself: you are going to miss shots,
+            lose games and have moments where things do not go your way. But you keep moving.
+            You keep working. You take the next shot.
+          </p>
+
+          <p>
+            That mindset changed the way I look at life. Failure stopped being something to run from.
+            It became part of chasing something that actually matters.
+          </p>
+
+          <p>
+            That is where the name <strong>Ball For Life</strong> comes from. Basketball has been part
+            of my life in a way that goes far beyond the court, and I want more people to understand
+            that it was never just a sport.
+          </p>
+
+          <div class="about-manifesto">
+            <span>The Message</span>
+            <h3>Don't fear failure. Fear being average.</h3>
+
+            <p>
+              We want Ball For Life to represent people who are willing to chase something bigger.
+              Your dream does not have to look like anyone else's. You do not have to follow the normal
+              route just because it is the safe one. Try. Fail. Learn. Keep going.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="about-final">
+    <div class="wrap">
+      <div class="eyebrow">The Next Move Is Yours</div>
+
+      <h2>I'm Chasing Mine.<br>Now It's Your Turn.</h2>
+
+      <p>
+        Ball For Life is still being built. That is part of the point. This brand is proof of me
+        choosing to start instead of waiting for the perfect time. If there is something you want
+        to build, something you want to become or a dream you keep thinking about — go after it.
+      </p>
+
+      <a href="shop.html" class="btn btn-solid-dark">Shop Ball For Life</a>
+    </div>
+  </section>
+
+</main>
+
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+
+      <div class="footer-brand">
+        <div class="logo-center">
+          <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+        </div>
+
+        <p>Inspired by the fear of being average.</p>
+
+        <div class="footer-social">
+          <a href="https://www.instagram.com/ball_for_life_store/" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
+          </a>
+
+          <a href="https://www.tiktok.com/@ball_for_life_store" aria-label="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.6 3 2.3 4.6 5 5"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about-us.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="#">Careers</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="faq.html">FAQ</a>
+        <a href="shipping-returns.html">Shipping &amp; Returns</a>
+        <a href="size-guide.html">Size Guide</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-conditions.html">Terms &amp; Conditions</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="shop.html?cat=tees">Graphic Tees</a>
+        <a href="shop.html?cat=hoodies">Hoodies</a>
+        <a href="shop.html?cat=tracksuits">Tracksuits</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Ball For Life. All rights reserved.</span>
+
+      <div class="pay-row" aria-label="Accepted payment methods">
+        <img class="pay-logo" src="visa.svg" alt="Visa">
+        <img class="pay-logo" src="mastercard-alt.svg" alt="Mastercard">
+        <img class="pay-logo" src="maestro.svg" alt="Maestro">
+        <img class="pay-logo" src="apple-pay.svg" alt="Apple Pay">
+        <img class="pay-logo" src="klarna.svg" alt="Klarna">
+        <img class="pay-logo" src="discover.svg" alt="Discover">
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="cart-overlay drawer-overlay"></div>
+
+<div class="cart-drawer">
+  <div class="cart-head">
+    <h3>Your Bag</h3>
+    <svg class="cart-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M4 4l16 16M20 4L4 20"/>
+    </svg>
+  </div>
+
+  <div class="cart-items"></div>
+
+  <div class="cart-foot">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span class="val">£0.00</span>
+    </div>
+
+    <a href="#" class="btn btn-solid-dark">Checkout</a>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
