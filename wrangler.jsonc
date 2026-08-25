@@ -1,0 +1,7 @@
+{
+  "name": "ball-for-life-version2",
+  "compatibility_date": "2026-08-25",
+  "assets": {
+    "directory": "./public"
+  }
+}
