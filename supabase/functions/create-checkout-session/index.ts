@@ -18,11 +18,15 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const orderNumber = String(body.order_number || '').trim();
     const customerEmail = String(body.customer_email || '').trim();
-    const amountGbp = Number(body.amount_gbp || 0);
-    const amountPence = Math.round(amountGbp * 100);
+    const subtotalGbp = Number(body.subtotal_gbp || 0);
+    const shippingCountry = String(body.shipping_country || '').trim();
+    const shippingGbp = subtotalGbp >= 50 ? 0 : 4.99;
+    const totalGbp = Number((subtotalGbp + shippingGbp).toFixed(2));
+    const amountPence = Math.round(totalGbp * 100);
 
     if (!orderNumber) throw new Error('Missing order number.');
-    if (!Number.isFinite(amountPence) || amountPence < 50) throw new Error('Invalid order amount.');
+    if (!Number.isFinite(subtotalGbp) || subtotalGbp <= 0) throw new Error('Invalid order subtotal.');
+    if (!shippingCountry) throw new Error('Missing shipping country.');
 
     const params = new URLSearchParams();
     params.set('mode', 'payment');
@@ -34,6 +38,9 @@ Deno.serve(async (req) => {
     params.set('line_items[0][price_data][unit_amount]', String(amountPence));
     params.set('line_items[0][price_data][product_data][name]', `Ball For Life order ${orderNumber}`);
     params.set('metadata[order_number]', orderNumber);
+    params.set('metadata[subtotal_gbp]', subtotalGbp.toFixed(2));
+    params.set('metadata[shipping_gbp]', shippingGbp.toFixed(2));
+    params.set('metadata[shipping_country]', shippingCountry);
     if (customerEmail) params.set('customer_email', customerEmail);
 
     const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
@@ -50,7 +57,7 @@ Deno.serve(async (req) => {
       throw new Error(session.error?.message || 'Stripe could not create checkout.');
     }
 
-    return new Response(JSON.stringify({ url: session.url, id: session.id }), {
+    return new Response(JSON.stringify({ url: session.url, id: session.id, subtotal_gbp: subtotalGbp, shipping_gbp: shippingGbp, total_gbp: totalGbp }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {

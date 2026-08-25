@@ -6,7 +6,11 @@
   const form = document.querySelector('[data-checkout-form]');
   const message = document.querySelector('[data-checkout-message]');
   const itemsEl = document.querySelector('[data-checkout-items]');
+  const subtotalEl = document.querySelector('[data-checkout-subtotal]');
+  const shippingEl = document.querySelector('[data-checkout-shipping]');
   const totalEl = document.querySelector('[data-checkout-total]');
+  const FREE_SHIPPING_THRESHOLD_GBP = 50;
+  const STANDARD_SHIPPING_GBP = 4.99;
   const submitButton = document.querySelector('[data-checkout-submit]');
 
   let currentUser = null;
@@ -44,10 +48,16 @@
     return cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 1), 0);
   }
 
+  function shippingFee() {
+    return Number(subtotal().toFixed(2)) >= FREE_SHIPPING_THRESHOLD_GBP ? 0 : STANDARD_SHIPPING_GBP;
+  }
+
   function renderSummary() {
     if (!itemsEl || !totalEl) return;
     if (!cart.length) {
       itemsEl.innerHTML = '<div class="auth-empty">Your bag is empty.</div>';
+      if (subtotalEl) subtotalEl.textContent = money(0);
+      if (shippingEl) shippingEl.textContent = money(0);
       totalEl.textContent = money(0);
       if (submitButton) submitButton.disabled = true;
       setMessage('Add a tee to your bag before checkout.', 'warning');
@@ -63,7 +73,11 @@
         <span>${money(Number(item.price || 0) * Number(item.qty || 1))}</span>
       </div>
     `).join('');
-    totalEl.textContent = money(subtotal());
+    const itemsSubtotal = Number(subtotal().toFixed(2));
+    const shipping = shippingFee();
+    if (subtotalEl) subtotalEl.textContent = money(itemsSubtotal);
+    if (shippingEl) shippingEl.textContent = shipping === 0 ? 'FREE' : money(shipping);
+    totalEl.textContent = money(itemsSubtotal + shipping);
   }
 
   function cleanPaymentLink() {
@@ -78,7 +92,8 @@
 
     const payload = {
       order_number: order.order_number,
-      amount_gbp: order.subtotal_gbp,
+      subtotal_gbp: order.subtotal_gbp,
+      shipping_country: order.shipping_country,
       customer_email: order.shipping_email,
     };
 
