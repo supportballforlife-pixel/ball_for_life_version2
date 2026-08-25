@@ -1647,6 +1647,10 @@ footer .logo-center .brand-logo{width:150px;}
 
 
 
+
+
+
+
 /* ============================================================
    BALL FOR LIFE — MOBILE DESKTOP-STYLE OVERRIDES
    Keep mobile visually close to desktop
@@ -1972,5 +1976,63 @@ footer .logo-center .brand-logo{width:150px;}
     height: 17px !important;
     font-size: 9px !important;
     flex: 0 0 17px !important;
+  }
+}
+
+
+
+
+
+
+@media (max-width:760px){
+  .signup-modal{
+    padding:14px;
+  }
+
+  .signup-modal-panel{
+    width:min(360px, 90vw);
+    max-height:88vh;
+    min-height:0;
+    grid-template-columns:1fr;
+    overflow:auto;
+  }
+
+  .signup-modal-image{
+    height:190px;
+  }
+
+  .signup-modal-content{
+    padding:28px 20px 24px;
+  }
+
+  .signup-modal-close{
+    width:42px;
+    height:42px;
+  }
+
+  .signup-modal-logo{
+    width:78px;
+    margin-bottom:16px;
+  }
+
+  .signup-modal h2{
+    font-size:22px;
+    line-height:1.08;
+    margin-bottom:18px;
+  }
+
+  .signup-modal-form{
+    gap:12px;
+  }
+
+  .signup-modal-form input,
+  .signup-modal-form button{
+    height:50px;
+    font-size:14px;
+  }
+
+  .signup-modal-content p{
+    font-size:11.5px;
+    margin-top:18px;
   }
 }
