@@ -99,6 +99,8 @@
     product('anthony-edwards-snow-washed-oversized-cotton-t-shirt', 'Anthony Edwards Snow Washed Oversized Cotton T-Shirt', 'Anthony-Edwards-Snow-Washed-Oversized-Cotton-T-Shirt', fullColors, 27.99),
   ];
 
+  const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+
   const ALIASES = {
     'tee-01': 'ball-for-life-graphic-tee',
     'no-average-graphic-tee': 'ball-for-life-graphic-tee',
@@ -165,6 +167,45 @@
             <details open>
               <summary>Product Details</summary>
               <p>Snow washed oversized cotton tee with a relaxed boxy fit and heavyweight streetwear feel.</p>
+              <div class="product-detail-specs">
+                <div><span>Material</span><strong>100% cotton</strong></div>
+                <div><span>Fabric Weight</span><strong>250 gsm (7.4 oz)</strong></div>
+              </div>
+            </details>
+            <details>
+              <summary>Care Instructions</summary>
+              <ul class="product-care-list">
+                <li>Machine wash at 30&deg;C (gentle cycle)</li>
+                <li>Do not bleach</li>
+                <li>Tumble dry low</li>
+                <li>Iron at low temperature, avoid ironing on print</li>
+                <li>Do not dry clean</li>
+              </ul>
+            </details>
+            <details>
+              <summary>Size Guide</summary>
+              <div class="product-size-table-wrap">
+                <p>1-3 cm sizing differences may occur.</p>
+                <table class="product-size-table">
+                  <thead>
+                    <tr>
+                      <th>Size</th>
+                      <th>Length</th>
+                      <th>Shoulder</th>
+                      <th>Chest</th>
+                      <th>Sleeve length</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>S</td><td>70</td><td>53</td><td>56</td><td>20.8</td></tr>
+                    <tr><td>M</td><td>72</td><td>55</td><td>58</td><td>21.5</td></tr>
+                    <tr><td>L</td><td>74</td><td>57</td><td>60</td><td>22.2</td></tr>
+                    <tr><td>XL</td><td>76</td><td>59</td><td>62</td><td>22.9</td></tr>
+                    <tr><td>2XL</td><td>78</td><td>61</td><td>64</td><td>23.6</td></tr>
+                    <tr><td>3XL</td><td>79</td><td>63</td><td>67</td><td>23.6</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </details>
             <details>
               <summary>Shipping Info</summary>
@@ -172,7 +213,7 @@
             </details>
             <details>
               <summary>Returns & Exchange</summary>
-              <p>Returns accepted within 30 days if the item is unworn, unwashed, and in original condition.</p>
+              <p>You can request a change-of-mind return within 14 days of receiving your order. Items must be unworn, unwashed, and in original condition. Faulty or incorrect items should be reported as soon as possible.</p>
             </details>
           </div>
         </aside>
@@ -206,7 +247,7 @@
             <span>Size</span>
           </div>
           <div class="product-sizes">
-            ${['S', 'M', 'L', 'XL'].map((size) => `<button class="product-size ${size === state.size ? 'active' : ''}" type="button" data-size="${size}">${size}</button>`).join('')}
+            ${SIZES.map((size) => `<button class="product-size ${size === state.size ? 'active' : ''}" type="button" data-size="${size}">${size}</button>`).join('')}
           </div>
 
           <div class="product-qty">

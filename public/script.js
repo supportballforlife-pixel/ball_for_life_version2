@@ -140,7 +140,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartOverlay = document.querySelector('.cart-overlay');
   function openCart(){ cartDrawer?.classList.add('open'); cartOverlay?.classList.add('open'); }
   function closeCart(){ cartDrawer?.classList.remove('open'); cartOverlay?.classList.remove('open'); }
-  document.querySelectorAll('[data-cart-open]').forEach(el=>el.addEventListener('click', openCart));
+  document.querySelectorAll('[data-cart-open]').forEach(el=>el.addEventListener('click', (event) => {
+    event.preventDefault();
+    openCart();
+  }));
   document.querySelector('.cart-close')?.addEventListener('click', closeCart);
   cartOverlay?.addEventListener('click', closeCart);
   document.querySelector('.cart-foot .btn')?.addEventListener('click', checkoutCart);

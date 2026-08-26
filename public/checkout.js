@@ -179,7 +179,7 @@
 
     if (submitButton) {
       submitButton.disabled = true;
-      submitButton.textContent = 'Creating order...';
+      submitButton.textContent = 'Opening secure payment...';
     }
 
     const order = {
@@ -211,7 +211,7 @@
         setMessage(`Could not start payment: ${error.message || error}`, 'error');
         if (submitButton) {
           submitButton.disabled = false;
-          submitButton.textContent = 'Create order & pay';
+          submitButton.textContent = 'Continue to secure payment';
         }
         return;
       }

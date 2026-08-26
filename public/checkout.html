@@ -31,7 +31,7 @@
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
       </select>
-      <a href="#" class="cart-link" data-cart-open aria-label="Cart">
+      <a href="checkout.html" class="cart-link" data-cart-open aria-label="Cart">
         My Cart <span class="cart-count">0</span>
       </a>
     </div>
@@ -50,8 +50,8 @@
   <section class="checkout-head">
     <div>
       <div class="eyebrow">Checkout</div>
-      <h1 class="display">Create order</h1>
-      <p>Fill in delivery details, then your order gets saved and you can pay securely.</p>
+      <h1 class="display">Secure checkout</h1>
+      <p>Pay securely with card, Apple Pay or Klarna.</p>
     </div>
     <a href="shop.html" class="btn btn-outline-dark">Keep shopping</a>
   </section>
@@ -193,7 +193,7 @@
       </div>
 
       <p class="auth-note" data-checkout-message data-type="">Checking your bag...</p>
-      <button type="submit" class="btn btn-solid-dark" data-checkout-submit>Create order & pay</button>
+      <button type="submit" class="btn btn-solid-dark" data-checkout-submit>Continue to secure payment</button>
     </form>
 
     <aside class="checkout-summary" aria-labelledby="summary-title">
@@ -202,7 +202,11 @@
       <div class="checkout-total"><span>Subtotal</span><strong data-checkout-subtotal>£0.00</strong></div>
       <div class="checkout-total"><span>Shipping</span><strong data-checkout-shipping>£4.99</strong></div>
       <div class="checkout-total"><span>Total</span><strong data-checkout-total>£0.00</strong></div>
-      <p>Payment opens after the order is created, so the order still appears in your account and admin dashboard.</p>
+      <div class="checkout-reassurance">
+        <div><span>Delivery estimate</span><strong>3-7 working days</strong></div>
+        <div><span>Returns</span><strong>14-day change-of-mind returns</strong></div>
+      </div>
+      <p>Pay securely with card, Apple Pay or Klarna.</p>
     </aside>
   </section>
 </main>
@@ -213,7 +217,7 @@
   <div class="cart-items"></div>
   <div class="cart-foot">
     <div class="cart-subtotal"><span>Subtotal</span><span class="val">£0.00</span></div>
-    <a href="#" class="btn btn-solid-dark">Checkout</a>
+    <a href="checkout.html" class="btn btn-solid-dark">Checkout</a>
   </div>
 </div>
 

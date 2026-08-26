@@ -1267,6 +1267,59 @@ footer .logo-center .brand-logo{width:150px;}
   font-size:12px;
   line-height:1.55;
 }
+.product-detail-specs{
+  display:grid;
+  gap:8px;
+  padding:0 18px 14px 0;
+}
+.product-detail-specs div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  border-top:1px solid var(--line-light);
+  padding-top:8px;
+  font-size:12px;
+}
+.product-detail-specs span{
+  color:var(--grey-dark);
+}
+.product-detail-specs strong{
+  font-weight:600;
+  text-align:right;
+}
+.product-care-list{
+  margin:0;
+  padding:0 18px 14px 18px;
+  color:var(--grey-dark);
+  font-size:12px;
+  line-height:1.65;
+}
+.product-size-table-wrap{
+  padding:0 18px 14px 0;
+  overflow-x:auto;
+}
+.product-size-table-wrap p{
+  padding:0 0 10px 0;
+}
+.product-size-table{
+  width:100%;
+  min-width:480px;
+  border-collapse:collapse;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+}
+.product-size-table th,
+.product-size-table td{
+  border:1px solid var(--line-dark);
+  padding:9px 8px;
+  text-align:center;
+}
+.product-size-table th{
+  background:var(--paper);
+  font-weight:600;
+  text-transform:uppercase;
+}
 .product-media-panel{
   position:relative;
   min-height:min(690px, calc(100vh - 172px));
@@ -1369,7 +1422,7 @@ footer .logo-center .brand-logo{width:150px;}
 }
 .product-sizes{
   display:grid;
-  grid-template-columns:repeat(4, 1fr);
+  grid-template-columns:repeat(6, 1fr);
   gap:0;
   border:1px solid var(--line-dark);
   margin-bottom:16px;
@@ -1570,6 +1623,30 @@ footer .logo-center .brand-logo{width:150px;}
 }
 .checkout-total strong{
   font-size:18px;
+}
+.checkout-reassurance{
+  display:grid;
+  gap:10px;
+  border:1px solid var(--line-light);
+  background:var(--paper);
+  padding:14px;
+  margin:18px 0 14px;
+}
+.checkout-reassurance div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.checkout-reassurance span{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;
+  text-transform:uppercase;
+  color:var(--grey-dark);
+}
+.checkout-reassurance strong{
+  font-size:12px;
+  text-align:right;
 }
 .order-success{
   min-height:calc(100vh - 112px);
