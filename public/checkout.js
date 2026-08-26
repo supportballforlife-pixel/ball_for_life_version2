@@ -9,12 +9,18 @@
   const subtotalEl = document.querySelector('[data-checkout-subtotal]');
   const shippingEl = document.querySelector('[data-checkout-shipping]');
   const totalEl = document.querySelector('[data-checkout-total]');
+  const discountRow = document.querySelector('[data-discount-row]');
+  const discountEl = document.querySelector('[data-checkout-discount]');
+  const rewardInput = document.querySelector('[data-reward-code-input]');
+  const rewardButton = document.querySelector('[data-apply-reward]');
+  const rewardMessage = document.querySelector('[data-reward-message]');
   const FREE_SHIPPING_THRESHOLD_GBP = 50;
   const STANDARD_SHIPPING_GBP = 4.99;
   const submitButton = document.querySelector('[data-checkout-submit]');
 
   let currentUser = null;
   let cart = [];
+  let appliedReward = null;
 
   function money(value) {
     return window.__bfl_money ? window.__bfl_money(Number(value || 0)) : `£${Number(value || 0).toFixed(2)}`;
@@ -24,6 +30,12 @@
     if (!message) return;
     message.textContent = text;
     message.dataset.type = type || '';
+  }
+
+  function setRewardMessage(text, type) {
+    if (!rewardMessage) return;
+    rewardMessage.textContent = text;
+    rewardMessage.dataset.type = type || '';
   }
 
   function escapeHtml(value) {
@@ -52,6 +64,10 @@
     return Number(subtotal().toFixed(2)) >= FREE_SHIPPING_THRESHOLD_GBP ? 0 : STANDARD_SHIPPING_GBP;
   }
 
+  function discountAmount() {
+    return appliedReward ? Number(appliedReward.discount_gbp || 0) : 0;
+  }
+
   function renderSummary() {
     if (!itemsEl || !totalEl) return;
     if (!cart.length) {
@@ -75,9 +91,12 @@
     `).join('');
     const itemsSubtotal = Number(subtotal().toFixed(2));
     const shipping = shippingFee();
+    const discount = discountAmount();
     if (subtotalEl) subtotalEl.textContent = money(itemsSubtotal);
+    if (discountRow) discountRow.hidden = discount <= 0;
+    if (discountEl) discountEl.textContent = `-${money(discount)}`;
     if (shippingEl) shippingEl.textContent = shipping === 0 ? 'FREE' : money(shipping);
-    totalEl.textContent = money(itemsSubtotal + shipping);
+    totalEl.textContent = money(itemsSubtotal + shipping - discount);
   }
 
   function cleanPaymentLink() {
@@ -101,6 +120,7 @@
       shipping_city: order.shipping_city,
       shipping_postcode: order.shipping_postcode,
       shipping_country: order.shipping_country,
+      reward_code: order.reward_code,
     };
 
     const config = window.BFL_SUPABASE || {};
@@ -165,6 +185,66 @@
         : 'Guest checkout — no account required.',
       'success'
     );
+    setRewardMessage(
+      currentUser
+        ? 'Enter an unlocked account reward code for 10% off.'
+        : 'Log in to use earned 10% reward codes.',
+      currentUser ? '' : 'warning'
+    );
+  }
+
+  async function validateRewardCode() {
+    if (!rewardInput || !client) return;
+    const code = rewardInput.value.trim().toUpperCase();
+    appliedReward = null;
+    renderSummary();
+    if (!code) {
+      setRewardMessage('Enter a reward code first.', 'warning');
+      return;
+    }
+    if (!currentUser) {
+      setRewardMessage('Log in to use a reward code.', 'warning');
+      return;
+    }
+
+    if (rewardButton) {
+      rewardButton.disabled = true;
+      rewardButton.textContent = 'Checking...';
+    }
+
+    try {
+      const config = window.BFL_SUPABASE || {};
+      const { data: sessionData } = await client.auth.getSession();
+      const token = sessionData.session?.access_token || config.anonKey;
+      const response = await fetch(`${config.url}/functions/v1/validate-reward-code`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: config.anonKey,
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          code,
+          subtotal_gbp: Number(subtotal().toFixed(2)),
+        }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.valid) throw new Error(result.error || 'Reward code could not be applied.');
+
+      appliedReward = result;
+      rewardInput.value = result.code;
+      setRewardMessage(`${result.code} applied: ${result.discount_percent}% off.`, 'success');
+      renderSummary();
+    } catch (error) {
+      appliedReward = null;
+      setRewardMessage(error.message || 'Reward code could not be applied.', 'error');
+      renderSummary();
+    } finally {
+      if (rewardButton) {
+        rewardButton.disabled = false;
+        rewardButton.textContent = 'Apply';
+      }
+    }
   }
 
   form?.addEventListener('submit', async (event) => {
@@ -176,6 +256,7 @@
     let paymentUrl = cleanPaymentLink();
     let paymentReference = null;
     const total = Number(subtotal().toFixed(2));
+    const rewardCode = appliedReward?.code || '';
 
     if (submitButton) {
       submitButton.disabled = true;
@@ -201,6 +282,7 @@
       shipping_postcode: String(data.get('postcode') || '').trim(),
       shipping_country: String(data.get('country') || '').trim(),
     };
+    order.reward_code = rewardCode || null;
 
     try {
       const checkoutSession = await createStripeCheckout(order);
@@ -229,9 +311,16 @@
     sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(savedOrder));
     localStorage.setItem(CART_KEY, '[]');
     window.__bfl_cart__ = [];
-    window.location.href = `order-created.html?order=${encodeURIComponent(orderNumber)}`;
+    window.location.href = paymentUrl || `order-created.html?order=${encodeURIComponent(orderNumber)}`;
   });
 
+  rewardButton?.addEventListener('click', validateRewardCode);
+  rewardInput?.addEventListener('input', () => {
+    if (!appliedReward) return;
+    appliedReward = null;
+    setRewardMessage('Reward code changed. Apply it again before payment.', 'warning');
+    renderSummary();
+  });
   document.addEventListener('bfl:currency-change', renderSummary);
   init();
 })();

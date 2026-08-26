@@ -1,0 +1,87 @@
+BALL FOR LIFE REWARDS + STRIPE WEBHOOK SETUP
+============================================
+
+This turns the £150 spend reward into real single-use 10% off codes.
+
+
+1) UPDATE THE DATABASE
+----------------------
+Open:
+Supabase Dashboard > SQL Editor
+
+Paste and run the full updated file:
+public/supabase-schema.sql
+
+This adds:
+- reward_codes table
+- discount/shipping/total columns on orders
+- guest order support
+- policies so customers can read their own reward codes
+
+
+2) DEPLOY / UPDATE EDGE FUNCTIONS
+---------------------------------
+Open:
+Supabase Dashboard > Edge Functions
+
+Create or update these functions with the matching index.ts files:
+
+create-checkout-session
+validate-reward-code
+stripe-webhook
+
+Important:
+stripe-webhook must allow Stripe to call it without a logged-in user.
+If Supabase shows a JWT verification setting for the function, turn JWT verification OFF
+for stripe-webhook only.
+
+
+3) CHECK SUPABASE SECRETS
+-------------------------
+Open:
+Supabase Dashboard > Edge Functions > Secrets
+
+You need:
+
+STRIPE_SECRET_KEY
+Your Stripe secret key.
+
+SITE_URL
+https://ballforlife.store
+
+STRIPE_WEBHOOK_SECRET
+You get this from Stripe after creating the webhook endpoint in step 4.
+
+Supabase usually provides SUPABASE_URL and server keys automatically. If not, add:
+
+SUPABASE_SERVICE_ROLE_KEY
+Your Supabase service role key.
+
+
+4) CREATE THE STRIPE WEBHOOK
+----------------------------
+Open:
+Stripe Dashboard > Developers > Webhooks > Add endpoint
+
+Endpoint URL:
+https://jhjhzqwwsrymeijaxfob.supabase.co/functions/v1/stripe-webhook
+
+Event to send:
+checkout.session.completed
+
+After creating it, Stripe gives you a Signing secret beginning with whsec_.
+Copy it into Supabase Edge Function Secrets as:
+
+STRIPE_WEBHOOK_SECRET
+
+
+5) HOW IT WORKS
+---------------
+Customer pays through Stripe.
+Stripe calls stripe-webhook.
+The webhook marks the order as paid.
+The webhook totals the customer's paid spend.
+For every £150 paid spend, it creates one reward code in reward_codes.
+The account page shows unused reward codes.
+Checkout validates a reward code server-side and takes 10% off before creating Stripe payment.
+After the discounted order is paid, the webhook marks that reward code as used.

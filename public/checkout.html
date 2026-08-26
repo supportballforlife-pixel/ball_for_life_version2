@@ -193,6 +193,17 @@
       </div>
 
       <p class="auth-note" data-checkout-message data-type="">Checking your bag...</p>
+      <div class="checkout-section checkout-discount">
+        <h2 class="display">Reward code</h2>
+        <div class="checkout-discount-row">
+          <label>
+            <span>Code</span>
+            <input type="text" name="reward_code" autocomplete="off" placeholder="BFL10-XXXXXX" data-reward-code-input>
+          </label>
+          <button type="button" class="btn btn-outline-dark" data-apply-reward>Apply</button>
+        </div>
+        <p class="auth-note" data-reward-message data-type="">Log in to use earned 10% reward codes.</p>
+      </div>
       <button type="submit" class="btn btn-solid-dark" data-checkout-submit>Continue to secure payment</button>
     </form>
 
@@ -200,6 +211,7 @@
       <h2 id="summary-title" class="display">Order summary</h2>
       <div class="checkout-items" data-checkout-items></div>
       <div class="checkout-total"><span>Subtotal</span><strong data-checkout-subtotal>£0.00</strong></div>
+      <div class="checkout-total checkout-discount-total" data-discount-row hidden><span>Reward discount</span><strong data-checkout-discount>-£0.00</strong></div>
       <div class="checkout-total"><span>Shipping</span><strong data-checkout-shipping>£4.99</strong></div>
       <div class="checkout-total"><span>Total</span><strong data-checkout-total>£0.00</strong></div>
       <div class="checkout-reassurance">

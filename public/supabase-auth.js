@@ -54,16 +54,24 @@
     return window.__bfl_money ? window.__bfl_money(value) : `£${Number(value).toFixed(2)}`;
   }
 
-  function rewardFor(total, userId) {
+  function rewardFor(total, codes) {
     const threshold = 150;
-    const rewards = Math.floor(total / threshold);
-    const nextAt = (rewards + 1) * threshold;
+    const unlockedCode = codes.find((code) => !code.used_at);
+    const progressSpend = total % threshold;
+    const nextAt = threshold - progressSpend;
     return {
-      rewards,
-      progress: Math.min(100, (total / nextAt) * 100),
-      left: Math.max(0, nextAt - total),
-      code: rewards > 0 ? `BFL10-${String(userId).slice(0, 6).toUpperCase()}` : '',
+      progress: unlockedCode ? 100 : Math.min(100, (progressSpend / threshold) * 100),
+      left: unlockedCode ? 0 : nextAt,
+      code: unlockedCode?.code || '',
+      unlockedCount: codes.filter((code) => !code.used_at).length,
     };
+  }
+
+  function authRedirectUrl() {
+    if (window.location.protocol === 'file:') {
+      return 'https://ballforlife.store/login.html';
+    }
+    return `${window.location.origin}/login.html`;
   }
 
   function renderOrders(orders) {
@@ -99,15 +107,29 @@
       return;
     }
 
+    const { data: codes, error: codeError } = await client
+      .from('reward_codes')
+      .select('code, discount_percent, used_at, created_at')
+      .order('created_at', { ascending: false });
+
+    if (codeError) {
+      setNote('Run the updated supabase-schema.sql in Supabase SQL Editor to activate real reward codes.', 'warning');
+    }
+
     const orders = data || [];
+    const rewardCodes = codes || [];
     const paidOrders = orders.filter((order) => order.payment_status === 'paid');
     const total = paidOrders.reduce((sum, order) => sum + Number(order.subtotal_gbp || 0), 0);
-    const reward = rewardFor(total, user.id);
+    const reward = rewardFor(total, rewardCodes);
     renderOrders(orders);
     if (rewardTotal) rewardTotal.textContent = money(total);
     if (rewardProgress) rewardProgress.style.width = `${reward.progress}%`;
     if (rewardLeft) rewardLeft.textContent = reward.left > 0 ? `${money(reward.left)} until your next 10% code` : '10% reward unlocked';
-    if (rewardCode) rewardCode.textContent = reward.code || 'Spend £150 total to unlock';
+    if (rewardCode) {
+      rewardCode.textContent = reward.code
+        ? `${reward.code}${reward.unlockedCount > 1 ? ` +${reward.unlockedCount - 1} more` : ''}`
+        : 'Spend £150 total to unlock';
+    }
   }
 
   function escapeHtml(value) {
@@ -141,7 +163,13 @@
       setLoading(form, true);
 
       const response = form.dataset.authMode === 'signup'
-        ? await client.auth.signUp({ email, password })
+        ? await client.auth.signUp({
+            email,
+            password,
+            options: {
+              emailRedirectTo: authRedirectUrl(),
+            },
+          })
         : await client.auth.signInWithPassword({ email, password });
 
       setLoading(form, false);

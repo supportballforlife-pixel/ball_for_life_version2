@@ -1,9 +1,12 @@
 create table if not exists public.orders (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid references auth.users(id) on delete set null,
   order_number text not null unique,
   items jsonb not null,
   subtotal_gbp numeric(10, 2) not null,
+  shipping_gbp numeric(10, 2) not null default 0,
+  discount_gbp numeric(10, 2) not null default 0,
+  total_gbp numeric(10, 2) not null default 0,
   status text not null default 'processing',
   tracking_status text not null default 'Order received',
   tracking_number text,
@@ -19,6 +22,18 @@ create table if not exists public.orders (
   shipping_postcode text,
   shipping_country text,
   reward_code text,
+  reward_code_id uuid,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.reward_codes (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  code text not null unique,
+  discount_percent integer not null default 10,
+  earned_from_spend numeric(10, 2) not null default 150,
+  used_order_id uuid references public.orders(id) on delete set null,
+  used_at timestamptz,
   created_at timestamptz not null default now()
 );
 
@@ -28,12 +43,17 @@ create table if not exists public.admin_emails (
 );
 
 alter table public.orders enable row level security;
+alter table public.reward_codes enable row level security;
 alter table public.admin_emails enable row level security;
 
+alter table public.orders alter column user_id drop not null;
 alter table public.orders add column if not exists payment_status text not null default 'pending_payment';
 alter table public.orders add column if not exists payment_url text;
 alter table public.orders add column if not exists payment_reference text;
 alter table public.orders add column if not exists paid_at timestamptz;
+alter table public.orders add column if not exists shipping_gbp numeric(10, 2) not null default 0;
+alter table public.orders add column if not exists discount_gbp numeric(10, 2) not null default 0;
+alter table public.orders add column if not exists total_gbp numeric(10, 2) not null default 0;
 alter table public.orders add column if not exists shipping_name text;
 alter table public.orders add column if not exists shipping_email text;
 alter table public.orders add column if not exists shipping_phone text;
@@ -41,6 +61,16 @@ alter table public.orders add column if not exists shipping_address text;
 alter table public.orders add column if not exists shipping_city text;
 alter table public.orders add column if not exists shipping_postcode text;
 alter table public.orders add column if not exists shipping_country text;
+alter table public.orders add column if not exists reward_code text;
+alter table public.orders add column if not exists reward_code_id uuid references public.reward_codes(id) on delete set null;
+
+alter table public.reward_codes add column if not exists discount_percent integer not null default 10;
+alter table public.reward_codes add column if not exists earned_from_spend numeric(10, 2) not null default 150;
+alter table public.reward_codes add column if not exists used_order_id uuid references public.orders(id) on delete set null;
+alter table public.reward_codes add column if not exists used_at timestamptz;
+
+create index if not exists reward_codes_user_id_idx on public.reward_codes(user_id);
+create index if not exists reward_codes_code_idx on public.reward_codes(lower(code));
 
 -- After running this file, replace the email below with your login email and run it once:
 -- insert into public.admin_emails (email) values ('you@example.com') on conflict (email) do nothing;
@@ -65,6 +95,13 @@ on public.orders
 for insert
 to authenticated
 with check (auth.uid() = user_id);
+
+drop policy if exists "Users can read their own reward codes" on public.reward_codes;
+create policy "Users can read their own reward codes"
+on public.reward_codes
+for select
+to authenticated
+using (auth.uid() = user_id);
 
 drop policy if exists "Admins can read all orders" on public.orders;
 create policy "Admins can read all orders"
@@ -92,6 +129,19 @@ using (
   )
 )
 with check (
+  exists (
+    select 1
+    from public.admin_emails
+    where lower(admin_emails.email) = lower(auth.jwt() ->> 'email')
+  )
+);
+
+drop policy if exists "Admins can read all reward codes" on public.reward_codes;
+create policy "Admins can read all reward codes"
+on public.reward_codes
+for select
+to authenticated
+using (
   exists (
     select 1
     from public.admin_emails
