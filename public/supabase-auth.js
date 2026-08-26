@@ -151,8 +151,8 @@
       }
 
       if (form.dataset.authMode === 'signup' && !response.data.session) {
-        setNote('Account created. Check your email to confirm your account, then log in.', 'success');
         showMode('login');
+        setNote('Account created. Please check your email for the confirmation link before logging in. If you cannot see it, check your spam or junk folder too.', 'success');
         return;
       }
 
