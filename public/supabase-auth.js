@@ -29,6 +29,15 @@
     button.textContent = loading ? 'Please wait...' : button.dataset.label;
   }
 
+  function withTimeout(promise, message) {
+    return Promise.race([
+      promise,
+      new Promise((_, reject) => {
+        setTimeout(() => reject(new Error(message)), 15000);
+      }),
+    ]);
+  }
+
   function showMode(mode) {
     authForms.forEach((form) => form.hidden = form.dataset.authMode !== mode);
     modeButtons.forEach((button) => button.classList.toggle('active', button.dataset.authTab === mode));
@@ -162,30 +171,40 @@
       const password = String(formData.get('password') || '');
       setLoading(form, true);
 
-      const response = form.dataset.authMode === 'signup'
-        ? await client.auth.signUp({
-            email,
-            password,
-            options: {
-              emailRedirectTo: authRedirectUrl(),
-            },
-          })
-        : await client.auth.signInWithPassword({ email, password });
+      try {
+        const authRequest = form.dataset.authMode === 'signup'
+          ? client.auth.signUp({
+              email,
+              password,
+              options: {
+                emailRedirectTo: authRedirectUrl(),
+              },
+            })
+          : client.auth.signInWithPassword({ email, password });
 
-      setLoading(form, false);
-      if (response.error) {
-        setNote(response.error.message, 'error');
-        return;
+        const response = await withTimeout(
+          authRequest,
+          'Login is taking too long. Check your internet connection, then try again.'
+        );
+
+        if (response.error) {
+          setNote(response.error.message, 'error');
+          return;
+        }
+
+        if (form.dataset.authMode === 'signup' && !response.data.session) {
+          showMode('login');
+          setNote('Account created. Please check your email for the confirmation link before logging in. If you cannot see it, check your spam or junk folder too.', 'success');
+          return;
+        }
+
+        setNote('Logged in successfully.', 'success');
+        await refreshSession();
+      } catch (error) {
+        setNote(error.message || 'Login failed. Please try again.', 'error');
+      } finally {
+        setLoading(form, false);
       }
-
-      if (form.dataset.authMode === 'signup' && !response.data.session) {
-        showMode('login');
-        setNote('Account created. Please check your email for the confirmation link before logging in. If you cannot see it, check your spam or junk folder too.', 'success');
-        return;
-      }
-
-      setNote('Logged in successfully.', 'success');
-      await refreshSession();
     });
   });
 
