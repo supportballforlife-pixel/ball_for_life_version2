@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ball For Life — Inspired by the Fear of Being Average</title>
+<meta name="description" content="Shop Ball For Life graphic tees and streetwear inspired by the fear of being average. Discover new drops, account rewards and secure checkout.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -287,7 +288,7 @@
         <h4>Shop</h4>
         <a href="shop.html?cat=tees">Graphic Tees</a>
         <a href="shop.html?cat=hoodies">Hoodies</a>
-        <a href="shop.html?cat=tracksuits">Tracksuits</div>
+        <a href="shop.html?cat=tracksuits">Tracksuits</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -340,33 +341,6 @@
     </div>
   </section>
 </div>
-
-<!-- Homepage hero automatic slideshow -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const hero = document.querySelector(".hero");
-  if (!hero) return;
-
-  const heroImages = [
-    "hero-basketball-court.jpg",
-    "hero-2.jpg",
-    "hero-4.jpg"
-  ];
-
-  let currentHero = 0;
-
-  function showHero(index) {
-    hero.style.backgroundImage = `url('${heroImages[index]}')`;
-  }
-
-  showHero(currentHero);
-
-  setInterval(() => {
-    currentHero = (currentHero + 1) % heroImages.length;
-    showHero(currentHero);
-  }, 3000);
-});
-</script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>

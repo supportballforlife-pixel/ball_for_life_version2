@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shop — Ball For Life</title>
+<meta name="description" content="Shop Ball For Life graphic tees, new arrivals and upcoming streetwear drops. Browse oversized cotton tees with secure checkout.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -66,6 +67,7 @@
   <a href="index.html" class="mobile-brand" aria-label="Ball For Life home"><img src="brand-logo.png" class="brand-logo" alt="Ball For Life"></a>
   <a href="index.html">Home</a>
   <a href="shop.html">Shop</a>
+  <a href="shop.html?cat=tees">Graphic Tees</a>
   <a href="shop.html?cat=hoodies">Hoodies</a>
   <a href="shop.html?cat=tracksuits">Tracksuits</a>
   <a href="about-us.html">About Us</a>
@@ -74,35 +76,26 @@
 
 <div class="page-head wrap">
   <div class="breadcrumb"><a href="index.html">Home</a> / Shop</div>
-  <h1 class="display">Graphic Tees</h1>
+  <h1 class="display" data-shop-title>Graphic Tees</h1>
 </div>
 
 <div class="wrap shop-layout">
   <aside class="filters">
     <h4>Category</h4>
-    <ul>
-      <li><label><input type="checkbox"> All</label></li>
-      <li><label><input type="checkbox"> Hoodies</label></li>
-      <li><label><input type="checkbox"> Tracksuits</label></li>
-      <li><label><input type="checkbox" checked> Graphic Tees</label></li>
+    <ul class="filter-links">
+      <li><a href="shop.html">New Arrivals</a></li>
+      <li><a href="shop.html?cat=tees" data-shop-filter="tees">Graphic Tees</a></li>
+      <li><a href="shop.html?cat=hoodies" data-shop-filter="hoodies">Hoodies <span>Coming soon</span></a></li>
+      <li><a href="shop.html?cat=tracksuits" data-shop-filter="tracksuits">Tracksuits <span>Coming soon</span></a></li>
     </ul>
-    <h4>Size</h4>
-    <ul>
-      <li><label><input type="checkbox"> S</label></li>
-      <li><label><input type="checkbox"> M</label></li>
-      <li><label><input type="checkbox"> L</label></li>
-      <li><label><input type="checkbox"> XL</label></li>
-    </ul>
-    <h4>Price</h4>
-    <ul>
-      <li><label><input type="checkbox"> Under <span data-money-gbp="75">£75.00</span></label></li>
-      <li><label><input type="checkbox"> <span data-money-gbp="75">£75.00</span> - <span data-money-gbp="150">£150.00</span></label></li>
-      <li><label><input type="checkbox"> <span data-money-gbp="150">£150.00</span>+</label></li>
-    </ul>
+    <h4>Available Sizes</h4>
+    <div class="size-pills" aria-label="Available sizes">
+      <span>S</span><span>M</span><span>L</span><span>XL</span><span>2XL</span><span>3XL</span>
+    </div>
   </aside>
 
   <div>
-    <div class="pgrid reveal-stagger in">
+    <div class="pgrid reveal-stagger in" data-shop-grid>
 
       <a href="product.html?id=ball-for-life-graphic-tee" class="pcard">
         <div class="img"><img src="graphic tee/Ball-For-Life-Graphic-Tee/black/front.png" alt="Ball For Life Graphic Tee"><div class="quick" data-quick-add data-name="Ball For Life Graphic Tee" data-price="34.99" data-mark="BFL">Quick Add</div></div>
@@ -178,6 +171,14 @@
       </a>
 
     </div>
+    <section class="shop-coming-soon" data-coming-soon hidden>
+      <div class="coming-soon-bg"></div>
+      <img class="coming-soon-watermark" src="brand-logo.png" alt="">
+      <span class="coming-soon-label">Coming Soon</span>
+      <h2 class="display" data-coming-title>Coming Soon</h2>
+      <p data-coming-copy>More Ball For Life pieces are loading up. Graphic tees are live while this category is being built.</p>
+      <a href="shop.html?cat=tees" class="btn btn-solid-light">Shop graphic tees</a>
+    </section>
   </div>
 </div>
 
@@ -226,6 +227,43 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="supabase-core.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const category = (params.get('cat') || 'tees').toLowerCase();
+  const comingSoon = {
+    hoodies: {
+      title: 'Hoodies',
+      copy: 'Hoodies are coming soon with the same Ball For Life energy. Graphic tees are live while this drop gets finished.',
+    },
+    tracksuits: {
+      title: 'Tracksuits',
+      copy: 'Tracksuits are coming soon. For now, shop the graphic tee lineup and stay ready for the next drop.',
+    },
+  };
+  const grid = document.querySelector('[data-shop-grid]');
+  const panel = document.querySelector('[data-coming-soon]');
+  const pageTitle = document.querySelector('[data-shop-title]');
+  const panelTitle = document.querySelector('[data-coming-title]');
+  const panelCopy = document.querySelector('[data-coming-copy]');
+  document.querySelectorAll('[data-shop-filter]').forEach((link) => {
+    link.classList.toggle('active', link.dataset.shopFilter === category);
+  });
+
+  if (comingSoon[category]) {
+    if (pageTitle) pageTitle.textContent = comingSoon[category].title;
+    if (panelTitle) panelTitle.textContent = comingSoon[category].title;
+    if (panelCopy) panelCopy.textContent = comingSoon[category].copy;
+    if (grid) grid.hidden = true;
+    if (panel) panel.hidden = false;
+    return;
+  }
+
+  if (pageTitle) pageTitle.textContent = category === 'tees' ? 'Graphic Tees' : 'New Arrivals';
+  if (grid) grid.hidden = false;
+  if (panel) panel.hidden = true;
+});
+</script>
 <script src="script.js"></script>
 </body>
 </html>

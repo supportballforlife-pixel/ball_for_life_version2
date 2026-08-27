@@ -99,12 +99,6 @@
     totalEl.textContent = money(itemsSubtotal + shipping - discount);
   }
 
-  function cleanPaymentLink() {
-    const url = String(paymentConfig.stripePaymentLink || '').trim();
-    if (!url || url.includes('YOUR_STRIPE_PAYMENT_LINK')) return '';
-    return url;
-  }
-
   async function createStripeCheckout(order) {
     const functionName = String(paymentConfig.checkoutFunctionName || 'create-checkout-session').trim();
     if (!functionName) return null;
@@ -253,7 +247,7 @@
 
     const data = new FormData(form);
     const orderNumber = `BFL-${Date.now().toString().slice(-8)}`;
-    let paymentUrl = cleanPaymentLink();
+    let paymentUrl = null;
     let paymentReference = null;
     const total = Number(subtotal().toFixed(2));
     const rewardCode = appliedReward?.code || '';

@@ -38,6 +38,23 @@
     ]);
   }
 
+  async function authHealthCheck() {
+    if (!config.url || !config.anonKey) return false;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    try {
+      const response = await fetch(`${config.url}/auth/v1/settings`, {
+        headers: { apikey: config.anonKey },
+        signal: controller.signal,
+      });
+      return response.ok;
+    } catch (_) {
+      return false;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
   function showMode(mode) {
     authForms.forEach((form) => form.hidden = form.dataset.authMode !== mode);
     modeButtons.forEach((button) => button.classList.toggle('active', button.dataset.authTab === mode));
@@ -172,6 +189,11 @@
       setLoading(form, true);
 
       try {
+        const authOnline = await authHealthCheck();
+        if (!authOnline) {
+          throw new Error('Supabase Auth is not responding right now. Check the project status in Supabase, then try again.');
+        }
+
         const authRequest = form.dataset.authMode === 'signup'
           ? client.auth.signUp({
               email,
@@ -184,7 +206,7 @@
 
         const response = await withTimeout(
           authRequest,
-          'Login is taking too long. Check your internet connection, then try again.'
+          'Supabase Auth is taking too long to respond. Check the project status in Supabase, then try again.'
         );
 
         if (response.error) {
