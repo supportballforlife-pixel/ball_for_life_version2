@@ -78,6 +78,14 @@
     'light-pink'
   ];
 
+  const expandedMockupColors = [
+    'black', 'water-blue', 'apricot', 'light-gray', 'bean-green', 'light-purple',
+    'orange', 'rose-red', 'wine-red', 'blue-jeans', 'grass-green', 'khaki-ash',
+    'dark-blue', 'pirate-gray', 'gray-green', 'dark-green', 'purple-haze',
+    'royal-blue', 'light-blue', 'light-brown', 'light-pink', 'red', 'yellow',
+    'lake-blue'
+  ];
+
   const PRODUCTS = [
     product('ball-for-life-graphic-tee', 'Ball For Life Graphic Tee', 'Ball-For-Life-Graphic-Tee', ['black', 'water-blue', 'apricot', 'light-pink', 'pirate-grey'], 34.99),
     product('lebron-james-oversized-snowly-washed-graphic-tee', 'LeBron James Oversized Snowly Washed Graphic Tee', 'LeBron-James-Oversized-Snowly-Washed-Graphic-Tee', lebronColors, 27.99),
@@ -97,6 +105,8 @@
     product('sga-snow-washed-oversized-cotton-t-shirt', 'SGA Snow Washed Oversized Cotton T-Shirt', 'SGA-Snow-Washed-Oversized-Cotton-T-Shirt', fullColors, 27.99),
     product('j-dub-snow-washed-oversized-cotton-t-shirt', 'J-Dub Snow Washed Oversized Cotton T-Shirt', 'J-Dub-Snow-Washed-Oversized-Cotton-T-Shirt', fullColors, 27.99),
     product('anthony-edwards-snow-washed-oversized-cotton-t-shirt', 'Anthony Edwards Snow Washed Oversized Cotton T-Shirt', 'Anthony-Edwards-Snow-Washed-Oversized-Cotton-T-Shirt', fullColors, 27.99),
+    product('austin-reaves-snow-washed-oversized-cotton-t-shirt', 'Austin Reaves Snow Washed Oversized Cotton T-Shirt', 'Austin-Reaves-Snow-Washed-Oversized-Cotton-T-Shirt', expandedMockupColors, 27.99),
+    product('jalen-brunson-snow-washed-oversized-cotton-t-shirt', 'Jalen Brunson Snow Washed Oversized Cotton T-Shirt', 'Jalen-Brunson-Snow-Washed-Oversized-Cotton-T-Shirt', expandedMockupColors, 27.99),
   ];
 
   const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
@@ -116,6 +126,10 @@
     'jdub': 'j-dub-snow-washed-oversized-cotton-t-shirt',
     'j-dub': 'j-dub-snow-washed-oversized-cotton-t-shirt',
     'ant': 'anthony-edwards-snow-washed-oversized-cotton-t-shirt',
+    'austin': 'austin-reaves-snow-washed-oversized-cotton-t-shirt',
+    'reaves': 'austin-reaves-snow-washed-oversized-cotton-t-shirt',
+    'jalen': 'jalen-brunson-snow-washed-oversized-cotton-t-shirt',
+    'brunson': 'jalen-brunson-snow-washed-oversized-cotton-t-shirt',
   };
 
   function product(id, name, folder, colors, price) {
