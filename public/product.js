@@ -86,6 +86,14 @@
     'lake-blue'
   ];
 
+  const jaredMccainColors = [
+    'black', 'water-blue', 'apricot', 'light-gray', 'bean-green', 'light-purple',
+    'orange', 'rose-red', 'wine-red', 'blue-jeans', 'grass-green', 'khaki-ash',
+    'dark-blue', 'pirate-gray', 'gray-green', 'dark-green', 'purple-haze',
+    'royal-blue', 'light-blue', 'light-brown', 'lake-blue', 'yellow', 'red',
+    'light-pink'
+  ];
+
   const PRODUCTS = [
     product('ball-for-life-graphic-tee', 'Ball For Life Graphic Tee', 'Ball-For-Life-Graphic-Tee', ['black', 'water-blue', 'apricot', 'light-pink', 'pirate-grey'], 34.99),
     product('lebron-james-oversized-snowly-washed-graphic-tee', 'LeBron James Oversized Snowly Washed Graphic Tee', 'LeBron-James-Oversized-Snowly-Washed-Graphic-Tee', lebronColors, 27.99),
@@ -107,6 +115,11 @@
     product('anthony-edwards-snow-washed-oversized-cotton-t-shirt', 'Anthony Edwards Snow Washed Oversized Cotton T-Shirt', 'Anthony-Edwards-Snow-Washed-Oversized-Cotton-T-Shirt', fullColors, 27.99),
     product('austin-reaves-snow-washed-oversized-cotton-t-shirt', 'Austin Reaves Snow Washed Oversized Cotton T-Shirt', 'Austin-Reaves-Snow-Washed-Oversized-Cotton-T-Shirt', expandedMockupColors, 27.99),
     product('jalen-brunson-snow-washed-oversized-cotton-t-shirt', 'Jalen Brunson Snow Washed Oversized Cotton T-Shirt', 'Jalen-Brunson-Snow-Washed-Oversized-Cotton-T-Shirt', expandedMockupColors, 27.99),
+    product('face-of-the-league-snow-washed-oversized-cotton-t-shirt', 'Face Of The League Snow Washed Oversized Cotton T-Shirt', 'Face-Of-The-League-Snow-Washed-Oversized-Cotton-T-Shirt', expandedMockupColors, 27.99),
+    product('derrick-rose-snow-washed-oversized-cotton-t-shirt', 'Derrick Rose Snow Washed Oversized Cotton T-Shirt', 'Derrick-Rose-Snow-Washed-Oversized-Cotton-T-Shirt', expandedMockupColors, 27.99),
+    product('jared-mccain-snow-washed-oversized-cotton-t-shirt', 'Jared McCain Snow Washed Oversized Cotton T-Shirt', 'Jared-McCain-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
+    product('jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt', 'Jared McCain Variant 2 Snow Washed Oversized Cotton T-Shirt', 'Jared-McCain-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
+    product('jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt', 'Jared McCain Variant 3 Snow Washed Oversized Cotton T-Shirt', 'Jared-McCain-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
   ];
 
   const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
@@ -130,6 +143,16 @@
     'reaves': 'austin-reaves-snow-washed-oversized-cotton-t-shirt',
     'jalen': 'jalen-brunson-snow-washed-oversized-cotton-t-shirt',
     'brunson': 'jalen-brunson-snow-washed-oversized-cotton-t-shirt',
+    'face-of-the-league': 'face-of-the-league-snow-washed-oversized-cotton-t-shirt',
+    'fotl': 'face-of-the-league-snow-washed-oversized-cotton-t-shirt',
+    'derrick': 'derrick-rose-snow-washed-oversized-cotton-t-shirt',
+    'rose': 'derrick-rose-snow-washed-oversized-cotton-t-shirt',
+    'jared': 'jared-mccain-snow-washed-oversized-cotton-t-shirt',
+    'mccain': 'jared-mccain-snow-washed-oversized-cotton-t-shirt',
+    'jared-2': 'jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'mccain-2': 'jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'jared-3': 'jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt',
+    'mccain-3': 'jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt',
   };
 
   function product(id, name, folder, colors, price) {
@@ -177,6 +200,7 @@
           <div class="product-kicker">${item.category}</div>
           <h1>${escapeHtml(item.name)}</h1>
           <div class="product-price" data-product-price>${money(item.price)}</div>
+          <div class="product-fabric-line">Heavyweight 250 GSM &bull; 100% cotton</div>
           <div class="product-accordion">
             <details open>
               <summary>Product Details</summary>
@@ -271,6 +295,13 @@
           </div>
 
           <button class="product-add" type="button" data-product-add>Add to Cart - ${money(item.price)}</button>
+          <div class="product-fabric-proof">
+            <img src="fabric-close-up.png" alt="Close-up of heavyweight cotton fabric">
+            <div>
+              <strong>Heavyweight 250 GSM &bull; 100% cotton</strong>
+              <span>Dense snow-washed cotton with a structured oversized fit.</span>
+            </div>
+          </div>
           <div class="product-pay-row" aria-label="Accepted payment methods">
             <img src="visa.svg" alt="Visa">
             <img src="mastercard-alt.svg" alt="Mastercard">
