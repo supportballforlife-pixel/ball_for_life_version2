@@ -170,7 +170,7 @@ Deno.serve(async (req) => {
       throw new Error(session.error?.message || 'Stripe could not create checkout.');
     }
 
-    fetch(`${supabaseUrl}/rest/v1/orders?id=eq.${encodeURIComponent(order.id)}`, {
+    const paymentLinkUpdate = fetch(`${supabaseUrl}/rest/v1/orders?id=eq.${encodeURIComponent(order.id)}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -182,6 +182,8 @@ Deno.serve(async (req) => {
         payment_reference: session.id,
       }),
     }).catch((error) => console.error('Could not update order payment link', error));
+
+    EdgeRuntime.waitUntil(paymentLinkUpdate);
 
     return json({
       url: session.url,

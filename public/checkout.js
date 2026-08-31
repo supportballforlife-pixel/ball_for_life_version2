@@ -120,39 +120,51 @@
     const config = window.BFL_SUPABASE || {};
     const { data: sessionData } = await client.auth.getSession();
     const token = sessionData.session?.access_token || config.anonKey;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
 
-    if (config.url && config.anonKey) {
-      const response = await fetch(`${config.url}/functions/v1/${functionName}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          apikey: config.anonKey,
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(data.error || data.msg || `Function failed with status ${response.status}`);
+    try {
+      if (config.url && config.anonKey) {
+        const response = await fetch(`${config.url}/functions/v1/${functionName}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: config.anonKey,
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+          signal: controller.signal,
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error || data.msg || `Function failed with status ${response.status}`);
+        }
+        if (!data?.url) throw new Error('Stripe did not return a payment URL.');
+        return data;
       }
-      if (!data?.url) throw new Error('Stripe did not return a payment URL.');
+
+      const { data, error } = await client.functions.invoke(functionName, {
+        body: payload,
+      });
+
+      if (error) {
+        throw new Error(error.message || 'Edge Function returned an error.');
+      }
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+      if (!data?.url) {
+        throw new Error('Stripe did not return a payment URL.');
+      }
       return data;
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        throw new Error('Payment took too long to open. Please try again.');
+      }
+      throw error;
+    } finally {
+      clearTimeout(timeout);
     }
-
-    const { data, error } = await client.functions.invoke(functionName, {
-      body: payload,
-    });
-
-    if (error) {
-      throw new Error(error.message || 'Edge Function returned an error.');
-    }
-    if (data?.error) {
-      throw new Error(data.error);
-    }
-    if (!data?.url) {
-      throw new Error('Stripe did not return a payment URL.');
-    }
-    return data;
   }
 
   async function init() {
@@ -249,6 +261,7 @@
     const orderNumber = `BFL-${Date.now().toString().slice(-8)}`;
     let paymentUrl = null;
     let paymentReference = null;
+    let checkoutSession = null;
     const total = Number(subtotal().toFixed(2));
     const rewardCode = appliedReward?.code || '';
 
@@ -282,7 +295,7 @@
     order.reward_code = rewardCode || null;
 
     try {
-      const checkoutSession = await createStripeCheckout(order);
+      checkoutSession = await createStripeCheckout(order);
       paymentUrl = checkoutSession?.url || paymentUrl;
       paymentReference = checkoutSession?.id || null;
     } catch (error) {
