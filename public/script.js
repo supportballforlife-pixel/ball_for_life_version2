@@ -82,6 +82,16 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem(CART_KEY, JSON.stringify(window.__bfl_cart__));
   }
 
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;',
+    }[char]));
+  }
+
   function renderCart(){
     const cart = window.__bfl_cart__;
     const itemsEl = document.querySelector('.cart-items');
@@ -97,10 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       itemsEl.innerHTML = cart.map((item, idx)=>`
         <div class="cart-item">
-          <div class="thumb"><span class="num-mark display" style="color:rgba(0,0,0,0.08)">${item.mark}</span></div>
+          <div class="thumb">
+            ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}">` : `<span class="num-mark display" style="color:rgba(0,0,0,0.08)">${escapeHtml(item.mark || 'BFL')}</span>`}
+          </div>
           <div class="info">
-            <div class="nm">${item.name}</div>
-            <div class="sub">SIZE ${item.size} · QTY ${item.qty}</div>
+            <div class="nm">${escapeHtml(item.name)}</div>
+            <div class="sub">SIZE ${escapeHtml(item.size)} · QTY ${item.qty}</div>
             <div class="sub">${money(item.price)}</div>
             <a class="rm" data-idx="${idx}">Remove</a>
           </div>
@@ -155,12 +167,14 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-quick-add]').forEach(btn=>{
     btn.addEventListener('click', (e)=>{
       e.preventDefault();
+      const cardImage = btn.closest('.pcard')?.querySelector('img')?.getAttribute('src') || '';
       addToCart({
         name: btn.dataset.name,
         price: parseFloat(btn.dataset.price),
         size: 'M',
         qty: 1,
-        mark: btn.dataset.mark || '—'
+        mark: btn.dataset.mark || 'BFL',
+        image: cardImage
       });
     });
   });
@@ -197,7 +211,8 @@ document.addEventListener('DOMContentLoaded', () => {
       price: parseFloat(pdAddBtn.dataset.price),
       size: selectedSize,
       qty: qty,
-      mark: pdAddBtn.dataset.mark || '—'
+      mark: pdAddBtn.dataset.mark || 'BFL',
+      image: document.querySelector('.pd-main-img img, .pd-main-img > img, .product-main-image')?.getAttribute('src') || ''
     });
   });
 

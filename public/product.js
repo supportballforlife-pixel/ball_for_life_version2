@@ -336,6 +336,7 @@
           size: state.size,
           qty: state.qty,
           mark: 'BFL',
+          image: imagePath(item, state.color, 'front'),
         });
       }
     });
