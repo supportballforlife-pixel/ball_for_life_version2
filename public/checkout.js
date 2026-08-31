@@ -256,6 +256,9 @@
       submitButton.disabled = true;
       submitButton.textContent = 'Opening secure payment...';
     }
+    const slowCheckoutTimer = setTimeout(() => {
+      setMessage('Still opening secure payment. Please keep this page open.', 'warning');
+    }, 8000);
 
     const order = {
       user_id: currentUser?.id || null,
@@ -283,6 +286,7 @@
       paymentUrl = checkoutSession?.url || paymentUrl;
       paymentReference = checkoutSession?.id || null;
     } catch (error) {
+      clearTimeout(slowCheckoutTimer);
       if (!paymentUrl) {
         setMessage(`Could not start payment: ${error.message || error}`, 'error');
         if (submitButton) {
@@ -305,6 +309,7 @@
     sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(savedOrder));
     localStorage.setItem(CART_KEY, '[]');
     window.__bfl_cart__ = [];
+    clearTimeout(slowCheckoutTimer);
     window.location.href = paymentUrl || `order-created.html?order=${encodeURIComponent(orderNumber)}`;
   });
 
