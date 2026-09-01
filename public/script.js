@@ -46,6 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  /* ---------- Product card specs ---------- */
+  document.querySelectorAll('.pcard .p-tag').forEach((tag) => {
+    if (tag.nextElementSibling?.classList.contains('p-spec')) return;
+    const spec = document.createElement('div');
+    spec.className = 'p-spec';
+    spec.textContent = 'Heavyweight 250 GSM • 100% cotton';
+    tag.insertAdjacentElement('afterend', spec);
+  });
+
   /* ---------- Scroll reveal ---------- */
   const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
   if('IntersectionObserver' in window){

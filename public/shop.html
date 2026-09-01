@@ -274,6 +274,47 @@ document.addEventListener('DOMContentLoaded', () => {
   const pageTitle = document.querySelector('[data-shop-title]');
   const panelTitle = document.querySelector('[data-coming-title]');
   const panelCopy = document.querySelector('[data-coming-copy]');
+  const latestProductOrder = [
+    'jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt',
+    'jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'jared-mccain-snow-washed-oversized-cotton-t-shirt',
+    'derrick-rose-snow-washed-oversized-cotton-t-shirt',
+    'face-of-the-league-snow-washed-oversized-cotton-t-shirt',
+    'jalen-brunson-snow-washed-oversized-cotton-t-shirt',
+    'austin-reaves-snow-washed-oversized-cotton-t-shirt',
+    'anthony-edwards-snow-washed-oversized-cotton-t-shirt',
+    'j-dub-snow-washed-oversized-cotton-t-shirt',
+    'sga-snow-washed-oversized-cotton-t-shirt',
+    'ja-morant-snow-washed-oversized-cotton-t-shirt',
+    'russell-westbrook-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'russell-westbrook-snow-washed-oversized-cotton-t-shirt',
+    'no-wasted-potential-snow-washed-oversized-cotton-t-shirt',
+    'prove-them-wrong-snow-washed-oversized-cotton-t-shirt',
+    'dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt',
+    'dennis-rodman-snow-washed-oversized-cotton-t-shirt',
+    'allen-iverson-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'allen-iverson-snow-washed-oversized-cotton-t-shirt',
+    'kobe-bryant-snow-washed-oversized-cotton-t-shirt',
+    'tyrese-maxey-snow-washed-oversized-cotton-t-shirt',
+    'kyrie-irving-snow-washed-oversized-cotton-t-shirt',
+    'lamelo-ball-snow-washed-oversized-cotton-t-shirt',
+    'lebron-james-oversized-snowly-washed-graphic-tee',
+    'ball-for-life-graphic-tee',
+  ];
+  const productOrderMap = new Map(latestProductOrder.map((id, index) => [id, index]));
+  const getCardProductId = (card) => {
+    try {
+      return new URL(card.getAttribute('href') || '', window.location.href).searchParams.get('id') || '';
+    } catch {
+      return '';
+    }
+  };
+  const sortGraphicTeesLatestFirst = () => {
+    if (!grid) return;
+    Array.from(grid.querySelectorAll('.pcard'))
+      .sort((a, b) => (productOrderMap.get(getCardProductId(a)) ?? 999) - (productOrderMap.get(getCardProductId(b)) ?? 999))
+      .forEach((card) => grid.appendChild(card));
+  };
   document.querySelectorAll('[data-shop-filter]').forEach((link) => {
     link.classList.toggle('active', link.dataset.shopFilter === category);
   });
@@ -288,6 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (pageTitle) pageTitle.textContent = category === 'tees' ? 'Graphic Tees' : 'New Arrivals';
+  sortGraphicTeesLatestFirst();
   if (grid) grid.hidden = false;
   if (panel) panel.hidden = true;
 });
