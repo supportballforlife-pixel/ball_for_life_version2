@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function trackVisitor() {
     if (document.visibilityState === 'hidden') return;
 
-    const now = new Date().toISOString();
+    const sessionId = getVisitorSessionId();
     let user = null;
     try {
       const sessionResult = await withTimeout(client.auth.getSession(), 2500);
@@ -449,21 +449,17 @@ document.addEventListener('DOMContentLoaded', () => {
       user = null;
     }
 
-    const payload = {
-      session_id: getVisitorSessionId(),
-      user_id: user?.id || null,
-      user_email: user?.email || null,
-      page_path: `${window.location.pathname}${window.location.search}`,
-      page_title: document.title || 'Ball For Life',
-      referrer: document.referrer || null,
-      user_agent: navigator.userAgent || null,
-      last_seen_at: now,
-    };
-
     try {
-      await client
-        .from('site_visitors')
-        .upsert(payload, { onConflict: 'session_id' });
+      const { error } = await client.rpc('record_site_visit', {
+        p_session_id: sessionId,
+        p_user_id: user?.id || null,
+        p_user_email: user?.email || null,
+        p_page_path: `${window.location.pathname}${window.location.search}`,
+        p_page_title: document.title || 'Ball For Life',
+        p_referrer: document.referrer || null,
+        p_user_agent: navigator.userAgent || null,
+      });
+      if (error) throw error;
     } catch (error) {
       console.warn('Visitor tracking failed:', error);
     }

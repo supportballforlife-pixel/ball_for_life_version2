@@ -89,6 +89,60 @@ create index if not exists site_visitors_session_id_idx on public.site_visitors(
 create index if not exists site_visitors_last_seen_idx on public.site_visitors(last_seen_at desc);
 create index if not exists site_visitors_first_seen_idx on public.site_visitors(first_seen_at desc);
 
+grant insert, update on public.site_visitors to anon, authenticated;
+grant select on public.site_visitors to authenticated;
+
+create or replace function public.record_site_visit(
+  p_session_id text,
+  p_user_id uuid default null,
+  p_user_email text default null,
+  p_page_path text default null,
+  p_page_title text default null,
+  p_referrer text default null,
+  p_user_agent text default null
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.site_visitors (
+    session_id,
+    user_id,
+    user_email,
+    page_path,
+    page_title,
+    referrer,
+    user_agent,
+    first_seen_at,
+    last_seen_at
+  )
+  values (
+    p_session_id,
+    p_user_id,
+    p_user_email,
+    p_page_path,
+    p_page_title,
+    p_referrer,
+    p_user_agent,
+    now(),
+    now()
+  )
+  on conflict (session_id) do update
+  set
+    user_id = excluded.user_id,
+    user_email = excluded.user_email,
+    page_path = excluded.page_path,
+    page_title = excluded.page_title,
+    referrer = coalesce(public.site_visitors.referrer, excluded.referrer),
+    user_agent = excluded.user_agent,
+    last_seen_at = now();
+end;
+$$;
+
+grant execute on function public.record_site_visit(text, uuid, text, text, text, text, text) to anon, authenticated;
+
 -- After running this file, replace the email below with your login email and run it once:
 -- insert into public.admin_emails (email) values ('you@example.com') on conflict (email) do nothing;
 
