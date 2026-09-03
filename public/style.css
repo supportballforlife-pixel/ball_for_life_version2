@@ -980,6 +980,54 @@ button:disabled{
   margin-bottom:24px;
 }
 .admin-app[hidden]{display:none;}
+.admin-analytics{
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:14px;
+  margin-bottom:22px;
+}
+.admin-stat{
+  border:1px solid var(--line-light);
+  background:var(--white);
+  padding:18px;
+  min-height:128px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.admin-stat-wide{
+  grid-column:span 2;
+}
+.admin-stat span,
+.admin-stat small,
+.admin-page-list span{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  color:var(--grey-dark);
+}
+.admin-stat strong{
+  display:block;
+  font-size:36px;
+  line-height:1;
+}
+.admin-page-list{
+  display:grid;
+  gap:8px;
+}
+.admin-page-list div{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+}
+.admin-page-list span{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.admin-page-list strong{
+  font-size:13px;
+}
 .admin-orders{
   display:grid;
   gap:16px;
@@ -1067,6 +1115,8 @@ button:disabled{
 @media (max-width:760px){
   .admin-main{padding:52px 20px 90px;}
   .admin-head{align-items:flex-start; flex-direction:column;}
+  .admin-analytics{grid-template-columns:1fr;}
+  .admin-stat-wide{grid-column:auto;}
   .admin-order-top,
   .admin-order-controls{grid-template-columns:1fr;}
   .admin-order-top > div:last-child{text-align:left;}

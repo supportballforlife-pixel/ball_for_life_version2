@@ -42,9 +42,23 @@ create table if not exists public.admin_emails (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.site_visitors (
+  id uuid primary key default gen_random_uuid(),
+  session_id text not null unique,
+  user_id uuid references auth.users(id) on delete set null,
+  user_email text,
+  page_path text,
+  page_title text,
+  referrer text,
+  user_agent text,
+  first_seen_at timestamptz not null default now(),
+  last_seen_at timestamptz not null default now()
+);
+
 alter table public.orders enable row level security;
 alter table public.reward_codes enable row level security;
 alter table public.admin_emails enable row level security;
+alter table public.site_visitors enable row level security;
 
 alter table public.orders alter column user_id drop not null;
 alter table public.orders add column if not exists payment_status text not null default 'pending_payment';
@@ -71,6 +85,9 @@ alter table public.reward_codes add column if not exists used_at timestamptz;
 
 create index if not exists reward_codes_user_id_idx on public.reward_codes(user_id);
 create index if not exists reward_codes_code_idx on public.reward_codes(lower(code));
+create index if not exists site_visitors_session_id_idx on public.site_visitors(session_id);
+create index if not exists site_visitors_last_seen_idx on public.site_visitors(last_seen_at desc);
+create index if not exists site_visitors_first_seen_idx on public.site_visitors(first_seen_at desc);
 
 -- After running this file, replace the email below with your login email and run it once:
 -- insert into public.admin_emails (email) values ('you@example.com') on conflict (email) do nothing;
@@ -139,6 +156,34 @@ with check (
 drop policy if exists "Admins can read all reward codes" on public.reward_codes;
 create policy "Admins can read all reward codes"
 on public.reward_codes
+for select
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admin_emails
+    where lower(admin_emails.email) = lower(auth.jwt() ->> 'email')
+  )
+);
+
+drop policy if exists "Visitors can create analytics rows" on public.site_visitors;
+create policy "Visitors can create analytics rows"
+on public.site_visitors
+for insert
+to anon, authenticated
+with check (true);
+
+drop policy if exists "Visitors can update analytics rows" on public.site_visitors;
+create policy "Visitors can update analytics rows"
+on public.site_visitors
+for update
+to anon, authenticated
+using (true)
+with check (true);
+
+drop policy if exists "Admins can read visitor analytics" on public.site_visitors;
+create policy "Admins can read visitor analytics"
+on public.site_visitors
 for select
 to authenticated
 using (

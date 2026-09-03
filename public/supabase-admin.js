@@ -5,6 +5,9 @@
   const ordersEl = document.querySelector('[data-admin-orders]');
   const refreshButton = document.querySelector('[data-admin-refresh]');
   const message = document.querySelector('[data-admin-message]');
+  const liveVisitorsEl = document.querySelector('[data-live-visitors]');
+  const todayVisitorsEl = document.querySelector('[data-today-visitors]');
+  const topPagesEl = document.querySelector('[data-top-pages]');
 
   function setMessage(text, type) {
     if (!message) return;
@@ -137,6 +140,67 @@
     });
   }
 
+  function setAnalyticsEmpty() {
+    if (liveVisitorsEl) liveVisitorsEl.textContent = '0';
+    if (todayVisitorsEl) todayVisitorsEl.textContent = '0';
+    if (topPagesEl) topPagesEl.innerHTML = '<small>No page data yet.</small>';
+  }
+
+  function renderTopPages(visitors) {
+    if (!topPagesEl) return;
+    const pageCounts = visitors.reduce((map, visitor) => {
+      const page = visitor.page_path || '/';
+      map.set(page, (map.get(page) || 0) + 1);
+      return map;
+    }, new Map());
+    const pages = Array.from(pageCounts.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+    if (!pages.length) {
+      topPagesEl.innerHTML = '<small>No page data yet.</small>';
+      return;
+    }
+
+    topPagesEl.innerHTML = pages.map(([page, count]) => `
+      <div>
+        <span>${escapeHtml(page)}</span>
+        <strong>${count}</strong>
+      </div>
+    `).join('');
+  }
+
+  async function loadAnalytics() {
+    if (!client) return;
+
+    const now = new Date();
+    const liveSince = new Date(now.getTime() - 60 * 1000).toISOString();
+    const todayStart = new Date(now);
+    todayStart.setHours(0, 0, 0, 0);
+
+    const [liveResult, todayResult] = await Promise.all([
+      client
+        .from('site_visitors')
+        .select('id', { count: 'exact', head: true })
+        .gte('last_seen_at', liveSince),
+      client
+        .from('site_visitors')
+        .select('page_path, last_seen_at')
+        .gte('last_seen_at', todayStart.toISOString())
+        .order('last_seen_at', { ascending: false }),
+    ]);
+
+    if (liveResult.error || todayResult.error) {
+      setAnalyticsEmpty();
+      return;
+    }
+
+    const todayVisitors = todayResult.data || [];
+    if (liveVisitorsEl) liveVisitorsEl.textContent = String(liveResult.count || 0);
+    if (todayVisitorsEl) todayVisitorsEl.textContent = String(todayVisitors.length);
+    renderTopPages(todayVisitors);
+  }
+
   async function loadOrders() {
     if (!client) return;
     setMessage('Loading orders...', '');
@@ -153,6 +217,10 @@
 
     renderOrders(data || []);
     setMessage(`${(data || []).length} order${(data || []).length === 1 ? '' : 's'} found.`, 'success');
+  }
+
+  async function loadDashboard() {
+    await Promise.all([loadOrders(), loadAnalytics()]);
   }
 
   async function init() {
@@ -181,9 +249,10 @@
 
     if (guard) guard.hidden = true;
     if (app) app.hidden = false;
-    await loadOrders();
+    await loadDashboard();
+    setInterval(loadAnalytics, 30000);
   }
 
-  refreshButton?.addEventListener('click', loadOrders);
+  refreshButton?.addEventListener('click', loadDashboard);
   init();
 })();

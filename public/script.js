@@ -411,6 +411,71 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 })();
 
+// Supabase visitor analytics
+(function () {
+  const client = window.BFL_SUPABASE_CLIENT || null;
+  if (!client || document.body.classList.contains('admin-page')) return;
+
+  const VISITOR_KEY = '__bfl_visitor_session__';
+  const HEARTBEAT_MS = 25000;
+
+  function getVisitorSessionId() {
+    const saved = localStorage.getItem(VISITOR_KEY);
+    if (saved) return saved;
+
+    const generated = window.crypto?.randomUUID
+      ? window.crypto.randomUUID()
+      : `bfl-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    localStorage.setItem(VISITOR_KEY, generated);
+    return generated;
+  }
+
+  function withTimeout(promise, ms) {
+    return Promise.race([
+      promise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Visitor tracking timed out')), ms)),
+    ]);
+  }
+
+  async function trackVisitor() {
+    if (document.visibilityState === 'hidden') return;
+
+    const now = new Date().toISOString();
+    let user = null;
+    try {
+      const sessionResult = await withTimeout(client.auth.getSession(), 2500);
+      user = sessionResult.data?.session?.user || null;
+    } catch {
+      user = null;
+    }
+
+    const payload = {
+      session_id: getVisitorSessionId(),
+      user_id: user?.id || null,
+      user_email: user?.email || null,
+      page_path: `${window.location.pathname}${window.location.search}`,
+      page_title: document.title || 'Ball For Life',
+      referrer: document.referrer || null,
+      user_agent: navigator.userAgent || null,
+      last_seen_at: now,
+    };
+
+    try {
+      await client
+        .from('site_visitors')
+        .upsert(payload, { onConflict: 'session_id' });
+    } catch (error) {
+      console.warn('Visitor tracking failed:', error);
+    }
+  }
+
+  trackVisitor();
+  setInterval(trackVisitor, HEARTBEAT_MS);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') trackVisitor();
+  });
+})();
+
 // Homepage hero automatic slideshow with smooth fade
 (function () {
   const hero = document.querySelector('#hero');
