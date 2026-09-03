@@ -120,6 +120,8 @@
     product('jared-mccain-snow-washed-oversized-cotton-t-shirt', 'Jared McCain Snow Washed Oversized Cotton T-Shirt', 'Jared-McCain-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
     product('jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt', 'Jared McCain Variant 2 Snow Washed Oversized Cotton T-Shirt', 'Jared-McCain-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
     product('jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt', 'Jared McCain Variant 3 Snow Washed Oversized Cotton T-Shirt', 'Jared-McCain-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
+    product('stephen-curry-snow-washed-oversized-cotton-t-shirt', 'Stephen Curry Snow Washed Oversized Cotton T-Shirt', 'Stephen-Curry-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
+    product('stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt', 'Stephen Curry Variant 2 Snow Washed Oversized Cotton T-Shirt', 'Stephen-Curry-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
   ];
 
   const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
@@ -153,6 +155,12 @@
     'mccain-2': 'jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt',
     'jared-3': 'jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt',
     'mccain-3': 'jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt',
+    'curry': 'stephen-curry-snow-washed-oversized-cotton-t-shirt',
+    'stephen': 'stephen-curry-snow-washed-oversized-cotton-t-shirt',
+    'steph': 'stephen-curry-snow-washed-oversized-cotton-t-shirt',
+    'curry-2': 'stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'stephen-2': 'stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'steph-2': 'stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt',
   };
 
   function product(id, name, folder, colors, price) {
