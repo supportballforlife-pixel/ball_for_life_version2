@@ -1113,14 +1113,135 @@ button:disabled{
   color:var(--grey-dark);
 }
 @media (max-width:760px){
-  .admin-main{padding:52px 20px 90px;}
-  .admin-head{align-items:flex-start; flex-direction:column;}
-  .admin-analytics{grid-template-columns:1fr;}
+  .admin-page .announce{
+    font-size:10.5px;
+    min-height:34px;
+  }
+  .admin-page .nav-grid{
+    height:62px !important;
+    padding:0 14px;
+  }
+  .admin-page .logo-center img{
+    max-height:32px !important;
+  }
+  .admin-page .currency-select{
+    display:none;
+  }
+  .admin-page .cart-link{
+    font-size:10px;
+  }
+  .admin-main{
+    padding:28px 14px 78px;
+  }
+  .admin-head{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:18px;
+    margin-bottom:18px;
+    padding-bottom:20px;
+  }
+  .admin-head .eyebrow{
+    font-size:10px;
+    margin-bottom:7px;
+  }
+  .admin-head h1{
+    font-size:34px;
+  }
+  .admin-head p{
+    font-size:12.5px;
+    line-height:1.5;
+    margin-top:8px;
+  }
+  .admin-head .btn{
+    width:100%;
+    min-height:44px;
+  }
+  .admin-message{
+    font-size:11px;
+    line-height:1.45;
+    margin-bottom:14px;
+  }
+  .admin-guard{
+    padding:24px 18px;
+  }
+  .admin-analytics{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .admin-stat{
+    min-height:104px;
+    padding:14px;
+  }
   .admin-stat-wide{grid-column:auto;}
+  .admin-stat span,
+  .admin-stat small,
+  .admin-page-list span{
+    font-size:9.5px;
+  }
+  .admin-stat strong{
+    font-size:32px;
+  }
+  .admin-page-list{
+    gap:6px;
+  }
+  .admin-page-list div{
+    gap:8px;
+  }
+  .admin-orders{
+    gap:12px;
+  }
+  .admin-order{
+    padding:16px;
+  }
   .admin-order-top,
   .admin-order-controls{grid-template-columns:1fr;}
-  .admin-order-top > div:last-child{text-align:left;}
-  .admin-order-meta{grid-template-columns:1fr;}
+  .admin-order-top{
+    gap:10px;
+    padding-bottom:13px;
+  }
+  .admin-order-top > div:last-child{
+    text-align:left;
+    border-top:1px solid var(--line-light);
+    padding-top:10px;
+  }
+  .admin-order-top strong{
+    font-size:14px;
+  }
+  .admin-order-top span,
+  .admin-order-items span,
+  .admin-order-controls label span,
+  .admin-order-meta span{
+    font-size:10px;
+  }
+  .admin-order-items{
+    display:grid;
+    gap:7px;
+    padding:13px 0;
+  }
+  .admin-order-items span{
+    line-height:1.4;
+  }
+  .admin-order-meta{
+    grid-template-columns:1fr;
+    gap:8px;
+    margin:0 0 13px;
+  }
+  .admin-order-meta div{
+    padding:11px;
+  }
+  .admin-order-controls{
+    gap:10px;
+  }
+  .admin-order-controls select,
+  .admin-order-controls input{
+    height:46px;
+    font-size:16px;
+  }
+  .admin-order-controls .btn{
+    min-height:46px;
+    width:100%;
+  }
 }
 .auth-create{
   max-width:460px;
