@@ -37,6 +37,10 @@ async function getUser(supabaseUrl: string, secretKey: string, req: Request) {
   return await res.json();
 }
 
+const PUBLIC_PROMO_CODES: Record<string, number> = {
+  TIKTOK10: 10,
+};
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -47,14 +51,25 @@ Deno.serve(async (req) => {
     const secretKey = getProjectSecretKey();
     if (!supabaseUrl || !secretKey) throw new Error('Reward service is not configured.');
 
-    const user = await getUser(supabaseUrl, secretKey, req);
-    if (!user?.id) throw new Error('Log in to use a reward code.');
-
     const body = await req.json();
     const code = String(body.code || '').trim().toUpperCase();
     const subtotalGbp = Number(body.subtotal_gbp || 0);
     if (!code) throw new Error('Enter a reward code.');
     if (!Number.isFinite(subtotalGbp) || subtotalGbp <= 0) throw new Error('Your bag is empty.');
+
+    const publicPromoPercent = PUBLIC_PROMO_CODES[code];
+    if (publicPromoPercent) {
+      const discountGbp = Number((subtotalGbp * (publicPromoPercent / 100)).toFixed(2));
+      return json({
+        valid: true,
+        code,
+        discount_percent: publicPromoPercent,
+        discount_gbp: discountGbp,
+      });
+    }
+
+    const user = await getUser(supabaseUrl, secretKey, req);
+    if (!user?.id) throw new Error('Log in to use an earned reward code.');
 
     const rewardRes = await fetch(
       `${supabaseUrl}/rest/v1/reward_codes?code=eq.${encodeURIComponent(code)}&user_id=eq.${encodeURIComponent(user.id)}&used_at=is.null&select=id,code,discount_percent`,

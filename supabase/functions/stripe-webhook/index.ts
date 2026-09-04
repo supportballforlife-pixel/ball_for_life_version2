@@ -61,11 +61,106 @@ function rewardCode() {
   return `BFL10-${suffix}`;
 }
 
+function escapeHtml(value: unknown) {
+  return String(value || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function money(value: unknown) {
+  return `£${Number(value || 0).toFixed(2)}`;
+}
+
 async function fetchJson(url: string, init: RequestInit) {
   const response = await fetch(url, init);
   const data = await response.json().catch(() => null);
   if (!response.ok) throw new Error(data?.message || data?.error || `Request failed with ${response.status}`);
   return data;
+}
+
+async function sendOrderConfirmationEmail(order: Record<string, any>) {
+  const resendKey = Deno.env.get('RESEND_API_KEY') || '';
+  const toEmail = String(order.shipping_email || '').trim();
+  if (!resendKey || !toEmail) return;
+
+  const fromEmail = Deno.env.get('ORDER_FROM_EMAIL') || 'Ball For Life <orders@ballforlife.store>';
+  const replyTo = Deno.env.get('ORDER_REPLY_TO_EMAIL') || 'supportballforlife@gmail.com';
+  const trustpilotBcc = Deno.env.get('TRUSTPILOT_BCC_EMAIL') || 'ballforlife.store+9f6d814841@invite.trustpilot.com';
+  const orderNumber = String(order.order_number || 'your order');
+  const customerName = String(order.shipping_name || 'there').trim();
+  const items = Array.isArray(order.items) ? order.items : [];
+  const itemRows = items.map((item) => `
+    <tr>
+      <td style="padding:10px 0;border-bottom:1px solid #eee;">
+        <strong>${escapeHtml(item.name || 'Ball For Life item')}</strong><br>
+        <span style="font-size:12px;color:#666;">Size ${escapeHtml(item.size || 'N/A')} · Qty ${Number(item.qty || 1)}</span>
+      </td>
+      <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;">${money(Number(item.price || 0) * Number(item.qty || 1))}</td>
+    </tr>
+  `).join('');
+
+  const html = `
+    <div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;color:#111;background:#fff;">
+      <div style="padding:28px 0;border-bottom:1px solid #111;text-align:center;">
+        <h1 style="margin:0;font-size:24px;letter-spacing:-0.02em;">Ball For Life</h1>
+      </div>
+      <div style="padding:28px 0;">
+        <p style="font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:#777;margin:0 0 14px;">Order confirmation</p>
+        <h2 style="font-size:28px;line-height:1.1;margin:0 0 16px;">Thanks for your order, ${escapeHtml(customerName)}.</h2>
+        <p style="line-height:1.6;margin:0 0 20px;">We have received your payment and your Ball For Life order is now being processed.</p>
+        <div style="background:#f6f6f6;border:1px solid #e6e6e6;padding:16px;margin:20px 0;">
+          <strong>Order number</strong><br>
+          <span style="font-family:monospace;">${escapeHtml(orderNumber)}</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse;margin:18px 0;">
+          ${itemRows || '<tr><td style="padding:10px 0;">Ball For Life order</td></tr>'}
+        </table>
+        <div style="border-top:1px solid #111;padding-top:14px;">
+          <p style="display:flex;justify-content:space-between;margin:7px 0;"><span>Subtotal</span><strong>${money(order.subtotal_gbp)}</strong></p>
+          <p style="display:flex;justify-content:space-between;margin:7px 0;"><span>Delivery</span><strong>${Number(order.shipping_gbp || 0) === 0 ? 'Free' : money(order.shipping_gbp)}</strong></p>
+          ${Number(order.discount_gbp || 0) > 0 ? `<p style="display:flex;justify-content:space-between;margin:7px 0;"><span>Discount</span><strong>-${money(order.discount_gbp)}</strong></p>` : ''}
+          <p style="display:flex;justify-content:space-between;margin:13px 0 0;font-size:18px;"><span>Total</span><strong>${money(order.total_gbp || order.subtotal_gbp)}</strong></p>
+        </div>
+        <p style="line-height:1.6;margin:24px 0 0;color:#555;">You can reply to this email if you need help with your order.</p>
+      </div>
+      <div style="padding:18px 0;border-top:1px solid #eee;color:#777;font-size:12px;">
+        Ball For Life · Premium graphic streetwear
+      </div>
+    </div>
+  `;
+
+  const text = `Ball For Life order confirmation
+
+Thanks for your order, ${customerName}.
+Order number: ${orderNumber}
+Total: ${money(order.total_gbp || order.subtotal_gbp)}
+
+Your order is now being processed. Reply to this email if you need help.`;
+
+  const emailRes = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${resendKey}`,
+    },
+    body: JSON.stringify({
+      from: fromEmail,
+      to: [toEmail],
+      bcc: trustpilotBcc ? [trustpilotBcc] : undefined,
+      reply_to: replyTo,
+      subject: `Your Ball For Life order ${orderNumber}`,
+      html,
+      text,
+    }),
+  });
+
+  const emailData = await emailRes.json().catch(() => null);
+  if (!emailRes.ok) {
+    console.error('Order confirmation email failed', emailData);
+  }
 }
 
 async function generateEarnedRewards(supabaseUrl: string, secretKey: string, userId: string) {
@@ -158,7 +253,7 @@ Deno.serve(async (req) => {
       : `order_number=eq.${encodeURIComponent(orderNumber)}`;
 
     const orders = await fetchJson(
-      `${supabaseUrl}/rest/v1/orders?${orderFilter}&select=id,user_id`,
+      `${supabaseUrl}/rest/v1/orders?${orderFilter}&select=id,user_id,order_number,items,subtotal_gbp,shipping_gbp,discount_gbp,total_gbp,shipping_name,shipping_email,payment_status`,
       {
         headers: {
           apikey: secretKey,
@@ -168,6 +263,7 @@ Deno.serve(async (req) => {
     );
     const order = Array.isArray(orders) ? orders[0] : null;
     if (!order) throw new Error('Order not found.');
+    const shouldSendConfirmationEmail = order.payment_status !== 'paid';
 
     await fetchJson(`${supabaseUrl}/rest/v1/orders?id=eq.${encodeURIComponent(order.id)}`, {
       method: 'PATCH',
@@ -204,6 +300,13 @@ Deno.serve(async (req) => {
     const generated = accountUserId
       ? await generateEarnedRewards(supabaseUrl, secretKey, accountUserId)
       : 0;
+
+    if (shouldSendConfirmationEmail) {
+      EdgeRuntime.waitUntil(sendOrderConfirmationEmail({
+        ...order,
+        payment_reference: session.id,
+      }));
+    }
 
     return json({ received: true, order_id: order.id, generated_rewards: generated });
   } catch (error) {

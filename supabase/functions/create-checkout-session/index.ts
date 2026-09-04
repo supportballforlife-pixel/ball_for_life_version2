@@ -41,6 +41,10 @@ function clampMoney(value: number) {
   return Number(Math.max(0, value).toFixed(2));
 }
 
+const PUBLIC_PROMO_CODES: Record<string, number> = {
+  TIKTOK10: 10,
+};
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -73,24 +77,30 @@ Deno.serve(async (req) => {
     if (!shippingCountry) throw new Error('Missing shipping country.');
 
     if (rewardCodeInput) {
-      if (!user?.id) throw new Error('Log in to use a reward code.');
+      const publicPromoPercent = PUBLIC_PROMO_CODES[rewardCodeInput];
+      if (publicPromoPercent) {
+        rewardCode = rewardCodeInput;
+        discountGbp = clampMoney(subtotalGbp * (publicPromoPercent / 100));
+      } else {
+        if (!user?.id) throw new Error('Log in to use an earned reward code.');
 
-      const rewardRes = await fetch(
-        `${supabaseUrl}/rest/v1/reward_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&user_id=eq.${encodeURIComponent(user.id)}&used_at=is.null&select=id,code,discount_percent`,
-        {
-          headers: {
-            apikey: secretKey,
-            Authorization: `Bearer ${secretKey}`,
+        const rewardRes = await fetch(
+          `${supabaseUrl}/rest/v1/reward_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&user_id=eq.${encodeURIComponent(user.id)}&used_at=is.null&select=id,code,discount_percent`,
+          {
+            headers: {
+              apikey: secretKey,
+              Authorization: `Bearer ${secretKey}`,
+            },
           },
-        },
-      );
-      const rewards = await rewardRes.json();
-      const reward = Array.isArray(rewards) ? rewards[0] : null;
-      if (!rewardRes.ok || !reward) throw new Error('That reward code is not valid for this account.');
+        );
+        const rewards = await rewardRes.json();
+        const reward = Array.isArray(rewards) ? rewards[0] : null;
+        if (!rewardRes.ok || !reward) throw new Error('That reward code is not valid for this account.');
 
-      rewardCodeId = reward.id;
-      rewardCode = reward.code;
-      discountGbp = clampMoney(subtotalGbp * (Number(reward.discount_percent || 10) / 100));
+        rewardCodeId = reward.id;
+        rewardCode = reward.code;
+        discountGbp = clampMoney(subtotalGbp * (Number(reward.discount_percent || 10) / 100));
+      }
     }
 
     const totalGbp = clampMoney(subtotalGbp + shippingGbp - discountGbp);

@@ -193,9 +193,9 @@
     );
     setRewardMessage(
       currentUser
-        ? 'Enter an unlocked account reward code for 10% off.'
-        : 'Log in to use earned 10% reward codes.',
-      currentUser ? '' : 'warning'
+        ? 'Use TIKTOK10 for 10% off, or enter an unlocked account reward code.'
+        : 'Use TIKTOK10 for 10% off. Log in to use earned reward codes too.',
+      ''
     );
   }
 
@@ -208,11 +208,6 @@
       setRewardMessage('Enter a reward code first.', 'warning');
       return;
     }
-    if (!currentUser) {
-      setRewardMessage('Log in to use a reward code.', 'warning');
-      return;
-    }
-
     if (rewardButton) {
       rewardButton.disabled = true;
       rewardButton.textContent = 'Checking...';
