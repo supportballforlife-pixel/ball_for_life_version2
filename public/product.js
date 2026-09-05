@@ -267,7 +267,7 @@
             </details>
             <details>
               <summary>Shipping Info</summary>
-              <p>Free shipping on orders over <span data-money-gbp="50">${money(50)}</span>. Standard delivery and return options are available at checkout.</p>
+              <p>Free shipping on orders over <span data-money-gbp="65">${money(65)}</span>. Standard delivery and return options are available at checkout.</p>
             </details>
             <details>
               <summary>Returns & Exchange</summary>

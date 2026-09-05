@@ -14,7 +14,7 @@
   const rewardInput = document.querySelector('[data-reward-code-input]');
   const rewardButton = document.querySelector('[data-apply-reward]');
   const rewardMessage = document.querySelector('[data-reward-message]');
-  const FREE_SHIPPING_THRESHOLD_GBP = 50;
+  const FREE_SHIPPING_THRESHOLD_GBP = 65;
   const STANDARD_SHIPPING_GBP = 4.99;
   const submitButton = document.querySelector('[data-checkout-submit]');
 

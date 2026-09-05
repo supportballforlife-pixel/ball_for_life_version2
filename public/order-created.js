@@ -52,7 +52,7 @@
     if (!detailsEl) return;
     const orderNumber = order?.order_number || orderParam || 'Your order';
     const subtotal = Number(order?.subtotal_gbp || 0);
-    const shipping = Number(order?.shipping_gbp ?? (subtotal > 0 && subtotal < 50 ? 4.99 : 0));
+    const shipping = Number(order?.shipping_gbp ?? (subtotal > 0 && subtotal < 65 ? 4.99 : 0));
     const discount = Number(order?.discount_gbp || 0);
     const total = Number(order?.total_gbp ?? (subtotal ? Number((subtotal + shipping - discount).toFixed(2)) : 0));
     const rewardCode = order?.reward_code ? `<span>Reward code: ${escapeHtml(order.reward_code)}</span>` : '';

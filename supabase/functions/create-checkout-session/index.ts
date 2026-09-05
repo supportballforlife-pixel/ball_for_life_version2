@@ -67,7 +67,7 @@ Deno.serve(async (req) => {
     const subtotalGbp = clampMoney(Number(body.subtotal_gbp || 0));
     const shippingCountry = String(body.shipping_country || '').trim();
     const rewardCodeInput = String(body.reward_code || '').trim().toUpperCase();
-    const shippingGbp = subtotalGbp >= 50 ? 0 : 4.99;
+    const shippingGbp = subtotalGbp >= 65 ? 0 : 4.99;
     let discountGbp = 0;
     let rewardCodeId: string | null = null;
     let rewardCode: string | null = null;
