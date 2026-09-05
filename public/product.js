@@ -122,6 +122,10 @@
     product('jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt', 'Jared McCain Variant 3 Snow Washed Oversized Cotton T-Shirt', 'Jared-McCain-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
     product('stephen-curry-snow-washed-oversized-cotton-t-shirt', 'Stephen Curry Snow Washed Oversized Cotton T-Shirt', 'Stephen-Curry-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
     product('stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt', 'Stephen Curry Variant 2 Snow Washed Oversized Cotton T-Shirt', 'Stephen-Curry-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
+    product('kyrie-irving-variant-2-snow-washed-oversized-cotton-t-shirt', 'Kyrie Irving Variant 2 Snow Washed Oversized Cotton T-Shirt', 'Kyrie-Irving-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
+    product('kyrie-irving-variant-3-snow-washed-oversized-cotton-t-shirt', 'Kyrie Irving Variant 3 Snow Washed Oversized Cotton T-Shirt', 'Kyrie-Irving-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
+    product('kyrie-irving-variant-4-snow-washed-oversized-cotton-t-shirt', 'Kyrie Irving Variant 4 Snow Washed Oversized Cotton T-Shirt', 'Kyrie-Irving-Variant-4-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
+    product('kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt', 'Kyrie Irving Variant 5 Snow Washed Oversized Cotton T-Shirt', 'Kyrie-Irving-Variant-5-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
   ];
 
   const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
@@ -132,6 +136,14 @@
     'lebron': 'lebron-james-oversized-snowly-washed-graphic-tee',
     'lamelo': 'lamelo-ball-snow-washed-oversized-cotton-t-shirt',
     'kyrie': 'kyrie-irving-snow-washed-oversized-cotton-t-shirt',
+    'kyrie-2': 'kyrie-irving-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'irving-2': 'kyrie-irving-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'kyrie-3': 'kyrie-irving-variant-3-snow-washed-oversized-cotton-t-shirt',
+    'irving-3': 'kyrie-irving-variant-3-snow-washed-oversized-cotton-t-shirt',
+    'kyrie-4': 'kyrie-irving-variant-4-snow-washed-oversized-cotton-t-shirt',
+    'irving-4': 'kyrie-irving-variant-4-snow-washed-oversized-cotton-t-shirt',
+    'kyrie-5': 'kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt',
+    'irving-5': 'kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt',
     'kobe': 'kobe-bryant-snow-washed-oversized-cotton-t-shirt',
     'iverson': 'allen-iverson-snow-washed-oversized-cotton-t-shirt',
     'rodman': 'dennis-rodman-snow-washed-oversized-cotton-t-shirt',
