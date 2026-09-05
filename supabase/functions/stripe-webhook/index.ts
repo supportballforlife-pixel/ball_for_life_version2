@@ -74,6 +74,14 @@ function money(value: unknown) {
   return `£${Number(value || 0).toFixed(2)}`;
 }
 
+function absoluteAssetUrl(path: unknown) {
+  const value = String(path || '').trim();
+  if (!value) return '';
+  if (/^https?:\/\//i.test(value)) return value.replaceAll(' ', '%20');
+  const siteUrl = (Deno.env.get('SITE_URL') || 'https://ballforlife.store').replace(/\/+$/, '');
+  return `${siteUrl}/${value.replace(/^\/+/, '').replaceAll(' ', '%20')}`;
+}
+
 async function fetchJson(url: string, init: RequestInit) {
   const response = await fetch(url, init);
   const data = await response.json().catch(() => null);
@@ -92,43 +100,119 @@ async function sendOrderConfirmationEmail(order: Record<string, any>) {
   const orderNumber = String(order.order_number || 'your order');
   const customerName = String(order.shipping_name || 'there').trim();
   const items = Array.isArray(order.items) ? order.items : [];
+  const siteUrl = (Deno.env.get('SITE_URL') || 'https://ballforlife.store').replace(/\/+$/, '');
+  const trackUrl = `${siteUrl}/order-created.html?order=${encodeURIComponent(orderNumber)}`;
+  const logoUrl = `${siteUrl}/brand-logo.png`;
   const itemRows = items.map((item) => `
     <tr>
-      <td style="padding:10px 0;border-bottom:1px solid #eee;">
-        <strong>${escapeHtml(item.name || 'Ball For Life item')}</strong><br>
-        <span style="font-size:12px;color:#666;">Size ${escapeHtml(item.size || 'N/A')} · Qty ${Number(item.qty || 1)}</span>
+      <td style="padding:14px 0;border-bottom:1px solid #e8e8e2;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="78" valign="top">
+              ${item.image ? `<img src="${escapeHtml(absoluteAssetUrl(item.image))}" width="64" alt="${escapeHtml(item.name || 'Ball For Life item')}" style="display:block;width:64px;height:64px;object-fit:cover;background:#f3f3ee;border:1px solid #e3e3dc;">` : ''}
+            </td>
+            <td valign="top" style="padding-left:${item.image ? '12px' : '0'};">
+              <strong style="font-size:14px;line-height:1.35;">${escapeHtml(item.name || 'Ball For Life item')}</strong><br>
+              <span style="display:block;margin-top:5px;font-size:12px;color:#666;line-height:1.5;">Size ${escapeHtml(item.size || 'N/A')} &bull; Qty ${Number(item.qty || 1)}</span>
+              <span style="display:block;margin-top:3px;font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.08em;">Heavyweight 250 GSM &bull; 100% cotton</span>
+            </td>
+          </tr>
+        </table>
       </td>
-      <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;">${money(Number(item.price || 0) * Number(item.qty || 1))}</td>
+      <td valign="top" style="padding:14px 0;border-bottom:1px solid #e8e8e2;text-align:right;font-size:14px;font-weight:700;">${money(Number(item.price || 0) * Number(item.qty || 1))}</td>
     </tr>
   `).join('');
 
   const html = `
-    <div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;color:#111;background:#fff;">
-      <div style="padding:28px 0;border-bottom:1px solid #111;text-align:center;">
-        <h1 style="margin:0;font-size:24px;letter-spacing:-0.02em;">Ball For Life</h1>
-      </div>
-      <div style="padding:28px 0;">
-        <p style="font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:#777;margin:0 0 14px;">Order confirmation</p>
-        <h2 style="font-size:28px;line-height:1.1;margin:0 0 16px;">Thanks for your order, ${escapeHtml(customerName)}.</h2>
-        <p style="line-height:1.6;margin:0 0 20px;">We have received your payment and your Ball For Life order is now being processed.</p>
-        <div style="background:#f6f6f6;border:1px solid #e6e6e6;padding:16px;margin:20px 0;">
-          <strong>Order number</strong><br>
-          <span style="font-family:monospace;">${escapeHtml(orderNumber)}</span>
-        </div>
-        <table style="width:100%;border-collapse:collapse;margin:18px 0;">
-          ${itemRows || '<tr><td style="padding:10px 0;">Ball For Life order</td></tr>'}
-        </table>
-        <div style="border-top:1px solid #111;padding-top:14px;">
-          <p style="display:flex;justify-content:space-between;margin:7px 0;"><span>Subtotal</span><strong>${money(order.subtotal_gbp)}</strong></p>
-          <p style="display:flex;justify-content:space-between;margin:7px 0;"><span>Delivery</span><strong>${Number(order.shipping_gbp || 0) === 0 ? 'Free' : money(order.shipping_gbp)}</strong></p>
-          ${Number(order.discount_gbp || 0) > 0 ? `<p style="display:flex;justify-content:space-between;margin:7px 0;"><span>Discount</span><strong>-${money(order.discount_gbp)}</strong></p>` : ''}
-          <p style="display:flex;justify-content:space-between;margin:13px 0 0;font-size:18px;"><span>Total</span><strong>${money(order.total_gbp || order.subtotal_gbp)}</strong></p>
-        </div>
-        <p style="line-height:1.6;margin:24px 0 0;color:#555;">You can reply to this email if you need help with your order.</p>
-      </div>
-      <div style="padding:18px 0;border-top:1px solid #eee;color:#777;font-size:12px;">
-        Ball For Life · Premium graphic streetwear
-      </div>
+    <div style="margin:0;padding:0;background:#0b0b0b;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#0b0b0b;">
+        <tr>
+          <td align="center" style="padding:28px 14px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#f7f7f2;color:#111;border:1px solid #282828;font-family:Arial,sans-serif;">
+              <tr>
+                <td align="center" style="padding:24px 22px 18px;background:#111;">
+                  <img src="${logoUrl}" width="112" alt="Ball For Life" style="display:block;border:0;max-width:112px;height:auto;">
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:30px 28px 24px;background:#111;color:#fff;">
+                  <p style="margin:0 0 12px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#bdbdb6;">Order confirmed</p>
+                  <h1 style="margin:0;font-size:34px;line-height:1.04;font-weight:900;letter-spacing:0;text-transform:uppercase;">Thanks for your order, ${escapeHtml(customerName)}.</h1>
+                  <p style="margin:14px 0 0;color:#deded8;font-size:15px;line-height:1.6;">Your payment has gone through and your Ball For Life order is now being processed.</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:22px 28px 0;">
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#fff;border:1px solid #e1e1da;">
+                    <tr>
+                      <td style="padding:16px;">
+                        <p style="margin:0 0 5px;color:#777;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;">Order number</p>
+                        <p style="margin:0;font-size:18px;font-weight:900;font-family:Arial,sans-serif;">${escapeHtml(orderNumber)}</p>
+                      </td>
+                      <td align="right" style="padding:16px;">
+                        <a href="${trackUrl}" style="display:inline-block;background:#111;color:#fff;text-decoration:none;font-size:12px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;padding:12px 16px;">View order</a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:22px 28px 8px;">
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="50%" valign="top" style="padding:14px;background:#ecece6;border:1px solid #deded7;">
+                        <p style="margin:0 0 6px;color:#777;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;">Delivery estimate</p>
+                        <p style="margin:0;font-size:14px;line-height:1.45;font-weight:700;">Usually 7-14 working days</p>
+                      </td>
+                      <td width="12"></td>
+                      <td width="50%" valign="top" style="padding:14px;background:#ecece6;border:1px solid #deded7;">
+                        <p style="margin:0 0 6px;color:#777;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;">Returns</p>
+                        <p style="margin:0;font-size:14px;line-height:1.45;font-weight:700;">14-day change-of-mind returns</p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:18px 28px 0;">
+                  <h2 style="margin:0 0 10px;font-size:18px;text-transform:uppercase;">Order summary</h2>
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+                    ${itemRows || '<tr><td style="padding:14px 0;border-bottom:1px solid #e8e8e2;">Ball For Life order</td></tr>'}
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:18px 28px 0;">
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-top:2px solid #111;padding-top:12px;">
+                    <tr><td style="padding:5px 0;color:#555;">Subtotal</td><td align="right" style="padding:5px 0;font-weight:700;">${money(order.subtotal_gbp)}</td></tr>
+                    <tr><td style="padding:5px 0;color:#555;">Delivery</td><td align="right" style="padding:5px 0;font-weight:700;">${Number(order.shipping_gbp || 0) === 0 ? 'Free' : money(order.shipping_gbp)}</td></tr>
+                    ${Number(order.discount_gbp || 0) > 0 ? `<tr><td style="padding:5px 0;color:#555;">Discount</td><td align="right" style="padding:5px 0;font-weight:700;">-${money(order.discount_gbp)}</td></tr>` : ''}
+                    <tr><td style="padding:12px 0 0;font-size:18px;font-weight:900;">Total paid</td><td align="right" style="padding:12px 0 0;font-size:18px;font-weight:900;">${money(order.total_gbp || order.subtotal_gbp)}</td></tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:24px 28px 28px;">
+                  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#111;color:#fff;">
+                    <tr>
+                      <td style="padding:18px 16px;">
+                        <p style="margin:0 0 6px;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#aaa;">Need help?</p>
+                        <p style="margin:0;font-size:14px;line-height:1.55;">Reply to this email with your order number and we will help you out.</p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:18px 28px;background:#0b0b0b;color:#85857d;font-size:12px;line-height:1.6;text-align:center;">
+                  Ball For Life &bull; Premium graphic streetwear<br>
+                  Secure checkout &bull; Heavyweight cotton &bull; UK shipping
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
     </div>
   `;
 
