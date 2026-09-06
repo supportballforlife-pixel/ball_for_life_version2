@@ -15,7 +15,24 @@
   const rewardButton = document.querySelector('[data-apply-reward]');
   const rewardMessage = document.querySelector('[data-reward-message]');
   const FREE_SHIPPING_THRESHOLD_GBP = 65;
-  const STANDARD_SHIPPING_GBP = 4.99;
+  const SHIPPING_RATES_GBP = Object.freeze({
+    'United Kingdom': 4.99,
+    Austria: 5.99,
+    Belgium: 5.99,
+    Canada: 6.99,
+    Denmark: 6.99,
+    France: 7.99,
+    Germany: 5.99,
+    Ireland: 6.99,
+    Italy: 5.99,
+    Mexico: 7.99,
+    Netherlands: 8.99,
+    Poland: 4.99,
+    Portugal: 5.99,
+    Spain: 5.99,
+    Sweden: 5.99,
+    'United States': 5.99,
+  });
   const submitButton = document.querySelector('[data-checkout-submit]');
 
   let currentUser = null;
@@ -60,9 +77,19 @@
     return cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 1), 0);
   }
 
+  function selectedCountry() {
+    return String(form?.querySelector('[name="country"]')?.value || 'United Kingdom').trim();
+  }
+
   function shippingFee() {
+    const country = selectedCountry();
+    const countryRate = SHIPPING_RATES_GBP[country];
+    if (typeof countryRate !== 'number') return null;
     const afterDiscount = Math.max(0, Number(subtotal().toFixed(2)) - discountAmount());
-    return Number(afterDiscount.toFixed(2)) >= FREE_SHIPPING_THRESHOLD_GBP ? 0 : STANDARD_SHIPPING_GBP;
+    if (country === 'United Kingdom' && Number(afterDiscount.toFixed(2)) >= FREE_SHIPPING_THRESHOLD_GBP) {
+      return 0;
+    }
+    return countryRate;
   }
 
   function discountAmount() {
@@ -96,8 +123,10 @@
     if (subtotalEl) subtotalEl.textContent = money(itemsSubtotal);
     if (discountRow) discountRow.hidden = discount <= 0;
     if (discountEl) discountEl.textContent = `-${money(discount)}`;
-    if (shippingEl) shippingEl.textContent = shipping === 0 ? 'FREE' : money(shipping);
-    totalEl.textContent = money(itemsSubtotal + shipping - discount);
+    if (shippingEl) shippingEl.textContent = shipping === null ? 'Unavailable' : shipping === 0 ? 'FREE' : money(shipping);
+    totalEl.textContent = shipping === null ? money(itemsSubtotal - discount) : money(itemsSubtotal + shipping - discount);
+    if (submitButton) submitButton.disabled = shipping === null;
+    if (shipping === null) setMessage('Shipping to this country is coming soon.', 'warning');
   }
 
   async function createStripeCheckout(order) {
@@ -329,6 +358,7 @@
     setRewardMessage('Reward code changed. Apply it again before payment.', 'warning');
     renderSummary();
   });
+  form?.querySelector('[name="country"]')?.addEventListener('change', renderSummary);
   document.addEventListener('bfl:currency-change', renderSummary);
   init();
 })();

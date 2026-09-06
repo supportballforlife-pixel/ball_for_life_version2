@@ -45,6 +45,34 @@ const PUBLIC_PROMO_CODES: Record<string, number> = {
   TIKTOK10: 10,
 };
 
+const SHIPPING_RATES_GBP: Record<string, number> = {
+  'United Kingdom': 4.99,
+  Austria: 5.99,
+  Belgium: 5.99,
+  Canada: 6.99,
+  Denmark: 6.99,
+  France: 7.99,
+  Germany: 5.99,
+  Ireland: 6.99,
+  Italy: 5.99,
+  Mexico: 7.99,
+  Netherlands: 8.99,
+  Poland: 4.99,
+  Portugal: 5.99,
+  Spain: 5.99,
+  Sweden: 5.99,
+  'United States': 5.99,
+};
+
+function shippingForCountry(country: string, subtotalAfterDiscount: number) {
+  const rate = SHIPPING_RATES_GBP[country];
+  if (typeof rate !== 'number') {
+    throw new Error('Shipping to this country is coming soon.');
+  }
+  if (country === 'United Kingdom' && subtotalAfterDiscount >= 65) return 0;
+  return rate;
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -103,7 +131,7 @@ Deno.serve(async (req) => {
     }
 
     const subtotalAfterDiscount = clampMoney(subtotalGbp - discountGbp);
-    const shippingGbp = subtotalAfterDiscount >= 65 ? 0 : 4.99;
+    const shippingGbp = shippingForCountry(shippingCountry, subtotalAfterDiscount);
     const totalGbp = clampMoney(subtotalGbp + shippingGbp - discountGbp);
     const amountPence = Math.round(totalGbp * 100);
     if (amountPence < 50) throw new Error('Order total is too low for secure payment.');
