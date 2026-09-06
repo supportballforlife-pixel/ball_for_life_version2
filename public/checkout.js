@@ -61,7 +61,8 @@
   }
 
   function shippingFee() {
-    return Number(subtotal().toFixed(2)) >= FREE_SHIPPING_THRESHOLD_GBP ? 0 : STANDARD_SHIPPING_GBP;
+    const afterDiscount = Math.max(0, Number(subtotal().toFixed(2)) - discountAmount());
+    return Number(afterDiscount.toFixed(2)) >= FREE_SHIPPING_THRESHOLD_GBP ? 0 : STANDARD_SHIPPING_GBP;
   }
 
   function discountAmount() {

@@ -67,7 +67,6 @@ Deno.serve(async (req) => {
     const subtotalGbp = clampMoney(Number(body.subtotal_gbp || 0));
     const shippingCountry = String(body.shipping_country || '').trim();
     const rewardCodeInput = String(body.reward_code || '').trim().toUpperCase();
-    const shippingGbp = subtotalGbp >= 65 ? 0 : 4.99;
     let discountGbp = 0;
     let rewardCodeId: string | null = null;
     let rewardCode: string | null = null;
@@ -103,6 +102,8 @@ Deno.serve(async (req) => {
       }
     }
 
+    const subtotalAfterDiscount = clampMoney(subtotalGbp - discountGbp);
+    const shippingGbp = subtotalAfterDiscount >= 65 ? 0 : 4.99;
     const totalGbp = clampMoney(subtotalGbp + shippingGbp - discountGbp);
     const amountPence = Math.round(totalGbp * 100);
     if (amountPence < 50) throw new Error('Order total is too low for secure payment.');
