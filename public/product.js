@@ -94,6 +94,14 @@
     'light-pink'
   ];
 
+  const sharifeCooperColors = [
+    'black', 'water-blue', 'apricot', 'light-gray', 'bean-green', 'light-purple',
+    'orange', 'wine-red', 'rose-red', 'blue-jeans', 'grass-green', 'khaki-ash',
+    'dark-blue', 'pirate-gray', 'gray-green', 'dark-green', 'purple-haze',
+    'royal-blue', 'light-blue', 'light-brown', 'lake-blue', 'yellow', 'red',
+    'light-pink'
+  ];
+
   const PRODUCTS = [
     product('ball-for-life-graphic-tee', 'Ball For Life Graphic Tee', 'Ball-For-Life-Graphic-Tee', ['black', 'water-blue', 'apricot', 'light-pink', 'pirate-grey'], 34.99),
     product('lebron-james-oversized-snowly-washed-graphic-tee', 'LeBron James Oversized Snowly Washed Graphic Tee', 'LeBron-James-Oversized-Snowly-Washed-Graphic-Tee', lebronColors, 27.99),
@@ -126,6 +134,9 @@
     product('kyrie-irving-variant-3-snow-washed-oversized-cotton-t-shirt', 'Kyrie Irving Variant 3 Snow Washed Oversized Cotton T-Shirt', 'Kyrie-Irving-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
     product('kyrie-irving-variant-4-snow-washed-oversized-cotton-t-shirt', 'Kyrie Irving Variant 4 Snow Washed Oversized Cotton T-Shirt', 'Kyrie-Irving-Variant-4-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
     product('kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt', 'Kyrie Irving Variant 5 Snow Washed Oversized Cotton T-Shirt', 'Kyrie-Irving-Variant-5-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
+    product('sharife-cooper-snow-washed-oversized-cotton-t-shirt', 'Sharife Cooper Snow Washed Oversized Cotton T-Shirt', 'Sharife-Cooper-Snow-Washed-Oversized-Cotton-T-Shirt', sharifeCooperColors, 27.99),
+    product('sharife-cooper-variant-2-snow-washed-oversized-cotton-t-shirt', 'Sharife Cooper Variant 2 Snow Washed Oversized Cotton T-Shirt', 'Sharife-Cooper-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt', sharifeCooperColors, 27.99),
+    product('sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt', 'Sharife Cooper Variant 3 Snow Washed Oversized Cotton T-Shirt', 'Sharife-Cooper-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt', sharifeCooperColors, 27.99),
   ];
 
   const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
@@ -144,6 +155,12 @@
     'irving-4': 'kyrie-irving-variant-4-snow-washed-oversized-cotton-t-shirt',
     'kyrie-5': 'kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt',
     'irving-5': 'kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt',
+    'sharife': 'sharife-cooper-snow-washed-oversized-cotton-t-shirt',
+    'cooper': 'sharife-cooper-snow-washed-oversized-cotton-t-shirt',
+    'sharife-2': 'sharife-cooper-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'cooper-2': 'sharife-cooper-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'sharife-3': 'sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt',
+    'cooper-3': 'sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt',
     'kobe': 'kobe-bryant-snow-washed-oversized-cotton-t-shirt',
     'iverson': 'allen-iverson-snow-washed-oversized-cotton-t-shirt',
     'rodman': 'dennis-rodman-snow-washed-oversized-cotton-t-shirt',
