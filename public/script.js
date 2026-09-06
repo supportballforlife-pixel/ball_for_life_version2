@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!Number.isNaN(value)) el.textContent = money(value);
     });
     document.querySelectorAll('[data-free-shipping]').forEach((el) => {
-      el.textContent = `Free shipping on all orders over ${money(parseFloat(el.dataset.freeShipping) || 65)} - new drop live now`;
+      el.textContent = `Free UK shipping over ${money(parseFloat(el.dataset.freeShipping) || 65)} - new drop live now`;
     });
   }
 
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const announcement = document.querySelector('.announce-message');
   if (!announcement) return;
   const messages = () => [
-    `Free shipping on all orders over ${window.__bfl_money ? window.__bfl_money(65) : '£65.00'} - new drop live now`,
+    `Free UK shipping over ${window.__bfl_money ? window.__bfl_money(65) : '£65.00'} - new drop live now`,
     'Sign up to get exclusive member offer',
     'Pay with Klarna'
   ];
