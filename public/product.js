@@ -102,6 +102,30 @@
     'light-pink'
   ];
 
+  const iSeeGodColors = [
+    'black', 'apricot', 'dark-blue', 'water-blue', 'light-gray', 'bean-green',
+    'light-purple', 'orange', 'rose-red', 'wine-red', 'blue-jeans',
+    'grass-green', 'khaki-ash', 'pirate-gray', 'gray-green', 'dark-green',
+    'purple-haze', 'royal-blue', 'light-blue', 'light-brown', 'lake-blue',
+    'yellow', 'red', 'light-pink'
+  ];
+
+  const goatGodColors = [
+    'black', 'water-blue', 'apricot', 'light-gray', 'bean-green',
+    'light-purple', 'orange', 'rose-red', 'wine-red', 'blue-jeans',
+    'grass-green', 'khaki-ash', 'dark-blue', 'pirate-gray', 'gray-green',
+    'dark-green', 'purple-haze', 'royal-blue', 'light-blue', 'light-brown',
+    'light-pink', 'red', 'yellow', 'lake-blue'
+  ];
+
+  const travisScottColors = [
+    'black', 'water-blue', 'apricot', 'light-gray', 'bean-green',
+    'light-purple', 'orange', 'rose-red', 'wine-red', 'blue-jeans',
+    'grass-green', 'khaki-ash', 'dark-blue', 'pirate-gray', 'gray-green',
+    'dark-green', 'purple-haze', 'royal-blue', 'light-brown', 'light-blue',
+    'light-pink', 'red', 'yellow', 'lake-blue'
+  ];
+
   const PRODUCTS = [
     product('ball-for-life-graphic-tee', 'Ball For Life Graphic Tee', 'Ball-For-Life-Graphic-Tee', ['black', 'water-blue', 'apricot', 'light-pink', 'pirate-grey'], 34.99),
     product('lebron-james-oversized-snowly-washed-graphic-tee', 'LeBron James Oversized Snowly Washed Graphic Tee', 'LeBron-James-Oversized-Snowly-Washed-Graphic-Tee', lebronColors, 27.99),
@@ -137,6 +161,12 @@
     product('sharife-cooper-snow-washed-oversized-cotton-t-shirt', 'Sharife Cooper Snow Washed Oversized Cotton T-Shirt', 'Sharife-Cooper-Snow-Washed-Oversized-Cotton-T-Shirt', sharifeCooperColors, 27.99),
     product('sharife-cooper-variant-2-snow-washed-oversized-cotton-t-shirt', 'Sharife Cooper Variant 2 Snow Washed Oversized Cotton T-Shirt', 'Sharife-Cooper-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt', sharifeCooperColors, 27.99),
     product('sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt', 'Sharife Cooper Variant 3 Snow Washed Oversized Cotton T-Shirt', 'Sharife-Cooper-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt', sharifeCooperColors, 27.99),
+    product('i-see-god-everywhere-snow-washed-oversized-cotton-t-shirt', 'I See God Everywhere Snow Washed Oversized Cotton T-Shirt', 'I-See-God-Everywhere-Snow-Washed-Oversized-Cotton-T-Shirt', iSeeGodColors, 29.99),
+    product('goat-x-god-snow-washed-oversized-cotton-t-shirt', 'G.O.A.T x GOD Snow Washed Oversized Cotton T-Shirt', 'GOAT-x-GOD-Snow-Washed-Oversized-Cotton-T-Shirt', goatGodColors, 29.99),
+    product('travis-scott-snow-washed-oversized-cotton-t-shirt', 'Travis Scott Snow Washed Oversized Cotton T-Shirt', 'Travis-Scott-Snow-Washed-Oversized-Cotton-T-Shirt', travisScottColors, 27.99),
+    product('kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt', 'Kobe Bryant Variant 2 Snow Washed Oversized Cotton T-Shirt', 'Kobe-Bryant-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt', travisScottColors, 27.99),
+    product('mask-on-snow-washed-oversized-cotton-t-shirt', 'Mask On Snow Washed Oversized Cotton T-Shirt', 'Mask-On-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
+    product('la-snow-washed-oversized-cotton-t-shirt', 'LA Snow Washed Oversized Cotton T-Shirt', 'LA-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
   ];
 
   const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
@@ -162,6 +192,10 @@
     'sharife-3': 'sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt',
     'cooper-3': 'sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt',
     'kobe': 'kobe-bryant-snow-washed-oversized-cotton-t-shirt',
+    'kobe-2': 'kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'bryant-2': 'kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'mask-on': 'mask-on-snow-washed-oversized-cotton-t-shirt',
+    'la': 'la-snow-washed-oversized-cotton-t-shirt',
     'iverson': 'allen-iverson-snow-washed-oversized-cotton-t-shirt',
     'rodman': 'dennis-rodman-snow-washed-oversized-cotton-t-shirt',
     'westbrook': 'russell-westbrook-snow-washed-oversized-cotton-t-shirt',
@@ -190,6 +224,12 @@
     'curry-2': 'stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt',
     'stephen-2': 'stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt',
     'steph-2': 'stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt',
+    'i-see-god-everywhere': 'i-see-god-everywhere-snow-washed-oversized-cotton-t-shirt',
+    'i-see-god': 'i-see-god-everywhere-snow-washed-oversized-cotton-t-shirt',
+    'goat-god': 'goat-x-god-snow-washed-oversized-cotton-t-shirt',
+    'goat-x-god': 'goat-x-god-snow-washed-oversized-cotton-t-shirt',
+    'travis': 'travis-scott-snow-washed-oversized-cotton-t-shirt',
+    'travis-scott': 'travis-scott-snow-washed-oversized-cotton-t-shirt',
   };
 
   function product(id, name, folder, colors, price) {
