@@ -98,6 +98,10 @@ Deno.serve(async (req) => {
     let discountGbp = 0;
     let rewardCodeId: string | null = null;
     let rewardCode: string | null = null;
+    let creatorCodeId: string | null = null;
+    let creatorCode: string | null = null;
+    let creatorName: string | null = null;
+    let creatorCommissionPercent: number | null = null;
 
     if (!orderNumber) throw new Error('Missing order number.');
     if (!Number.isFinite(subtotalGbp) || subtotalGbp <= 0) throw new Error('Invalid order subtotal.');
@@ -109,10 +113,8 @@ Deno.serve(async (req) => {
         rewardCode = rewardCodeInput;
         discountGbp = clampMoney(subtotalGbp * (publicPromoPercent / 100));
       } else {
-        if (!user?.id) throw new Error('Log in to use an earned reward code.');
-
-        const rewardRes = await fetch(
-          `${supabaseUrl}/rest/v1/reward_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&user_id=eq.${encodeURIComponent(user.id)}&used_at=is.null&select=id,code,discount_percent`,
+        const creatorRes = await fetch(
+          `${supabaseUrl}/rest/v1/creator_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&active=eq.true&select=id,creator_name,code,discount_percent,commission_percent`,
           {
             headers: {
               apikey: secretKey,
@@ -120,13 +122,35 @@ Deno.serve(async (req) => {
             },
           },
         );
-        const rewards = await rewardRes.json();
-        const reward = Array.isArray(rewards) ? rewards[0] : null;
-        if (!rewardRes.ok || !reward) throw new Error('That reward code is not valid for this account.');
+        const creators = await creatorRes.json();
+        const creator = Array.isArray(creators) ? creators[0] : null;
+        if (creatorRes.ok && creator) {
+          rewardCode = creator.code;
+          creatorCodeId = creator.id;
+          creatorCode = creator.code;
+          creatorName = creator.creator_name;
+          creatorCommissionPercent = Number(creator.commission_percent || 0);
+          discountGbp = clampMoney(subtotalGbp * (Number(creator.discount_percent || 10) / 100));
+        } else {
+          if (!user?.id) throw new Error('Log in to use an earned reward code.');
 
-        rewardCodeId = reward.id;
-        rewardCode = reward.code;
-        discountGbp = clampMoney(subtotalGbp * (Number(reward.discount_percent || 10) / 100));
+          const rewardRes = await fetch(
+            `${supabaseUrl}/rest/v1/reward_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&user_id=eq.${encodeURIComponent(user.id)}&used_at=is.null&select=id,code,discount_percent`,
+            {
+              headers: {
+                apikey: secretKey,
+                Authorization: `Bearer ${secretKey}`,
+              },
+            },
+          );
+          const rewards = await rewardRes.json();
+          const reward = Array.isArray(rewards) ? rewards[0] : null;
+          if (!rewardRes.ok || !reward) throw new Error('That reward code is not valid for this account.');
+
+          rewardCodeId = reward.id;
+          rewardCode = reward.code;
+          discountGbp = clampMoney(subtotalGbp * (Number(reward.discount_percent || 10) / 100));
+        }
       }
     }
 
@@ -149,6 +173,10 @@ Deno.serve(async (req) => {
       payment_status: 'pending_payment',
       reward_code: rewardCode,
       reward_code_id: rewardCodeId,
+      creator_code_id: creatorCodeId,
+      creator_code: creatorCode,
+      creator_name: creatorName,
+      creator_commission_percent: creatorCommissionPercent,
       shipping_name: String(body.shipping_name || '').trim(),
       shipping_email: customerEmail,
       shipping_phone: String(body.shipping_phone || '').trim(),
@@ -188,6 +216,10 @@ Deno.serve(async (req) => {
     params.set('metadata[user_id]', user?.id || '');
     params.set('metadata[reward_code_id]', rewardCodeId || '');
     params.set('metadata[reward_code]', rewardCode || '');
+    params.set('metadata[creator_code_id]', creatorCodeId || '');
+    params.set('metadata[creator_code]', creatorCode || '');
+    params.set('metadata[creator_name]', creatorName || '');
+    params.set('metadata[creator_commission_percent]', creatorCommissionPercent === null ? '' : String(creatorCommissionPercent));
     params.set('metadata[subtotal_gbp]', subtotalGbp.toFixed(2));
     params.set('metadata[shipping_gbp]', shippingGbp.toFixed(2));
     params.set('metadata[discount_gbp]', discountGbp.toFixed(2));

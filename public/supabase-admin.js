@@ -8,6 +8,11 @@
   const liveVisitorsEl = document.querySelector('[data-live-visitors]');
   const todayVisitorsEl = document.querySelector('[data-today-visitors]');
   const topPagesEl = document.querySelector('[data-top-pages]');
+  const creatorStatsEl = document.querySelector('[data-creator-stats]');
+  const creatorCodeForm = document.querySelector('[data-creator-code-form]');
+  const TEE_COST_GBP = 17.03;
+  const STRIPE_PERCENT = 0.015;
+  const STRIPE_FIXED_GBP = 0.20;
 
   function setMessage(text, type) {
     if (!message) return;
@@ -27,6 +32,92 @@
       '"': '&quot;',
       "'": '&#039;',
     }[char]));
+  }
+
+  function itemCount(order) {
+    const items = Array.isArray(order.items) ? order.items : [];
+    return items.reduce((sum, item) => sum + Number(item.qty || 1), 0);
+  }
+
+  function stripeFee(order) {
+    const total = Number(order.total_gbp || order.subtotal_gbp || 0);
+    return Number((total * STRIPE_PERCENT + STRIPE_FIXED_GBP).toFixed(2));
+  }
+
+  function estimatedNetProfit(order) {
+    const total = Number(order.total_gbp || order.subtotal_gbp || 0);
+    const productCost = itemCount(order) * TEE_COST_GBP;
+    return Number((total - productCost - stripeFee(order)).toFixed(2));
+  }
+
+  function renderCreatorStats(orders, creatorCodes = []) {
+    if (!creatorStatsEl) return;
+    const paidCreatorOrders = orders.filter((order) => order.payment_status === 'paid' && order.creator_code);
+    if (!paidCreatorOrders.length && !creatorCodes.length) {
+      creatorStatsEl.innerHTML = '<div class="auth-empty">No paid creator-code orders yet.</div>';
+      return;
+    }
+
+    const startingStats = creatorCodes.reduce((map, creator) => {
+      const code = String(creator.code || '').toUpperCase();
+      if (!code) return map;
+      map.set(code, {
+        code,
+        creatorName: creator.creator_name || 'Creator',
+        commissionPercent: Number(creator.commission_percent || 20),
+        orders: 0,
+        tees: 0,
+        sales: 0,
+        discount: 0,
+        stripeFees: 0,
+        netProfit: 0,
+      });
+      return map;
+    }, new Map());
+
+    const stats = paidCreatorOrders.reduce((map, order) => {
+      const code = String(order.creator_code || '').toUpperCase();
+      const existing = map.get(code) || {
+        code,
+        creatorName: order.creator_name || 'Creator',
+        commissionPercent: Number(order.creator_commission_percent || 20),
+        orders: 0,
+        tees: 0,
+        sales: 0,
+        discount: 0,
+        stripeFees: 0,
+        netProfit: 0,
+      };
+      existing.orders += 1;
+      existing.tees += itemCount(order);
+      existing.sales += Number(order.total_gbp || order.subtotal_gbp || 0);
+      existing.discount += Number(order.discount_gbp || 0);
+      existing.stripeFees += stripeFee(order);
+      existing.netProfit += estimatedNetProfit(order);
+      map.set(code, existing);
+      return map;
+    }, startingStats);
+
+    creatorStatsEl.innerHTML = Array.from(stats.values())
+      .sort((a, b) => b.sales - a.sales || a.code.localeCompare(b.code))
+      .map((creator) => {
+        const commission = Math.max(0, creator.netProfit) * (creator.commissionPercent / 100);
+        return `
+          <article class="admin-creator-card">
+            <div>
+              <h3>${escapeHtml(creator.creatorName)}</h3>
+              <span>${escapeHtml(creator.code)} / ${creator.commissionPercent}% commission</span>
+            </div>
+            <strong>${money(creator.sales)}</strong>
+            <div class="admin-creator-row"><span>Paid orders</span><span>${creator.orders}</span></div>
+            <div class="admin-creator-row"><span>Tees sold</span><span>${creator.tees}</span></div>
+            <div class="admin-creator-row"><span>Discount given</span><span>${money(creator.discount)}</span></div>
+            <div class="admin-creator-row"><span>Stripe fees est.</span><span>${money(creator.stripeFees)}</span></div>
+            <div class="admin-creator-row"><span>Net profit est.</span><span>${money(creator.netProfit)}</span></div>
+            <div class="admin-creator-row"><span>Payout est.</span><span>${money(commission)}</span></div>
+          </article>
+        `;
+      }).join('');
   }
 
   function renderOrders(orders) {
@@ -75,6 +166,14 @@
               <span>${escapeHtml(order.shipping_email || 'No email')}</span>
               <span>${escapeHtml(order.shipping_phone || 'No phone')}</span>
               <span>${escapeHtml(shipping || 'No address')}</span>
+            </div>
+            <div>
+              <strong>Creator</strong>
+              ${order.creator_code ? `
+                <span>${escapeHtml(order.creator_name || 'Creator')}</span>
+                <span>${escapeHtml(order.creator_code)}</span>
+                <span>${Number(order.creator_commission_percent || 20)}% commission</span>
+              ` : '<span>No creator code</span>'}
             </div>
           </div>
 
@@ -206,7 +305,12 @@
     setMessage('Loading orders...', '');
     const { data, error } = await client
       .from('orders')
-      .select('id, order_number, items, subtotal_gbp, status, tracking_status, tracking_number, payment_status, payment_url, payment_reference, paid_at, reward_code, shipping_name, shipping_email, shipping_phone, shipping_address, shipping_city, shipping_postcode, shipping_country, created_at, user_id')
+      .select('id, order_number, items, subtotal_gbp, shipping_gbp, discount_gbp, total_gbp, status, tracking_status, tracking_number, payment_status, payment_url, payment_reference, paid_at, reward_code, creator_code, creator_name, creator_commission_percent, shipping_name, shipping_email, shipping_phone, shipping_address, shipping_city, shipping_postcode, shipping_country, created_at, user_id')
+      .order('created_at', { ascending: false });
+    const creatorResult = await client
+      .from('creator_codes')
+      .select('creator_name, code, commission_percent, active')
+      .eq('active', true)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -216,11 +320,60 @@
     }
 
     renderOrders(data || []);
+    renderCreatorStats(data || [], creatorResult.data || []);
     setMessage(`${(data || []).length} order${(data || []).length === 1 ? '' : 's'} found.`, 'success');
   }
 
   async function loadDashboard() {
     await Promise.all([loadOrders(), loadAnalytics()]);
+  }
+
+  async function createCreatorCode(event) {
+    event.preventDefault();
+    if (!client || !creatorCodeForm) return;
+
+    const formData = new FormData(creatorCodeForm);
+    const creatorName = String(formData.get('creator_name') || '').trim();
+    const code = String(formData.get('code') || '').trim().toUpperCase().replace(/\s+/g, '');
+    const discountPercent = Number(formData.get('discount_percent') || 10);
+    const commissionPercent = Number(formData.get('commission_percent') || 20);
+    const button = creatorCodeForm.querySelector('button[type="submit"]');
+
+    if (!creatorName || !code) {
+      setMessage('Add a creator name and code first.', 'warning');
+      return;
+    }
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = 'Creating...';
+    }
+
+    const { error } = await client
+      .from('creator_codes')
+      .insert({
+        creator_name: creatorName,
+        code,
+        discount_percent: discountPercent,
+        commission_percent: commissionPercent,
+        active: true,
+      });
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = 'Create code';
+    }
+
+    if (error) {
+      setMessage(error.message, 'error');
+      return;
+    }
+
+    creatorCodeForm.reset();
+    creatorCodeForm.elements.discount_percent.value = '10';
+    creatorCodeForm.elements.commission_percent.value = '20';
+    setMessage(`${code} created for ${creatorName}.`, 'success');
+    loadOrders();
   }
 
   async function init() {
@@ -254,5 +407,6 @@
   }
 
   refreshButton?.addEventListener('click', loadDashboard);
+  creatorCodeForm?.addEventListener('submit', createCreatorCode);
   init();
 })();

@@ -42,6 +42,17 @@ create table if not exists public.admin_emails (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.creator_codes (
+  id uuid primary key default gen_random_uuid(),
+  creator_name text not null,
+  code text not null unique,
+  discount_percent integer not null default 10,
+  commission_percent numeric(5, 2) not null default 20,
+  active boolean not null default true,
+  notes text,
+  created_at timestamptz not null default now()
+);
+
 create table if not exists public.site_visitors (
   id uuid primary key default gen_random_uuid(),
   session_id text not null unique,
@@ -58,6 +69,7 @@ create table if not exists public.site_visitors (
 alter table public.orders enable row level security;
 alter table public.reward_codes enable row level security;
 alter table public.admin_emails enable row level security;
+alter table public.creator_codes enable row level security;
 alter table public.site_visitors enable row level security;
 
 alter table public.orders alter column user_id drop not null;
@@ -77,6 +89,10 @@ alter table public.orders add column if not exists shipping_postcode text;
 alter table public.orders add column if not exists shipping_country text;
 alter table public.orders add column if not exists reward_code text;
 alter table public.orders add column if not exists reward_code_id uuid references public.reward_codes(id) on delete set null;
+alter table public.orders add column if not exists creator_code_id uuid references public.creator_codes(id) on delete set null;
+alter table public.orders add column if not exists creator_code text;
+alter table public.orders add column if not exists creator_name text;
+alter table public.orders add column if not exists creator_commission_percent numeric(5, 2);
 
 alter table public.reward_codes add column if not exists discount_percent integer not null default 10;
 alter table public.reward_codes add column if not exists earned_from_spend numeric(10, 2) not null default 150;
@@ -85,6 +101,8 @@ alter table public.reward_codes add column if not exists used_at timestamptz;
 
 create index if not exists reward_codes_user_id_idx on public.reward_codes(user_id);
 create index if not exists reward_codes_code_idx on public.reward_codes(lower(code));
+create index if not exists creator_codes_code_idx on public.creator_codes(lower(code));
+create index if not exists orders_creator_code_idx on public.orders(lower(creator_code));
 create index if not exists site_visitors_session_id_idx on public.site_visitors(session_id);
 create index if not exists site_visitors_last_seen_idx on public.site_visitors(last_seen_at desc);
 create index if not exists site_visitors_first_seen_idx on public.site_visitors(first_seen_at desc);
@@ -145,6 +163,10 @@ grant execute on function public.record_site_visit(text, uuid, text, text, text,
 
 -- After running this file, replace the email below with your login email and run it once:
 -- insert into public.admin_emails (email) values ('you@example.com') on conflict (email) do nothing;
+-- Optional creator code example:
+-- insert into public.creator_codes (creator_name, code, discount_percent, commission_percent)
+-- values ('Creator Name', 'CREATOR10', 10, 20)
+-- on conflict (code) do update set creator_name = excluded.creator_name, discount_percent = excluded.discount_percent, commission_percent = excluded.commission_percent, active = true;
 
 drop policy if exists "Admins can read their own admin email" on public.admin_emails;
 create policy "Admins can read their own admin email"
@@ -213,6 +235,39 @@ on public.reward_codes
 for select
 to authenticated
 using (
+  exists (
+    select 1
+    from public.admin_emails
+    where lower(admin_emails.email) = lower(auth.jwt() ->> 'email')
+  )
+);
+
+drop policy if exists "Admins can read creator codes" on public.creator_codes;
+create policy "Admins can read creator codes"
+on public.creator_codes
+for select
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admin_emails
+    where lower(admin_emails.email) = lower(auth.jwt() ->> 'email')
+  )
+);
+
+drop policy if exists "Admins can manage creator codes" on public.creator_codes;
+create policy "Admins can manage creator codes"
+on public.creator_codes
+for all
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admin_emails
+    where lower(admin_emails.email) = lower(auth.jwt() ->> 'email')
+  )
+)
+with check (
   exists (
     select 1
     from public.admin_emails

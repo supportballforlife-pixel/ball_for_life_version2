@@ -63,7 +63,34 @@ Deno.serve(async (req) => {
       return json({
         valid: true,
         code,
+        code_type: 'public_promo',
         discount_percent: publicPromoPercent,
+        discount_gbp: discountGbp,
+      });
+    }
+
+    const creatorRes = await fetch(
+      `${supabaseUrl}/rest/v1/creator_codes?code=eq.${encodeURIComponent(code)}&active=eq.true&select=id,creator_name,code,discount_percent,commission_percent`,
+      {
+        headers: {
+          apikey: secretKey,
+          Authorization: `Bearer ${secretKey}`,
+        },
+      },
+    );
+    const creators = await creatorRes.json();
+    const creator = Array.isArray(creators) ? creators[0] : null;
+    if (creatorRes.ok && creator) {
+      const percent = Number(creator.discount_percent || 10);
+      const discountGbp = Number((subtotalGbp * (percent / 100)).toFixed(2));
+      return json({
+        valid: true,
+        code: creator.code,
+        code_type: 'creator',
+        creator_code_id: creator.id,
+        creator_name: creator.creator_name,
+        creator_commission_percent: Number(creator.commission_percent || 0),
+        discount_percent: percent,
         discount_gbp: discountGbp,
       });
     }
@@ -89,6 +116,7 @@ Deno.serve(async (req) => {
     return json({
       valid: true,
       code: reward.code,
+      code_type: 'reward',
       discount_percent: percent,
       discount_gbp: discountGbp,
     });
