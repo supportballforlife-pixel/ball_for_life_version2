@@ -10,9 +10,27 @@
   const topPagesEl = document.querySelector('[data-top-pages]');
   const creatorStatsEl = document.querySelector('[data-creator-stats]');
   const creatorCodeForm = document.querySelector('[data-creator-code-form]');
-  const TEE_COST_GBP = 17.03;
+  const TEE_PRODUCTION_COST_GBP = 13.63;
   const STRIPE_PERCENT = 0.015;
   const STRIPE_FIXED_GBP = 0.20;
+  const TAPSTITCH_SHIPPING_RATES_GBP = Object.freeze({
+    'United Kingdom': { first: 3.02, additional: 1.22 },
+    Austria: { first: 4.25, additional: 1.49 },
+    Belgium: { first: 4.17, additional: 1.53 },
+    Canada: { first: 4.68, additional: 1.79 },
+    Denmark: { first: 4.28, additional: 1.65 },
+    France: { first: 3.93, additional: 1.32 },
+    Germany: { first: 3.78, additional: 1.45 },
+    Ireland: { first: 4.71, additional: 1.84 },
+    Italy: { first: 4.07, additional: 1.42 },
+    Mexico: { first: 5.92, additional: 2.50 },
+    Netherlands: { first: 7.24, additional: 3.89 },
+    Poland: { first: 3.12, additional: 1.41 },
+    Portugal: { first: 4.14, additional: 1.87 },
+    Spain: { first: 3.35, additional: 1.28 },
+    Sweden: { first: 3.66, additional: 1.86 },
+    'United States': { first: 3.78, additional: 1.91 },
+  });
 
   function setMessage(text, type) {
     if (!message) return;
@@ -44,10 +62,21 @@
     return Number((total * STRIPE_PERCENT + STRIPE_FIXED_GBP).toFixed(2));
   }
 
+  function productionCost(order) {
+    return Number((itemCount(order) * TEE_PRODUCTION_COST_GBP).toFixed(2));
+  }
+
+  function tapstitchShippingCost(order) {
+    const qty = itemCount(order);
+    if (!qty) return 0;
+    const country = String(order.shipping_country || 'United Kingdom').trim();
+    const rate = TAPSTITCH_SHIPPING_RATES_GBP[country] || TAPSTITCH_SHIPPING_RATES_GBP['United Kingdom'];
+    return Number((rate.first + Math.max(0, qty - 1) * rate.additional).toFixed(2));
+  }
+
   function estimatedNetProfit(order) {
     const total = Number(order.total_gbp || order.subtotal_gbp || 0);
-    const productCost = itemCount(order) * TEE_COST_GBP;
-    return Number((total - productCost - stripeFee(order)).toFixed(2));
+    return Number((total - productionCost(order) - tapstitchShippingCost(order) - stripeFee(order)).toFixed(2));
   }
 
   function renderCreatorStats(orders, creatorCodes = []) {
@@ -69,6 +98,8 @@
         tees: 0,
         sales: 0,
         discount: 0,
+        productionCost: 0,
+        tapstitchShipping: 0,
         stripeFees: 0,
         netProfit: 0,
       });
@@ -85,6 +116,8 @@
         tees: 0,
         sales: 0,
         discount: 0,
+        productionCost: 0,
+        tapstitchShipping: 0,
         stripeFees: 0,
         netProfit: 0,
       };
@@ -92,6 +125,8 @@
       existing.tees += itemCount(order);
       existing.sales += Number(order.total_gbp || order.subtotal_gbp || 0);
       existing.discount += Number(order.discount_gbp || 0);
+      existing.productionCost += productionCost(order);
+      existing.tapstitchShipping += tapstitchShippingCost(order);
       existing.stripeFees += stripeFee(order);
       existing.netProfit += estimatedNetProfit(order);
       map.set(code, existing);
@@ -112,6 +147,8 @@
             <div class="admin-creator-row"><span>Paid orders</span><span>${creator.orders}</span></div>
             <div class="admin-creator-row"><span>Tees sold</span><span>${creator.tees}</span></div>
             <div class="admin-creator-row"><span>Discount given</span><span>${money(creator.discount)}</span></div>
+            <div class="admin-creator-row"><span>Production cost est.</span><span>${money(creator.productionCost)}</span></div>
+            <div class="admin-creator-row"><span>Tapstitch shipping est.</span><span>${money(creator.tapstitchShipping)}</span></div>
             <div class="admin-creator-row"><span>Stripe fees est.</span><span>${money(creator.stripeFees)}</span></div>
             <div class="admin-creator-row"><span>Net profit est.</span><span>${money(creator.netProfit)}</span></div>
             <div class="admin-creator-row"><span>Payout est.</span><span>${money(commission)}</span></div>
