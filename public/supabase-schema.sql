@@ -53,6 +53,20 @@ create table if not exists public.creator_codes (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.limited_discount_codes (
+  id uuid primary key default gen_random_uuid(),
+  code text not null unique,
+  discount_percent integer not null,
+  min_item_quantity integer not null default 1,
+  max_uses integer not null default 1,
+  used_count integer not null default 0,
+  active boolean not null default true,
+  used_order_id uuid references public.orders(id) on delete set null,
+  used_at timestamptz,
+  notes text,
+  created_at timestamptz not null default now()
+);
+
 create table if not exists public.site_visitors (
   id uuid primary key default gen_random_uuid(),
   session_id text not null unique,
@@ -99,10 +113,21 @@ alter table public.reward_codes add column if not exists earned_from_spend numer
 alter table public.reward_codes add column if not exists used_order_id uuid references public.orders(id) on delete set null;
 alter table public.reward_codes add column if not exists used_at timestamptz;
 
+alter table public.limited_discount_codes enable row level security;
+alter table public.limited_discount_codes add column if not exists discount_percent integer not null default 10;
+alter table public.limited_discount_codes add column if not exists min_item_quantity integer not null default 1;
+alter table public.limited_discount_codes add column if not exists max_uses integer not null default 1;
+alter table public.limited_discount_codes add column if not exists used_count integer not null default 0;
+alter table public.limited_discount_codes add column if not exists active boolean not null default true;
+alter table public.limited_discount_codes add column if not exists used_order_id uuid references public.orders(id) on delete set null;
+alter table public.limited_discount_codes add column if not exists used_at timestamptz;
+alter table public.limited_discount_codes add column if not exists notes text;
+
 create index if not exists reward_codes_user_id_idx on public.reward_codes(user_id);
 create index if not exists reward_codes_code_idx on public.reward_codes(lower(code));
 create index if not exists creator_codes_code_idx on public.creator_codes(lower(code));
 create index if not exists orders_creator_code_idx on public.orders(lower(creator_code));
+create index if not exists limited_discount_codes_code_idx on public.limited_discount_codes(lower(code));
 create index if not exists site_visitors_session_id_idx on public.site_visitors(session_id);
 create index if not exists site_visitors_last_seen_idx on public.site_visitors(last_seen_at desc);
 create index if not exists site_visitors_first_seen_idx on public.site_visitors(first_seen_at desc);
@@ -167,6 +192,16 @@ grant execute on function public.record_site_visit(text, uuid, text, text, text,
 -- insert into public.creator_codes (creator_name, code, discount_percent, commission_percent)
 -- values ('Creator Name', 'CREATOR10', 10, 20)
 -- on conflict (code) do update set creator_name = excluded.creator_name, discount_percent = excluded.discount_percent, commission_percent = excluded.commission_percent, active = true;
+
+insert into public.limited_discount_codes (code, discount_percent, min_item_quantity, max_uses, active, notes)
+values ('BFLUWHBDJ-15', 15, 3, 1, true, 'One-use 15% off code for carts with more than 2 tees')
+on conflict (code) do update
+set
+  discount_percent = excluded.discount_percent,
+  min_item_quantity = excluded.min_item_quantity,
+  max_uses = excluded.max_uses,
+  active = excluded.active,
+  notes = excluded.notes;
 
 drop policy if exists "Admins can read their own admin email" on public.admin_emails;
 create policy "Admins can read their own admin email"
@@ -258,6 +293,39 @@ using (
 drop policy if exists "Admins can manage creator codes" on public.creator_codes;
 create policy "Admins can manage creator codes"
 on public.creator_codes
+for all
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admin_emails
+    where lower(admin_emails.email) = lower(auth.jwt() ->> 'email')
+  )
+)
+with check (
+  exists (
+    select 1
+    from public.admin_emails
+    where lower(admin_emails.email) = lower(auth.jwt() ->> 'email')
+  )
+);
+
+drop policy if exists "Admins can read limited discount codes" on public.limited_discount_codes;
+create policy "Admins can read limited discount codes"
+on public.limited_discount_codes
+for select
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admin_emails
+    where lower(admin_emails.email) = lower(auth.jwt() ->> 'email')
+  )
+);
+
+drop policy if exists "Admins can manage limited discount codes" on public.limited_discount_codes;
+create policy "Admins can manage limited discount codes"
+on public.limited_discount_codes
 for all
 to authenticated
 using (

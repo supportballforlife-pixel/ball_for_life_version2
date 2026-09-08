@@ -41,6 +41,14 @@ const PUBLIC_PROMO_CODES: Record<string, number> = {
   TIKTOK10: 10,
 };
 
+function itemCountFromBody(body: Record<string, unknown>) {
+  const directCount = Number(body.item_count || 0);
+  if (Number.isFinite(directCount) && directCount > 0) return Math.floor(directCount);
+
+  const items = Array.isArray(body.items) ? body.items as Array<Record<string, unknown>> : [];
+  return items.reduce((total, item) => total + Number(item?.qty || 1), 0);
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -54,6 +62,7 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const code = String(body.code || '').trim().toUpperCase();
     const subtotalGbp = Number(body.subtotal_gbp || 0);
+    const itemCount = itemCountFromBody(body);
     if (!code) throw new Error('Enter a reward code.');
     if (!Number.isFinite(subtotalGbp) || subtotalGbp <= 0) throw new Error('Your bag is empty.');
 
@@ -66,6 +75,36 @@ Deno.serve(async (req) => {
         code_type: 'public_promo',
         discount_percent: publicPromoPercent,
         discount_gbp: discountGbp,
+      });
+    }
+
+    const limitedRes = await fetch(
+      `${supabaseUrl}/rest/v1/limited_discount_codes?code=eq.${encodeURIComponent(code)}&active=eq.true&select=id,code,discount_percent,min_item_quantity,max_uses,used_count,used_at`,
+      {
+        headers: {
+          apikey: secretKey,
+          Authorization: `Bearer ${secretKey}`,
+        },
+      },
+    );
+    const limitedCodes = await limitedRes.json();
+    const limitedCode = Array.isArray(limitedCodes) ? limitedCodes[0] : null;
+    if (limitedRes.ok && limitedCode) {
+      const minItemQuantity = Number(limitedCode.min_item_quantity || 1);
+      const maxUses = Number(limitedCode.max_uses || 1);
+      const usedCount = Number(limitedCode.used_count || 0);
+      if (limitedCode.used_at || usedCount >= maxUses) throw new Error('That discount code has already been used.');
+      if (itemCount < minItemQuantity) throw new Error(`Add ${minItemQuantity - itemCount} more tee${minItemQuantity - itemCount === 1 ? '' : 's'} to use this code.`);
+
+      const percent = Number(limitedCode.discount_percent || 10);
+      const discountGbp = Number((subtotalGbp * (percent / 100)).toFixed(2));
+      return json({
+        valid: true,
+        code: limitedCode.code,
+        code_type: 'limited_promo',
+        discount_percent: percent,
+        discount_gbp: discountGbp,
+        min_item_quantity: minItemQuantity,
       });
     }
 

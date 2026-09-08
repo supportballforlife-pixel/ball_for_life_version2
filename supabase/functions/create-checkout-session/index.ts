@@ -45,6 +45,14 @@ const PUBLIC_PROMO_CODES: Record<string, number> = {
   TIKTOK10: 10,
 };
 
+function itemCountFromBody(body: Record<string, unknown>) {
+  const directCount = Number(body.item_count || 0);
+  if (Number.isFinite(directCount) && directCount > 0) return Math.floor(directCount);
+
+  const items = Array.isArray(body.items) ? body.items as Array<Record<string, unknown>> : [];
+  return items.reduce((total, item) => total + Number(item?.qty || 1), 0);
+}
+
 const SHIPPING_RATES_GBP: Record<string, number> = {
   'United Kingdom': 4.99,
   Austria: 5.99,
@@ -95,9 +103,11 @@ Deno.serve(async (req) => {
     const subtotalGbp = clampMoney(Number(body.subtotal_gbp || 0));
     const shippingCountry = String(body.shipping_country || '').trim();
     const rewardCodeInput = String(body.reward_code || '').trim().toUpperCase();
+    const itemCount = itemCountFromBody(body);
     let discountGbp = 0;
     let rewardCodeId: string | null = null;
     let rewardCode: string | null = null;
+    let limitedDiscountCodeId: string | null = null;
     let creatorCodeId: string | null = null;
     let creatorCode: string | null = null;
     let creatorName: string | null = null;
@@ -113,8 +123,8 @@ Deno.serve(async (req) => {
         rewardCode = rewardCodeInput;
         discountGbp = clampMoney(subtotalGbp * (publicPromoPercent / 100));
       } else {
-        const creatorRes = await fetch(
-          `${supabaseUrl}/rest/v1/creator_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&active=eq.true&select=id,creator_name,code,discount_percent,commission_percent`,
+        const limitedRes = await fetch(
+          `${supabaseUrl}/rest/v1/limited_discount_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&active=eq.true&select=id,code,discount_percent,min_item_quantity,max_uses,used_count,used_at`,
           {
             headers: {
               apikey: secretKey,
@@ -122,20 +132,21 @@ Deno.serve(async (req) => {
             },
           },
         );
-        const creators = await creatorRes.json();
-        const creator = Array.isArray(creators) ? creators[0] : null;
-        if (creatorRes.ok && creator) {
-          rewardCode = creator.code;
-          creatorCodeId = creator.id;
-          creatorCode = creator.code;
-          creatorName = creator.creator_name;
-          creatorCommissionPercent = Number(creator.commission_percent || 0);
-          discountGbp = clampMoney(subtotalGbp * (Number(creator.discount_percent || 10) / 100));
-        } else {
-          if (!user?.id) throw new Error('Log in to use an earned reward code.');
+        const limitedCodes = await limitedRes.json();
+        const limitedCode = Array.isArray(limitedCodes) ? limitedCodes[0] : null;
+        if (limitedRes.ok && limitedCode) {
+          const minItemQuantity = Number(limitedCode.min_item_quantity || 1);
+          const maxUses = Number(limitedCode.max_uses || 1);
+          const usedCount = Number(limitedCode.used_count || 0);
+          if (limitedCode.used_at || usedCount >= maxUses) throw new Error('That discount code has already been used.');
+          if (itemCount < minItemQuantity) throw new Error(`Add ${minItemQuantity - itemCount} more tee${minItemQuantity - itemCount === 1 ? '' : 's'} to use this code.`);
 
-          const rewardRes = await fetch(
-            `${supabaseUrl}/rest/v1/reward_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&user_id=eq.${encodeURIComponent(user.id)}&used_at=is.null&select=id,code,discount_percent`,
+          limitedDiscountCodeId = limitedCode.id;
+          rewardCode = limitedCode.code;
+          discountGbp = clampMoney(subtotalGbp * (Number(limitedCode.discount_percent || 10) / 100));
+        } else {
+          const creatorRes = await fetch(
+            `${supabaseUrl}/rest/v1/creator_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&active=eq.true&select=id,creator_name,code,discount_percent,commission_percent`,
             {
               headers: {
                 apikey: secretKey,
@@ -143,13 +154,35 @@ Deno.serve(async (req) => {
               },
             },
           );
-          const rewards = await rewardRes.json();
-          const reward = Array.isArray(rewards) ? rewards[0] : null;
-          if (!rewardRes.ok || !reward) throw new Error('That reward code is not valid for this account.');
+          const creators = await creatorRes.json();
+          const creator = Array.isArray(creators) ? creators[0] : null;
+          if (creatorRes.ok && creator) {
+            rewardCode = creator.code;
+            creatorCodeId = creator.id;
+            creatorCode = creator.code;
+            creatorName = creator.creator_name;
+            creatorCommissionPercent = Number(creator.commission_percent || 0);
+            discountGbp = clampMoney(subtotalGbp * (Number(creator.discount_percent || 10) / 100));
+          } else {
+            if (!user?.id) throw new Error('Log in to use an earned reward code.');
 
-          rewardCodeId = reward.id;
-          rewardCode = reward.code;
-          discountGbp = clampMoney(subtotalGbp * (Number(reward.discount_percent || 10) / 100));
+            const rewardRes = await fetch(
+              `${supabaseUrl}/rest/v1/reward_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&user_id=eq.${encodeURIComponent(user.id)}&used_at=is.null&select=id,code,discount_percent`,
+              {
+                headers: {
+                  apikey: secretKey,
+                  Authorization: `Bearer ${secretKey}`,
+                },
+              },
+            );
+            const rewards = await rewardRes.json();
+            const reward = Array.isArray(rewards) ? rewards[0] : null;
+            if (!rewardRes.ok || !reward) throw new Error('That reward code is not valid for this account.');
+
+            rewardCodeId = reward.id;
+            rewardCode = reward.code;
+            discountGbp = clampMoney(subtotalGbp * (Number(reward.discount_percent || 10) / 100));
+          }
         }
       }
     }
@@ -216,6 +249,7 @@ Deno.serve(async (req) => {
     params.set('metadata[user_id]', user?.id || '');
     params.set('metadata[reward_code_id]', rewardCodeId || '');
     params.set('metadata[reward_code]', rewardCode || '');
+    params.set('metadata[limited_discount_code_id]', limitedDiscountCodeId || '');
     params.set('metadata[creator_code_id]', creatorCodeId || '');
     params.set('metadata[creator_code]', creatorCode || '');
     params.set('metadata[creator_name]', creatorName || '');
@@ -239,6 +273,28 @@ Deno.serve(async (req) => {
     const session = await stripeResponse.json();
     if (!stripeResponse.ok) {
       throw new Error(session.error?.message || 'Stripe could not create checkout.');
+    }
+
+    if (limitedDiscountCodeId) {
+      const limitedUseRes = await fetch(`${supabaseUrl}/rest/v1/limited_discount_codes?id=eq.${encodeURIComponent(limitedDiscountCodeId)}&used_at=is.null&used_count=lt.1`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: secretKey,
+          Authorization: `Bearer ${secretKey}`,
+          Prefer: 'return=representation',
+        },
+        body: JSON.stringify({
+          used_count: 1,
+          used_order_id: order.id,
+          used_at: new Date().toISOString(),
+        }),
+      });
+      const limitedUse = await limitedUseRes.json().catch(() => null);
+      const limitedUseRow = Array.isArray(limitedUse) ? limitedUse[0] : null;
+      if (!limitedUseRes.ok || !limitedUseRow) {
+        throw new Error('That discount code has already been used.');
+      }
     }
 
     const paymentLinkUpdate = fetch(`${supabaseUrl}/rest/v1/orders?id=eq.${encodeURIComponent(order.id)}`, {

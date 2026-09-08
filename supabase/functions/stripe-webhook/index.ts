@@ -330,6 +330,7 @@ Deno.serve(async (req) => {
     const orderNumber = String(metadata.order_number || '').trim();
     const userId = String(metadata.user_id || '').trim();
     const rewardCodeId = String(metadata.reward_code_id || '').trim();
+    const limitedDiscountCodeId = String(metadata.limited_discount_code_id || '').trim();
     if (!orderId && !orderNumber) throw new Error('Stripe session has no order reference.');
 
     const orderFilter = orderId
@@ -374,6 +375,22 @@ Deno.serve(async (req) => {
           Authorization: `Bearer ${secretKey}`,
         },
         body: JSON.stringify({
+          used_order_id: order.id,
+          used_at: new Date().toISOString(),
+        }),
+      });
+    }
+
+    if (limitedDiscountCodeId) {
+      await fetchJson(`${supabaseUrl}/rest/v1/limited_discount_codes?id=eq.${encodeURIComponent(limitedDiscountCodeId)}&used_at=is.null`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: secretKey,
+          Authorization: `Bearer ${secretKey}`,
+        },
+        body: JSON.stringify({
+          used_count: 1,
           used_order_id: order.id,
           used_at: new Date().toISOString(),
         }),

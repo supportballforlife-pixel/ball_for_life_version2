@@ -257,6 +257,8 @@
         body: JSON.stringify({
           code,
           subtotal_gbp: Number(subtotal().toFixed(2)),
+          item_count: cart.reduce((sum, item) => sum + Number(item.qty || 1), 0),
+          items: cart,
         }),
       });
       const result = await response.json().catch(() => ({}));
