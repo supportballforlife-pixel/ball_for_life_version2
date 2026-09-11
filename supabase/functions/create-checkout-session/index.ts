@@ -124,7 +124,7 @@ Deno.serve(async (req) => {
         discountGbp = clampMoney(subtotalGbp * (publicPromoPercent / 100));
       } else {
         const limitedRes = await fetch(
-          `${supabaseUrl}/rest/v1/limited_discount_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&active=eq.true&select=id,code,discount_percent,min_item_quantity,max_uses,used_count,used_at`,
+          `${supabaseUrl}/rest/v1/limited_discount_codes?code=ilike.${encodeURIComponent(rewardCodeInput)}&active=eq.true&select=id,code,discount_percent,min_item_quantity,max_uses,used_count,used_at`,
           {
             headers: {
               apikey: secretKey,

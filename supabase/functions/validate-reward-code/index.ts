@@ -79,7 +79,7 @@ Deno.serve(async (req) => {
     }
 
     const limitedRes = await fetch(
-      `${supabaseUrl}/rest/v1/limited_discount_codes?code=eq.${encodeURIComponent(code)}&active=eq.true&select=id,code,discount_percent,min_item_quantity,max_uses,used_count,used_at`,
+      `${supabaseUrl}/rest/v1/limited_discount_codes?code=ilike.${encodeURIComponent(code)}&active=eq.true&select=id,code,discount_percent,min_item_quantity,max_uses,used_count,used_at`,
       {
         headers: {
           apikey: secretKey,

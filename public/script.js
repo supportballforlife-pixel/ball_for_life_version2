@@ -11,7 +11,30 @@ document.addEventListener('DOMContentLoaded', () => {
     USD: { symbol: '$', rate: 1.363 },
     EUR: { symbol: '€', rate: 1.169 },
   };
-  let activeCurrency = localStorage.getItem(CURRENCY_KEY) || 'GBP';
+  const EURO_COUNTRIES = new Set([
+    'AT', 'BE', 'CY', 'EE', 'FI', 'FR', 'DE', 'GR', 'HR', 'IE', 'IT', 'LV',
+    'LT', 'LU', 'MT', 'NL', 'PT', 'SK', 'SI', 'ES',
+  ]);
+
+  function detectCurrency(){
+    const locales = navigator.languages?.length ? navigator.languages : [navigator.language];
+    const regions = locales.map((locale) => {
+      try {
+        return new Intl.Locale(locale).region;
+      } catch {
+        const match = String(locale || '').match(/[-_]([A-Z]{2})\b/i);
+        return match ? match[1].toUpperCase() : '';
+      }
+    }).filter(Boolean);
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+
+    if (regions.includes('GB') || timeZone === 'Europe/London') return 'GBP';
+    if (regions.includes('US') || timeZone.startsWith('America/')) return 'USD';
+    if (regions.some((region) => EURO_COUNTRIES.has(region)) || timeZone.startsWith('Europe/')) return 'EUR';
+    return 'GBP';
+  }
+
+  let activeCurrency = localStorage.getItem(CURRENCY_KEY) || detectCurrency();
   if (!CURRENCIES[activeCurrency]) activeCurrency = 'GBP';
 
   function money(n){
