@@ -375,6 +375,7 @@
           </div>
 
           <button class="product-add" type="button" data-product-add>Add to Cart - ${money(item.price)}</button>
+          <div class="product-delivery-note">UK delivery &pound;4.99 &middot; 4-7 working days after dispatch &middot; 14-day returns</div>
           <div class="product-fabric-proof">
             <img src="fabric-close-up.png" alt="Close-up of heavyweight cotton fabric">
             <div>
