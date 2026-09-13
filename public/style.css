@@ -2542,6 +2542,9 @@ footer .logo-center .brand-logo{width:150px;}
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 28px 10px;
   }
+  .hero + .section-pad .pgrid .pcard:nth-child(n+5) {
+    display: none;
+  }
 
   .pcard .img,
   .hero + .section-pad .pcard .img,
