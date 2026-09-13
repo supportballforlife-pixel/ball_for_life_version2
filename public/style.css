@@ -2124,6 +2124,9 @@ footer .logo-center .brand-logo{width:150px;}
   height:22px;
   object-fit:contain;
 }
+.product-mobile-buy{
+  display:none;
+}
 @media (max-width:1020px){
   .product-hero{
     grid-template-columns:1fr;
@@ -2147,7 +2150,7 @@ footer .logo-center .brand-logo{width:150px;}
 }
 @media (max-width:560px){
   .product-hero{
-    padding:22px 18px 44px;
+    padding:22px 18px 112px;
   }
   .product-media-panel{
     min-height:360px;
@@ -2159,6 +2162,52 @@ footer .logo-center .brand-logo{width:150px;}
   .product-side-next{right:-8px;}
   .product-info-panel h1{
     font-size:16px;
+  }
+  .product-mobile-buy{
+    position:fixed;
+    left:12px;
+    right:12px;
+    bottom:12px;
+    z-index:180;
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:center;
+    gap:14px;
+    min-height:62px;
+    padding:10px 10px 10px 14px;
+    background:rgba(255,255,255,.94);
+    border:1px solid var(--line-dark);
+    box-shadow:0 18px 44px rgba(0,0,0,.16);
+    backdrop-filter:blur(16px);
+  }
+  .product-mobile-buy span,
+  .product-mobile-buy strong{
+    display:block;
+  }
+  .product-mobile-buy span{
+    margin-bottom:4px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--grey-dark);
+    text-transform:uppercase;
+  }
+  .product-mobile-buy strong{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+  }
+  .product-mobile-buy button{
+    min-width:136px;
+    height:42px;
+    background:var(--black);
+    color:var(--white);
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .cart-drawer.open ~ .product-mobile-buy,
+  body:has(.cart-drawer.open) .product-mobile-buy{
+    display:none;
   }
 }
 
@@ -2494,6 +2543,9 @@ footer .logo-center .brand-logo{width:150px;}
   .pcard .quick {
     font-size: 9px;
     padding: 9px 0;
+    transform: translateY(0);
+    background: rgba(10,10,10,.92);
+    backdrop-filter: blur(8px);
   }
 
   /* ---------- CATEGORY SECTION ---------- */

@@ -389,6 +389,14 @@
             <img src="klarna.svg" alt="Klarna">
           </div>
         </aside>
+
+        <div class="product-mobile-buy" data-product-mobile-buy>
+          <div>
+            <span data-mobile-buy-size>${state.size} / ${titleFromColor(state.color)}</span>
+            <strong data-mobile-buy-price>${money(item.price)}</strong>
+          </div>
+          <button type="button" data-product-mobile-add>Add to Cart</button>
+        </div>
       </section>
     `;
 
@@ -400,6 +408,7 @@
     function updatePriceText() {
       app.querySelector('[data-product-price]').textContent = money(item.price);
       app.querySelector('[data-product-add]').textContent = `Add to Cart - ${money(item.price)}`;
+      app.querySelector('[data-mobile-buy-price]').textContent = money(item.price);
       app.querySelectorAll('[data-money-gbp]').forEach((el) => {
         const value = parseFloat(el.dataset.moneyGbp);
         if (!Number.isNaN(value)) el.textContent = money(value);
@@ -414,7 +423,21 @@
       app.querySelectorAll('.product-swatch').forEach((button) => button.classList.toggle('active', button.dataset.color === state.color));
       app.querySelectorAll('.product-size').forEach((button) => button.classList.toggle('active', button.dataset.size === state.size));
       qtyValue.textContent = state.qty;
+      app.querySelector('[data-mobile-buy-size]').textContent = `${state.size} / ${titleFromColor(state.color)}`;
       updatePriceText();
+    }
+
+    function addSelectedToCart() {
+      if (typeof window.__bfl_addToCart === 'function') {
+        window.__bfl_addToCart({
+          name: `${item.name} - ${titleFromColor(state.color)}`,
+          price: item.price,
+          size: state.size,
+          qty: state.qty,
+          mark: 'BFL',
+          image: imagePath(item, state.color, 'front'),
+        });
+      }
     }
 
     app.querySelector('#product-picker').addEventListener('change', (event) => {
@@ -453,18 +476,8 @@
       updateImage();
     });
 
-    app.querySelector('.product-add').addEventListener('click', () => {
-      if (typeof window.__bfl_addToCart === 'function') {
-        window.__bfl_addToCart({
-          name: `${item.name} - ${titleFromColor(state.color)}`,
-          price: item.price,
-          size: state.size,
-          qty: state.qty,
-          mark: 'BFL',
-          image: imagePath(item, state.color, 'front'),
-        });
-      }
-    });
+    app.querySelector('.product-add').addEventListener('click', addSelectedToCart);
+    app.querySelector('[data-product-mobile-add]').addEventListener('click', addSelectedToCart);
 
     updateImage();
     document.addEventListener('bfl:currency-change', updatePriceText);
