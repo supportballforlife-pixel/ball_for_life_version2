@@ -168,6 +168,7 @@
     product('kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt', 'Kobe Bryant Variant 2 Snow Washed Oversized Cotton T-Shirt', 'Kobe-Bryant-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt', travisScottColors, 27.99),
     product('mask-on-snow-washed-oversized-cotton-t-shirt', 'Mask On Snow Washed Oversized Cotton T-Shirt', 'Mask-On-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
     product('la-snow-washed-oversized-cotton-t-shirt', 'LA Snow Washed Oversized Cotton T-Shirt', 'LA-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
+    product('confidence-snow-washed-oversized-cotton-t-shirt', 'Confidence Snow Washed Oversized Cotton T-Shirt', 'Confidence-Snow-Washed-Oversized-Cotton-T-Shirt', expandedMockupColors, 27.99),
   ];
 
   const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
@@ -233,6 +234,7 @@
     'goat-x-god': 'goat-x-god-snow-washed-oversized-cotton-t-shirt',
     'travis': 'travis-scott-snow-washed-oversized-cotton-t-shirt',
     'travis-scott': 'travis-scott-snow-washed-oversized-cotton-t-shirt',
+    'confidence': 'confidence-snow-washed-oversized-cotton-t-shirt',
   };
 
   function product(id, name, folder, colors, price) {
