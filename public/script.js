@@ -102,6 +102,66 @@ document.addEventListener('DOMContentLoaded', () => {
   overlay?.addEventListener('click', closeDrawer);
   drawer?.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeDrawer));
 
+  /* ---------- Community carousel ---------- */
+  document.querySelectorAll('[data-community-carousel]').forEach((carousel) => {
+    const track = carousel.querySelector('[data-community-track]');
+    const cards = Array.from(carousel.querySelectorAll('[data-community-card]'));
+    const prev = carousel.querySelector('[data-community-prev]');
+    const next = carousel.querySelector('[data-community-next]');
+    if (!track || cards.length <= 1) return;
+
+    let index = 0;
+    let userPaused = false;
+    let hoverPaused = false;
+    let focusPaused = false;
+    let timer = null;
+
+    const maxIndex = () => {
+      const cardWidth = cards[0]?.getBoundingClientRect().width || 1;
+      const visible = Math.max(1, Math.floor(carousel.getBoundingClientRect().width / cardWidth));
+      return Math.max(0, cards.length - visible);
+    };
+
+    const renderCommunityCarousel = () => {
+      index = Math.min(index, maxIndex());
+      const card = cards[0];
+      const gap = parseFloat(getComputedStyle(track).gap) || 0;
+      const width = card.getBoundingClientRect().width + gap;
+      track.style.transform = `translateX(-${index * width}px)`;
+    };
+
+    const goTo = (nextIndex, shouldPause = true) => {
+      if (shouldPause) userPaused = true;
+      const limit = maxIndex();
+      index = nextIndex > limit ? 0 : nextIndex < 0 ? limit : nextIndex;
+      renderCommunityCarousel();
+    };
+
+    const startAuto = () => {
+      window.clearInterval(timer);
+      timer = window.setInterval(() => {
+        if (!userPaused && !hoverPaused && !focusPaused) goTo(index + 1, false);
+      }, 3600);
+    };
+
+    prev?.addEventListener('click', () => goTo(index - 1));
+    next?.addEventListener('click', () => goTo(index + 1));
+    carousel.addEventListener('pointerenter', () => { hoverPaused = true; });
+    carousel.addEventListener('pointerleave', () => { hoverPaused = false; });
+    carousel.addEventListener('focusin', () => { focusPaused = true; });
+    carousel.addEventListener('focusout', () => { focusPaused = false; });
+    carousel.addEventListener('click', (event) => {
+      if (event.target.closest('[data-community-card], video')) userPaused = true;
+    });
+    carousel.querySelectorAll('video').forEach((video) => {
+      video.addEventListener('play', () => { userPaused = true; });
+    });
+    window.addEventListener('resize', renderCommunityCarousel);
+
+    renderCommunityCarousel();
+    startAuto();
+  });
+
   /* ---------- Cart state ---------- */
   const CART_KEY = '__bfl_cart__';
   try {
