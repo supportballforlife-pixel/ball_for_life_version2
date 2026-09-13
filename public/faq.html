@@ -147,6 +147,32 @@
       text-decoration:underline;
       text-underline-offset:3px;
     }
+    .customer-promise{
+      margin-top:34px;
+      border:1px solid var(--line-light);
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      background:var(--white);
+    }
+    .customer-promise div{
+      padding:18px;
+      border-right:1px solid var(--line-light);
+    }
+    .customer-promise div:last-child{border-right:0;}
+    .customer-promise span{
+      display:block;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:9px;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:var(--grey);
+      margin-bottom:7px;
+    }
+    .customer-promise strong{
+      display:block;
+      font-size:12.5px;
+      line-height:1.4;
+    }
 
     .faq-callout{
       margin-top:42px;
@@ -218,6 +244,14 @@
         align-items:flex-start;
         flex-direction:column;
       }
+      .customer-promise{
+        grid-template-columns:1fr;
+      }
+      .customer-promise div{
+        border-right:0;
+        border-bottom:1px solid var(--line-light);
+      }
+      .customer-promise div:last-child{border-bottom:0;}
     }
   </style>
 </head>
@@ -304,6 +338,12 @@
         Everything you need to know about ordering from Ball For Life — from delivery and sizing
         to payments, returns and product care.
       </p>
+      <div class="customer-promise" aria-label="Ball For Life customer promise">
+        <div><span>Checkout</span><strong>Secure payment through Stripe</strong></div>
+        <div><span>Returns</span><strong>14-day change-of-mind returns</strong></div>
+        <div><span>Shipping</span><strong>Free UK shipping over &pound;65</strong></div>
+        <div><span>Support</span><strong>Order help by email</strong></div>
+      </div>
     </div>
   </section>
 

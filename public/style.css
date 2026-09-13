@@ -302,10 +302,14 @@ body.home-page header .currency-select{
 .pcard .img .num-mark{font-size:150px; top:50%; left:50%; transform:translate(-50%,-50%);}
 .pcard .img img, .pcard .img .swatch-fill{width:100%; height:100%; object-fit:cover;}
 .pcard .quick{
-  position:absolute; left:0; right:0; bottom:0; background:var(--black); color:var(--white);
+  position:absolute; left:10px; right:10px; bottom:10px; background:rgba(255,255,255,.72); color:var(--black);
   text-align:center; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; padding:12px 0;
-  transform:translateY(100%); transition:transform .3s ease;
+  border:1px solid rgba(255,255,255,.78);
+  box-shadow:0 14px 34px rgba(0,0,0,.14);
+  backdrop-filter:blur(14px);
+  transform:translateY(calc(100% + 14px)); transition:transform .3s ease, background .2s ease, border-color .2s ease;
 }
+.pcard .quick:hover{background:rgba(255,255,255,.88); border-color:rgba(10,10,10,.18);}
 .pcard:hover .quick{transform:translateY(0);}
 .pcard:hover .img .num-mark{transform:translate(-50%,-50%) scale(1.06); }
 .pcard .meta-row{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
@@ -2544,8 +2548,13 @@ footer .logo-center .brand-logo{width:150px;}
     font-size: 9px;
     padding: 9px 0;
     transform: translateY(0);
-    background: rgba(10,10,10,.92);
-    backdrop-filter: blur(8px);
+    left: 7px;
+    right: 7px;
+    bottom: 7px;
+    background: rgba(255,255,255,.76);
+    color: var(--black);
+    border-color: rgba(255,255,255,.82);
+    backdrop-filter: blur(12px);
   }
 
   /* ---------- CATEGORY SECTION ---------- */

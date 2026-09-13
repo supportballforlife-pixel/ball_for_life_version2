@@ -30,12 +30,17 @@
     .policy-callout{margin-top:26px;border:1px solid var(--line-light);background:var(--paper);padding:22px 24px;}
     .policy-callout .label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);margin-bottom:10px;}
     .policy-callout p{margin:0;color:var(--black);}
+    .customer-promise{margin-top:34px;border:1px solid var(--line-light);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--white);}
+    .customer-promise div{padding:18px;border-right:1px solid var(--line-light);}
+    .customer-promise div:last-child{border-right:0;}
+    .customer-promise span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);margin-bottom:7px;}
+    .customer-promise strong{display:block;font-size:12.5px;line-height:1.4;}
     .policy-contact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px;}
     .policy-contact-item{border:1px solid var(--line-light);padding:16px;}
     .policy-contact-item span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--grey);margin-bottom:5px;}
     .policy-contact-item strong{font-size:12.5px;font-weight:600;}
     @media(max-width:860px){.policy-hero{padding:64px 0 52px}.policy-layout{grid-template-columns:1fr;gap:42px;padding:52px 0 88px}.policy-nav{position:static;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}}
-    @media(max-width:520px){.policy-hero{padding:50px 0 42px}.policy-hero h1{font-size:40px}.policy-layout{padding:42px 0 72px}.policy-section{padding-bottom:40px;margin-bottom:40px}.policy-section h2{font-size:28px}.policy-contact-grid{grid-template-columns:1fr}}
+    @media(max-width:520px){.policy-hero{padding:50px 0 42px}.policy-hero h1{font-size:40px}.policy-layout{padding:42px 0 72px}.policy-section{padding-bottom:40px;margin-bottom:40px}.policy-section h2{font-size:28px}.policy-contact-grid{grid-template-columns:1fr}.customer-promise{grid-template-columns:1fr}.customer-promise div{border-right:0;border-bottom:1px solid var(--line-light)}.customer-promise div:last-child{border-bottom:0}}
   </style>
 </head>
 <body class="policy-page">
@@ -83,6 +88,12 @@
       <div class="policy-kicker">Customer Care / 01</div>
       <h1>Shipping &amp;<br>Returns</h1>
       <p class="policy-intro">Please read the information below before placing an order or requesting a return. We have kept it straightforward so you know what to expect from delivery through to aftercare.</p>
+      <div class="customer-promise" aria-label="Ball For Life customer promise">
+        <div><span>Checkout</span><strong>Secure payment through Stripe</strong></div>
+        <div><span>Returns</span><strong>14-day change-of-mind returns</strong></div>
+        <div><span>Shipping</span><strong>Free UK shipping over &pound;65</strong></div>
+        <div><span>Support</span><strong>Order help by email</strong></div>
+      </div>
     </div>
   </section>
 
