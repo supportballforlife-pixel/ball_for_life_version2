@@ -4,6 +4,7 @@
   const app = document.querySelector('[data-admin-app]');
   const ordersEl = document.querySelector('[data-admin-orders]');
   const refreshButton = document.querySelector('[data-admin-refresh]');
+  const saleAlertButton = document.querySelector('[data-sale-alert-toggle]');
   const message = document.querySelector('[data-admin-message]');
   const liveVisitorsEl = document.querySelector('[data-live-visitors]');
   const todayVisitorsEl = document.querySelector('[data-today-visitors]');
@@ -13,6 +14,10 @@
   const TEE_PRODUCTION_COST_GBP = 13.63;
   const STRIPE_PERCENT = 0.015;
   const STRIPE_FIXED_GBP = 0.20;
+  const SALE_ALERTS_KEY = '__bfl_sale_alerts__';
+  let saleAlertsEnabled = localStorage.getItem(SALE_ALERTS_KEY) === '1';
+  let latestSeenPaidOrderTime = null;
+  let saleAlertAudioContext = null;
   const TAPSTITCH_SHIPPING_RATES_GBP = Object.freeze({
     'United Kingdom': { first: 3.02, additional: 1.22 },
     Austria: { first: 4.25, additional: 1.49 },
@@ -40,6 +45,80 @@
 
   function money(value) {
     return window.__bfl_money ? window.__bfl_money(Number(value || 0)) : `£${Number(value || 0).toFixed(2)}`;
+  }
+
+  function renderSaleAlertButton() {
+    if (!saleAlertButton) return;
+    saleAlertButton.textContent = saleAlertsEnabled ? 'Sale alerts on' : 'Enable sale alerts';
+    saleAlertButton.classList.toggle('is-active', saleAlertsEnabled);
+    saleAlertButton.setAttribute('aria-pressed', String(saleAlertsEnabled));
+  }
+
+  function paidOrderTime(order) {
+    return Date.parse(order.paid_at || order.created_at || '') || 0;
+  }
+
+  function playSaleDing() {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      saleAlertAudioContext = saleAlertAudioContext || new AudioContext();
+      const ctx = saleAlertAudioContext;
+      if (ctx.state === 'suspended') ctx.resume();
+
+      const now = ctx.currentTime;
+      [880, 1175].forEach((frequency, index) => {
+        const oscillator = ctx.createOscillator();
+        const gain = ctx.createGain();
+        oscillator.type = 'sine';
+        oscillator.frequency.value = frequency;
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+        const start = now + index * 0.14;
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(0.16, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.22);
+        oscillator.start(start);
+        oscillator.stop(start + 0.24);
+      });
+    } catch {
+      // Some browsers block sound until a user taps the page; notifications still work.
+    }
+  }
+
+  function showSaleNotification(order) {
+    const title = `New paid order ${order.order_number || ''}`.trim();
+    const body = `${money(order.total_gbp || order.subtotal_gbp || 0)} from ${order.user_email || order.shipping_email || 'a customer'}`;
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(title, {
+        body,
+        icon: 'brand-logo.png',
+        tag: `bfl-sale-${order.id}`,
+      });
+    }
+    setMessage(`${title} - ${body}`, 'success');
+  }
+
+  function checkForNewPaidOrders(orders) {
+    const paidOrders = (orders || [])
+      .filter((order) => order.payment_status === 'paid')
+      .sort((a, b) => paidOrderTime(a) - paidOrderTime(b));
+    const newestPaidTime = paidOrders.reduce((latest, order) => Math.max(latest, paidOrderTime(order)), 0);
+
+    if (latestSeenPaidOrderTime === null) {
+      latestSeenPaidOrderTime = newestPaidTime;
+      return;
+    }
+
+    const newPaidOrders = paidOrders.filter((order) => paidOrderTime(order) > latestSeenPaidOrderTime);
+    latestSeenPaidOrderTime = Math.max(latestSeenPaidOrderTime, newestPaidTime);
+    if (!saleAlertsEnabled || !newPaidOrders.length) return false;
+
+    newPaidOrders.forEach((order) => {
+      playSaleDing();
+      showSaleNotification(order);
+    });
+    return true;
   }
 
   function escapeHtml(value) {
@@ -337,9 +416,10 @@
     renderTopPages(todayVisitors);
   }
 
-  async function loadOrders() {
+  async function loadOrders(options = {}) {
     if (!client) return;
-    setMessage('Loading orders...', '');
+    const { silent = false } = options;
+    if (!silent) setMessage('Loading orders...', '');
     const { data, error } = await client
       .from('orders')
       .select('id, order_number, items, subtotal_gbp, shipping_gbp, discount_gbp, total_gbp, status, tracking_status, tracking_number, payment_status, payment_url, payment_reference, paid_at, reward_code, creator_code, creator_name, creator_commission_percent, shipping_name, shipping_email, shipping_phone, shipping_address, shipping_city, shipping_postcode, shipping_country, created_at, user_id')
@@ -358,7 +438,10 @@
 
     renderOrders(data || []);
     renderCreatorStats(data || [], creatorResult.data || []);
-    setMessage(`${(data || []).length} order${(data || []).length === 1 ? '' : 's'} found.`, 'success');
+    const hadNewPaidOrder = checkForNewPaidOrders(data || []);
+    if (!hadNewPaidOrder && !silent) {
+      setMessage(`${(data || []).length} order${(data || []).length === 1 ? '' : 's'} found.`, 'success');
+    }
   }
 
   async function loadDashboard() {
@@ -441,9 +524,25 @@
     if (app) app.hidden = false;
     await loadDashboard();
     setInterval(loadAnalytics, 30000);
+    setInterval(() => loadOrders({ silent: true }), 30000);
   }
 
   refreshButton?.addEventListener('click', loadDashboard);
+  saleAlertButton?.addEventListener('click', async () => {
+    saleAlertsEnabled = !saleAlertsEnabled;
+    localStorage.setItem(SALE_ALERTS_KEY, saleAlertsEnabled ? '1' : '0');
+    if (saleAlertsEnabled && 'Notification' in window && Notification.permission === 'default') {
+      await Notification.requestPermission();
+    }
+    renderSaleAlertButton();
+    if (saleAlertsEnabled) {
+      playSaleDing();
+      setMessage('Sale alerts are on. Keep this admin page open to hear the ding.', 'success');
+    } else {
+      setMessage('Sale alerts are off.', '');
+    }
+  });
   creatorCodeForm?.addEventListener('submit', createCreatorCode);
+  renderSaleAlertButton();
   init();
 })();

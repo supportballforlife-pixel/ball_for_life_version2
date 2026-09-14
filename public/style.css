@@ -1197,6 +1197,17 @@ button:disabled{
   border-bottom:1px solid var(--line-light);
   padding-bottom:34px;
 }
+.admin-head-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.admin-head-actions .btn.is-active{
+  background:var(--black);
+  color:var(--white);
+}
 .admin-head .eyebrow{
   font-family:'IBM Plex Mono',monospace;
   font-size:11.5px;
@@ -1463,6 +1474,14 @@ button:disabled{
     gap:18px;
     margin-bottom:18px;
     padding-bottom:20px;
+  }
+  .admin-head-actions{
+    width:100%;
+    justify-content:stretch;
+  }
+  .admin-head-actions .btn{
+    flex:1;
+    min-width:140px;
   }
   .admin-head .eyebrow{
     font-size:10px;
