@@ -2085,6 +2085,17 @@ footer .logo-center .brand-logo{width:150px;}
   line-height:1.5;
   color:var(--grey-dark);
 }
+.product-delivery-note strong{
+  color:var(--black);
+  font-weight:700;
+}
+.product-delivery-note span{
+  display:block;
+}
+.product-delivery-countdown{
+  margin-top:3px;
+  color:var(--black);
+}
 .product-fabric-line{
   margin-top:8px;
   font-family:'IBM Plex Mono',monospace;

@@ -377,7 +377,11 @@
           </div>
 
           <button class="product-add" type="button" data-product-add>Add to Cart - ${money(item.price)}</button>
-          <div class="product-delivery-note">UK delivery &pound;4.99 &middot; 4-7 working days after dispatch &middot; 14-day returns</div>
+          <div class="product-delivery-note">
+            <span>Estimated delivery <strong data-delivery-estimate>5-9 days</strong></span>
+            <span>14-day returns</span>
+            <span class="product-delivery-countdown" data-delivery-countdown>Order today to keep this estimate</span>
+          </div>
           <div class="product-fabric-proof">
             <img src="fabric-close-up.png" alt="Close-up of heavyweight cotton fabric">
             <div>
@@ -483,6 +487,7 @@
     app.querySelector('[data-product-mobile-add]').addEventListener('click', addSelectedToCart);
 
     updateImage();
+    window.__bfl_updateDeliveryEstimateLabels?.();
     document.addEventListener('bfl:currency-change', updatePriceText);
   }
 

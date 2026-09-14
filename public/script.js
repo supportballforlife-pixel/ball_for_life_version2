@@ -52,8 +52,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function ordinalDay(day){
+    const mod100 = day % 100;
+    if (mod100 >= 11 && mod100 <= 13) return `${day}th`;
+    const suffixes = { 1: 'st', 2: 'nd', 3: 'rd' };
+    return `${day}${suffixes[day % 10] || 'th'}`;
+  }
+
+  function deliveryEstimateText(baseDate = new Date()){
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    const start = new Date(baseDate);
+    const end = new Date(baseDate);
+    start.setDate(start.getDate() + 5);
+    end.setDate(end.getDate() + 9);
+
+    const sameMonth = start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear();
+    if (sameMonth) {
+      return `${start.getDate()}-${ordinalDay(end.getDate())} ${months[end.getMonth()]}`;
+    }
+    return `${ordinalDay(start.getDate())} ${months[start.getMonth()]} - ${ordinalDay(end.getDate())} ${months[end.getMonth()]}`;
+  }
+
+  function updateDeliveryEstimateLabels(){
+    document.querySelectorAll('[data-delivery-estimate]').forEach((el) => {
+      el.textContent = deliveryEstimateText();
+    });
+  }
+
+  function deliveryCountdownText(baseDate = new Date()){
+    const tomorrow = new Date(baseDate);
+    tomorrow.setHours(24, 0, 0, 0);
+    const remainingMinutes = Math.max(1, Math.ceil((tomorrow - baseDate) / 60000));
+    const hours = Math.floor(remainingMinutes / 60);
+    const minutes = remainingMinutes % 60;
+    if (hours <= 0) return `Order in the next ${minutes}m to keep this estimate`;
+    return `Order within ${hours}h ${minutes}m to keep this estimate`;
+  }
+
+  function updateDeliveryCountdownLabels(){
+    document.querySelectorAll('[data-delivery-countdown]').forEach((el) => {
+      el.textContent = deliveryCountdownText();
+    });
+  }
+
+  function updateDeliveryPromise(){
+    updateDeliveryEstimateLabels();
+    updateDeliveryCountdownLabels();
+  }
+
   window.__bfl_money = money;
   window.__bfl_getCurrency = () => activeCurrency;
+  window.__bfl_deliveryEstimateText = deliveryEstimateText;
+  window.__bfl_updateDeliveryEstimateLabels = updateDeliveryPromise;
 
   document.querySelectorAll('[data-currency-select]').forEach((select) => {
     select.value = activeCurrency;
@@ -68,6 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
       document.dispatchEvent(new CustomEvent('bfl:currency-change'));
     });
   });
+
+  updateDeliveryPromise();
+  window.setInterval(updateDeliveryPromise, 60000);
 
   /* ---------- Product card specs ---------- */
   document.querySelectorAll('.pcard .p-tag').forEach((tag) => {
