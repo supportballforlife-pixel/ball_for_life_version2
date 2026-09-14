@@ -655,10 +655,11 @@ footer{background:var(--white); padding:76px 0 0;}
 .footer-col a{display:block; font-size:13.5px; margin-bottom:11px; color:var(--near-black); opacity:0.85;}
 .footer-col a:hover{color:var(--accent); opacity:1;}
 .footer-social{display:flex; gap:14px; margin-top:18px;}
-.footer-social a{width:34px; height:34px; border:1px solid var(--line-light); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all .2s ease;}
-.footer-social a:hover{background:var(--black); border-color:var(--black);}
+.footer-social a{width:34px; height:34px; border:1px solid var(--line-light); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--black); transition:all .2s ease;}
+.footer-social a:hover{background:var(--black); border-color:var(--black); color:var(--white);}
 .footer-social a:hover svg{stroke:var(--white);}
 .footer-social svg{width:15px; height:15px; stroke:var(--black); fill:none; stroke-width:1.5;}
+.footer-social a[aria-label="Pinterest"] svg{fill:currentColor; stroke:none;}
 
 .footer-bottom{
   border-top:1px solid var(--line-light); padding:26px 0; display:flex; justify-content:space-between;
