@@ -103,7 +103,7 @@
     payLink.removeAttribute('aria-disabled');
     setMessage(
       orderParam
-        ? 'Sign in with the checkout email to view full order details and payment status.'
+        ? 'Order details will appear here when the order number is found.'
         : 'Your order reference will appear here after checkout.',
       isFetching ? '' : 'warning'
     );

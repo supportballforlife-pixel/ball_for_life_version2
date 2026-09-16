@@ -53,6 +53,10 @@ function itemCountFromBody(body: Record<string, unknown>) {
   return items.reduce((total, item) => total + Number(item?.qty || 1), 0);
 }
 
+function emailsMatch(a: string, b: string) {
+  return a.trim().toLowerCase() === b.trim().toLowerCase();
+}
+
 const SHIPPING_RATES_GBP: Record<string, number> = {
   'United Kingdom': 4.99,
   Austria: 5.99,
@@ -100,6 +104,9 @@ Deno.serve(async (req) => {
     const user = await getUser(supabaseUrl, secretKey, req);
     const orderNumber = String(body.order_number || '').trim();
     const customerEmail = String(body.customer_email || '').trim();
+    const linkedUserId = user?.id && user?.email && customerEmail && emailsMatch(String(user.email), customerEmail)
+      ? String(user.id)
+      : null;
     const subtotalGbp = clampMoney(Number(body.subtotal_gbp || 0));
     const shippingCountry = String(body.shipping_country || '').trim();
     const rewardCodeInput = String(body.reward_code || '').trim().toUpperCase();
@@ -164,10 +171,10 @@ Deno.serve(async (req) => {
             creatorCommissionPercent = Number(creator.commission_percent || 0);
             discountGbp = clampMoney(subtotalGbp * (Number(creator.discount_percent || 10) / 100));
           } else {
-            if (!user?.id) throw new Error('Log in to use an earned reward code.');
+            if (!linkedUserId) throw new Error('Use your account email to spend an earned reward code.');
 
             const rewardRes = await fetch(
-              `${supabaseUrl}/rest/v1/reward_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&user_id=eq.${encodeURIComponent(user.id)}&used_at=is.null&select=id,code,discount_percent`,
+              `${supabaseUrl}/rest/v1/reward_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&user_id=eq.${encodeURIComponent(linkedUserId)}&used_at=is.null&select=id,code,discount_percent`,
               {
                 headers: {
                   apikey: secretKey,
@@ -194,7 +201,7 @@ Deno.serve(async (req) => {
     if (amountPence < 50) throw new Error('Order total is too low for secure payment.');
 
     const orderPayload = {
-      user_id: user?.id || null,
+      user_id: linkedUserId,
       order_number: orderNumber,
       items: body.items || [],
       subtotal_gbp: subtotalGbp,
@@ -246,7 +253,7 @@ Deno.serve(async (req) => {
     params.set('line_items[0][price_data][product_data][name]', `Ball For Life order ${orderNumber}`);
     params.set('metadata[order_number]', orderNumber);
     params.set('metadata[order_id]', order.id);
-    params.set('metadata[user_id]', user?.id || '');
+    params.set('metadata[user_id]', linkedUserId || '');
     params.set('metadata[reward_code_id]', rewardCodeId || '');
     params.set('metadata[reward_code]', rewardCode || '');
     params.set('metadata[limited_discount_code_id]', limitedDiscountCodeId || '');

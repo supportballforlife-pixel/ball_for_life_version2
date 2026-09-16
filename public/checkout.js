@@ -129,6 +129,14 @@
     if (shipping === null) setMessage('Shipping to this country is coming soon.', 'warning');
   }
 
+  function emailsMatch(a, b) {
+    return String(a || '').trim().toLowerCase() === String(b || '').trim().toLowerCase();
+  }
+
+  function shouldLinkOrderToCurrentUser(email) {
+    return Boolean(currentUser?.id && currentUser?.email && emailsMatch(currentUser.email, email));
+  }
+
   async function createStripeCheckout(order) {
     const functionName = String(paymentConfig.checkoutFunctionName || 'create-checkout-session').trim();
     if (!functionName) return null;
@@ -149,7 +157,8 @@
 
     const config = window.BFL_SUPABASE || {};
     const { data: sessionData } = await client.auth.getSession();
-    const token = sessionData.session?.access_token || config.anonKey;
+    const shouldSendUserToken = shouldLinkOrderToCurrentUser(order.shipping_email);
+    const token = shouldSendUserToken ? sessionData.session?.access_token : config.anonKey;
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000);
 
@@ -217,7 +226,7 @@
 
     setMessage(
       currentUser
-        ? 'Signed in — this order will be linked to your account.'
+        ? 'Signed in. Orders link to your account when the checkout email matches your login email.'
         : 'Guest checkout — no account required.',
       'success'
     );
@@ -291,6 +300,12 @@
     let checkoutSession = null;
     const total = Number(subtotal().toFixed(2));
     const rewardCode = appliedReward?.code || '';
+    const checkoutEmail = String(data.get('email') || '').trim();
+
+    if (appliedReward?.code_type === 'reward' && !shouldLinkOrderToCurrentUser(checkoutEmail)) {
+      setMessage('Use your account email at checkout to spend an earned reward code.', 'error');
+      return;
+    }
 
     if (submitButton) {
       submitButton.disabled = true;
@@ -301,7 +316,7 @@
     }, 8000);
 
     const order = {
-      user_id: currentUser?.id || null,
+      user_id: shouldLinkOrderToCurrentUser(checkoutEmail) ? currentUser.id : null,
       order_number: orderNumber,
       items: cart,
       subtotal_gbp: total,
@@ -312,7 +327,7 @@
       payment_url: null,
       payment_reference: null,
       shipping_name: String(data.get('name') || '').trim(),
-      shipping_email: String(data.get('email') || '').trim(),
+      shipping_email: checkoutEmail,
       shipping_phone: String(data.get('phone') || '').trim(),
       shipping_address: String(data.get('address') || '').trim(),
       shipping_city: String(data.get('city') || '').trim(),
