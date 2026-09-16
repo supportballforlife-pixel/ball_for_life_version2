@@ -7,6 +7,7 @@
   const params = new URLSearchParams(window.location.search);
   const orderParam = params.get('order');
   const paidParam = params.get('paid') === '1';
+  const config = window.BFL_SUPABASE || {};
 
   let order = null;
   let isFetching = false;
@@ -42,9 +43,10 @@
   }
 
   function orderStatus() {
-    if (paidParam) return 'Payment received';
     if (!order) return 'Order reference created';
-    if (order.payment_status === 'paid') return 'Payment received';
+    if (order.payment_status === 'paid' && order.tracking_status) return order.tracking_status;
+    if (paidParam) return 'Payment received';
+    if (order.payment_status === 'paid') return 'Order received';
     return order.tracking_status || order.status || 'Waiting for payment';
   }
 
@@ -56,10 +58,12 @@
     const discount = Number(order?.discount_gbp || 0);
     const total = Number(order?.total_gbp ?? (subtotal ? Number((subtotal + shipping - discount).toFixed(2)) : 0));
     const rewardCode = order?.reward_code ? `<span>Reward code: ${escapeHtml(order.reward_code)}</span>` : '';
+    const trackingNumber = order?.tracking_number ? `<span>Tracking number: ${escapeHtml(order.tracking_number)}</span>` : '';
 
     detailsEl.innerHTML = `
       <strong>${escapeHtml(orderNumber)}</strong>
       <span>Status: ${escapeHtml(orderStatus())}</span>
+      ${trackingNumber}
       ${subtotal ? `<span>Subtotal: ${money(subtotal)}</span>` : ''}
       ${discount ? `<span>Reward discount: -${money(discount)}</span>` : ''}
       ${subtotal ? `<span>Shipping: ${shipping === 0 ? 'FREE' : money(shipping)}</span>` : ''}
@@ -78,7 +82,7 @@
       payLink.rel = '';
       payLink.textContent = 'View account';
       payLink.removeAttribute('aria-disabled');
-      setMessage('Payment complete. Your order is now being processed.', 'success');
+      setMessage(order?.tracking_number ? 'Tracking has been added to your order.' : 'Payment complete. Your order is now being processed.', 'success');
       return;
     }
 
@@ -106,18 +110,50 @@
   }
 
   async function fetchOrderByNumber() {
-    if (!client || !orderParam) return;
+    if (!orderParam) return;
 
     try {
-      const { data: sessionData } = await client.auth.getSession();
-      if (!sessionData.session?.user) return;
-
       isFetching = true;
       setMessage('Finding your order details...', '');
 
+      if (config.url && config.anonKey) {
+        const response = await fetch(`${config.url}/functions/v1/order-status`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: config.anonKey,
+            Authorization: `Bearer ${config.anonKey}`,
+          },
+          body: JSON.stringify({ order_number: orderParam }),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (response.ok && result.order) {
+          order = result.order;
+          sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(result.order));
+          return;
+        }
+      }
+
+      if (!client) return;
+
+      const rpcResult = await client.rpc('get_public_order_status', {
+        lookup_order_number: orderParam,
+      });
+      if (!rpcResult.error) {
+        const rpcOrder = Array.isArray(rpcResult.data) ? rpcResult.data[0] : rpcResult.data;
+        if (rpcOrder) {
+          order = rpcOrder;
+          sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(rpcOrder));
+          return;
+        }
+      }
+
+      const { data: sessionData } = await client.auth.getSession();
+      if (!sessionData.session?.user) return;
+
       const { data, error } = await client
         .from('orders')
-        .select('order_number, subtotal_gbp, shipping_gbp, discount_gbp, total_gbp, status, tracking_status, payment_status, payment_url, payment_reference, reward_code')
+        .select('order_number, subtotal_gbp, shipping_gbp, discount_gbp, total_gbp, status, tracking_status, tracking_number, payment_status, payment_url, payment_reference, reward_code')
         .eq('order_number', orderParam)
         .maybeSingle();
 
@@ -138,7 +174,7 @@
     render();
     updateAction();
 
-    if (!order?.subtotal_gbp && orderParam) {
+    if (orderParam) {
       await fetchOrderByNumber();
       render();
       updateAction();
