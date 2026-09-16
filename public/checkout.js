@@ -85,6 +85,7 @@
     const country = selectedCountry();
     const countryRate = SHIPPING_RATES_GBP[country];
     if (typeof countryRate !== 'number') return null;
+    if (appliedReward?.free_shipping) return 0;
     const afterDiscount = Math.max(0, Number(subtotal().toFixed(2)) - discountAmount());
     if (country === 'United Kingdom' && Number(afterDiscount.toFixed(2)) >= FREE_SHIPPING_THRESHOLD_GBP) {
       return 0;
@@ -275,7 +276,10 @@
 
       appliedReward = result;
       rewardInput.value = result.code;
-      setRewardMessage(`${result.code} applied: ${result.discount_percent}% off.`, 'success');
+      const rewardText = result.free_shipping
+        ? `${result.code} applied: free shipping.`
+        : `${result.code} applied: ${result.discount_percent}% off.`;
+      setRewardMessage(rewardText, 'success');
       renderSummary();
     } catch (error) {
       appliedReward = null;

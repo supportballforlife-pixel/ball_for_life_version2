@@ -78,6 +78,14 @@
     'light-pink'
   ];
 
+  const lameloVariant2Colors = [
+    'black', 'water-blue', 'apricot', 'light-gray', 'bean-green',
+    'light-purple', 'orange', 'rose-red', 'wine-red', 'blue-jeans',
+    'grass-green', 'khaki-ash', 'dark-blue', 'pirate-gray', 'gray-green',
+    'dark-green', 'purple-haze', 'light-blue', 'light-brown', 'royal-blue',
+    'light-pink', 'red', 'yellow', 'lake-blue'
+  ];
+
   const expandedMockupColors = [
     'black', 'water-blue', 'apricot', 'light-gray', 'bean-green', 'light-purple',
     'orange', 'rose-red', 'wine-red', 'blue-jeans', 'grass-green', 'khaki-ash',
@@ -130,6 +138,7 @@
     product('ball-for-life-graphic-tee', 'Ball For Life Graphic Tee', 'Ball-For-Life-Graphic-Tee', ['black', 'water-blue', 'apricot', 'light-pink', 'pirate-grey'], 34.99),
     product('lebron-james-oversized-snowly-washed-graphic-tee', 'LeBron James Oversized Snowly Washed Graphic Tee', 'LeBron-James-Oversized-Snowly-Washed-Graphic-Tee', lebronColors, 27.99),
     product('lamelo-ball-snow-washed-oversized-cotton-t-shirt', 'LaMelo Ball Snow Washed Oversized Cotton T-Shirt', 'LaMelo-Ball-Snow-Washed-Oversized-Cotton-T-Shirt', lameloColors, 27.99),
+    product('lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt', 'LaMelo Ball Variant 2 Snow Washed Oversized Cotton T-Shirt', 'LaMelo-Ball-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt', lameloVariant2Colors, 27.99),
     product('kyrie-irving-snow-washed-oversized-cotton-t-shirt', 'Kyrie Irving Snow Washed Oversized Cotton T-Shirt', 'Kyrie-Irving-Snow-Washed-Oversized-Cotton-T-Shirt', ['black', 'light-gray', 'light-blue', 'pirate-gray', 'royal-blue'], 27.99),
     product('tyrese-maxey-snow-washed-oversized-cotton-t-shirt', 'Tyrese Maxey Snow Washed Oversized Cotton T-Shirt', 'Tyrese-Maxey-Snow-Washed-Oversized-Cotton-T-Shirt', fullColors, 27.99),
     product('kobe-bryant-snow-washed-oversized-cotton-t-shirt', 'Kobe Bryant Snow Washed Oversized Cotton T-Shirt', 'Kobe-Bryant-Snow-Washed-Oversized-Cotton-T-Shirt', fullColors, 27.99),
@@ -178,6 +187,7 @@
     'no-average-graphic-tee': 'ball-for-life-graphic-tee',
     'lebron': 'lebron-james-oversized-snowly-washed-graphic-tee',
     'lamelo': 'lamelo-ball-snow-washed-oversized-cotton-t-shirt',
+    'lamelo-2': 'lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt',
     'kyrie': 'kyrie-irving-snow-washed-oversized-cotton-t-shirt',
     'kyrie-2': 'kyrie-irving-variant-2-snow-washed-oversized-cotton-t-shirt',
     'irving-2': 'kyrie-irving-variant-2-snow-washed-oversized-cotton-t-shirt',

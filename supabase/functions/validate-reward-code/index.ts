@@ -79,7 +79,7 @@ Deno.serve(async (req) => {
     }
 
     const limitedRes = await fetch(
-      `${supabaseUrl}/rest/v1/limited_discount_codes?code=ilike.${encodeURIComponent(code)}&active=eq.true&select=id,code,discount_percent,min_item_quantity,max_uses,used_count,used_at`,
+      `${supabaseUrl}/rest/v1/limited_discount_codes?code=ilike.${encodeURIComponent(code)}&active=eq.true&select=id,code,discount_percent,min_item_quantity,max_uses,used_count,used_at,free_shipping`,
       {
         headers: {
           apikey: secretKey,
@@ -96,7 +96,7 @@ Deno.serve(async (req) => {
       if (limitedCode.used_at || usedCount >= maxUses) throw new Error('That discount code has already been used.');
       if (itemCount < minItemQuantity) throw new Error(`Add ${minItemQuantity - itemCount} more tee${minItemQuantity - itemCount === 1 ? '' : 's'} to use this code.`);
 
-      const percent = Number(limitedCode.discount_percent || 10);
+      const percent = Number(limitedCode.discount_percent ?? 10);
       const discountGbp = Number((subtotalGbp * (percent / 100)).toFixed(2));
       return json({
         valid: true,
@@ -104,6 +104,7 @@ Deno.serve(async (req) => {
         code_type: 'limited_promo',
         discount_percent: percent,
         discount_gbp: discountGbp,
+        free_shipping: Boolean(limitedCode.free_shipping),
         min_item_quantity: minItemQuantity,
       });
     }

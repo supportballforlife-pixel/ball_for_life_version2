@@ -60,6 +60,7 @@ create table if not exists public.limited_discount_codes (
   min_item_quantity integer not null default 1,
   max_uses integer not null default 1,
   used_count integer not null default 0,
+  free_shipping boolean not null default false,
   active boolean not null default true,
   used_order_id uuid references public.orders(id) on delete set null,
   used_at timestamptz,
@@ -118,6 +119,7 @@ alter table public.limited_discount_codes add column if not exists discount_perc
 alter table public.limited_discount_codes add column if not exists min_item_quantity integer not null default 1;
 alter table public.limited_discount_codes add column if not exists max_uses integer not null default 1;
 alter table public.limited_discount_codes add column if not exists used_count integer not null default 0;
+alter table public.limited_discount_codes add column if not exists free_shipping boolean not null default false;
 alter table public.limited_discount_codes add column if not exists active boolean not null default true;
 alter table public.limited_discount_codes add column if not exists used_order_id uuid references public.orders(id) on delete set null;
 alter table public.limited_discount_codes add column if not exists used_at timestamptz;

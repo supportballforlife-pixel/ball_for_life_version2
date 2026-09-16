@@ -119,6 +119,7 @@ Deno.serve(async (req) => {
     let creatorCode: string | null = null;
     let creatorName: string | null = null;
     let creatorCommissionPercent: number | null = null;
+    let freeShippingCode = false;
 
     if (!orderNumber) throw new Error('Missing order number.');
     if (!Number.isFinite(subtotalGbp) || subtotalGbp <= 0) throw new Error('Invalid order subtotal.');
@@ -131,7 +132,7 @@ Deno.serve(async (req) => {
         discountGbp = clampMoney(subtotalGbp * (publicPromoPercent / 100));
       } else {
         const limitedRes = await fetch(
-          `${supabaseUrl}/rest/v1/limited_discount_codes?code=ilike.${encodeURIComponent(rewardCodeInput)}&active=eq.true&select=id,code,discount_percent,min_item_quantity,max_uses,used_count,used_at`,
+          `${supabaseUrl}/rest/v1/limited_discount_codes?code=ilike.${encodeURIComponent(rewardCodeInput)}&active=eq.true&select=id,code,discount_percent,min_item_quantity,max_uses,used_count,used_at,free_shipping`,
           {
             headers: {
               apikey: secretKey,
@@ -150,7 +151,8 @@ Deno.serve(async (req) => {
 
           limitedDiscountCodeId = limitedCode.id;
           rewardCode = limitedCode.code;
-          discountGbp = clampMoney(subtotalGbp * (Number(limitedCode.discount_percent || 10) / 100));
+          freeShippingCode = Boolean(limitedCode.free_shipping);
+          discountGbp = clampMoney(subtotalGbp * (Number(limitedCode.discount_percent ?? 10) / 100));
         } else {
           const creatorRes = await fetch(
             `${supabaseUrl}/rest/v1/creator_codes?code=eq.${encodeURIComponent(rewardCodeInput)}&active=eq.true&select=id,creator_name,code,discount_percent,commission_percent`,
@@ -195,7 +197,7 @@ Deno.serve(async (req) => {
     }
 
     const subtotalAfterDiscount = clampMoney(subtotalGbp - discountGbp);
-    const shippingGbp = shippingForCountry(shippingCountry, subtotalAfterDiscount);
+    const shippingGbp = freeShippingCode ? 0 : shippingForCountry(shippingCountry, subtotalAfterDiscount);
     const totalGbp = clampMoney(subtotalGbp + shippingGbp - discountGbp);
     const amountPence = Math.round(totalGbp * 100);
     if (amountPence < 50) throw new Error('Order total is too low for secure payment.');
