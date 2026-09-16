@@ -116,24 +116,6 @@
       isFetching = true;
       setMessage('Finding your order details...', '');
 
-      if (config.url && config.anonKey) {
-        const response = await fetch(`${config.url}/functions/v1/order-status`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            apikey: config.anonKey,
-            Authorization: `Bearer ${config.anonKey}`,
-          },
-          body: JSON.stringify({ order_number: orderParam }),
-        });
-        const result = await response.json().catch(() => ({}));
-        if (response.ok && result.order) {
-          order = result.order;
-          sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(result.order));
-          return;
-        }
-      }
-
       if (!client) return;
 
       const rpcResult = await client.rpc('get_public_order_status', {
@@ -145,6 +127,28 @@
           order = rpcOrder;
           sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(rpcOrder));
           return;
+        }
+      }
+
+      if (config.url && config.anonKey) {
+        try {
+          const response = await fetch(`${config.url}/functions/v1/order-status`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              apikey: config.anonKey,
+              Authorization: `Bearer ${config.anonKey}`,
+            },
+            body: JSON.stringify({ order_number: orderParam }),
+          });
+          const result = await response.json().catch(() => ({}));
+          if (response.ok && result.order) {
+            order = result.order;
+            sessionStorage.setItem(LAST_ORDER_KEY, JSON.stringify(result.order));
+            return;
+          }
+        } catch {
+          // The SQL RPC above is the primary guest lookup; this optional function may not be deployed.
         }
       }
 
