@@ -316,7 +316,7 @@
               <input data-admin-tracking type="text" value="${escapeHtml(order.tracking_number || '')}" placeholder="Optional">
             </label>
             <button type="button" class="btn btn-solid-dark" data-admin-save>Save</button>
-            <button type="button" class="btn btn-outline" data-admin-send-tracking>Email customer</button>
+            <button type="button" class="btn btn-outline-dark" data-admin-send-tracking>Email customer</button>
           </div>
         </article>
       `;
