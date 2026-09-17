@@ -354,11 +354,20 @@
           return;
         }
         if (trackingChanged && paymentStatus === 'paid') {
-          const { error: emailError } = await client.functions.invoke('send-tracking-update', {
+          button.disabled = true;
+          button.textContent = 'Sending email...';
+          const { data: emailData, error: emailError } = await client.functions.invoke('send-tracking-update', {
             body: { order_id: id },
           });
+          button.disabled = false;
+          button.textContent = 'Save';
           if (emailError) {
             setMessage(`Tracking updated, but email was not sent: ${emailError.message}`, 'warning');
+            loadOrders();
+            return;
+          }
+          if (emailData?.ok === false) {
+            setMessage(`Tracking updated, but email was not sent: ${emailData.error || 'Unknown email error'}`, 'warning');
             loadOrders();
             return;
           }
