@@ -316,10 +316,35 @@
               <input data-admin-tracking type="text" value="${escapeHtml(order.tracking_number || '')}" placeholder="Optional">
             </label>
             <button type="button" class="btn btn-solid-dark" data-admin-save>Save</button>
+            <button type="button" class="btn btn-outline" data-admin-send-tracking>Email customer</button>
           </div>
         </article>
       `;
     }).join('');
+
+    async function sendTrackingEmail(orderId, button, successMessage) {
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Sending email...';
+      }
+      const { data: emailData, error: emailError } = await client.functions.invoke('send-tracking-update', {
+        body: { order_id: orderId },
+      });
+      if (button) {
+        button.disabled = false;
+        button.textContent = button.dataset.adminSendTracking !== undefined ? 'Email customer' : 'Save';
+      }
+      if (emailError) {
+        setMessage(`Email was not sent: ${emailError.message}`, 'warning');
+        return false;
+      }
+      if (emailData?.ok === false) {
+        setMessage(`Email was not sent: ${emailData.error || 'Unknown email error'}`, 'warning');
+        return false;
+      }
+      setMessage(successMessage || 'Customer email sent.', 'success');
+      return true;
+    }
 
     ordersEl.querySelectorAll('[data-admin-save]').forEach((button) => {
       button.addEventListener('click', async () => {
@@ -354,28 +379,19 @@
           return;
         }
         if (trackingChanged && paymentStatus === 'paid') {
-          button.disabled = true;
-          button.textContent = 'Sending email...';
-          const { data: emailData, error: emailError } = await client.functions.invoke('send-tracking-update', {
-            body: { order_id: id },
-          });
-          button.disabled = false;
-          button.textContent = 'Save';
-          if (emailError) {
-            setMessage(`Tracking updated, but email was not sent: ${emailError.message}`, 'warning');
-            loadOrders();
-            return;
-          }
-          if (emailData?.ok === false) {
-            setMessage(`Tracking updated, but email was not sent: ${emailData.error || 'Unknown email error'}`, 'warning');
-            loadOrders();
-            return;
-          }
-          setMessage('Tracking updated and customer email sent.', 'success');
+          await sendTrackingEmail(id, button, 'Tracking updated and customer email sent.');
         } else {
           setMessage('Tracking updated.', 'success');
         }
         loadOrders();
+      });
+    });
+
+    ordersEl.querySelectorAll('[data-admin-send-tracking]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const card = button.closest('[data-order-id]');
+        const id = card.dataset.orderId;
+        await sendTrackingEmail(id, button, 'Tracking email sent to customer.');
       });
     });
   }
