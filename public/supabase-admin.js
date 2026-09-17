@@ -325,9 +325,13 @@
       button.addEventListener('click', async () => {
         const card = button.closest('[data-order-id]');
         const id = card.dataset.orderId;
+        const originalOrder = orders.find((order) => String(order.id) === String(id)) || {};
         const paymentStatus = card.querySelector('[data-admin-payment]').value;
         const trackingStatus = card.querySelector('[data-admin-status]').value;
         const trackingNumber = card.querySelector('[data-admin-tracking]').value.trim() || null;
+        const originalTrackingStatus = String(originalOrder.tracking_status || '');
+        const originalTrackingNumber = originalOrder.tracking_number || null;
+        const trackingChanged = trackingStatus !== originalTrackingStatus || trackingNumber !== originalTrackingNumber;
         const status = paymentStatus === 'paid'
           ? trackingStatus.toLowerCase().replace(/\s+/g, '-')
           : 'pending-payment';
@@ -349,7 +353,19 @@
           setMessage(error.message, 'error');
           return;
         }
-        setMessage('Tracking updated.', 'success');
+        if (trackingChanged && paymentStatus === 'paid') {
+          const { error: emailError } = await client.functions.invoke('send-tracking-update', {
+            body: { order_id: id },
+          });
+          if (emailError) {
+            setMessage(`Tracking updated, but email was not sent: ${emailError.message}`, 'warning');
+            loadOrders();
+            return;
+          }
+          setMessage('Tracking updated and customer email sent.', 'success');
+        } else {
+          setMessage('Tracking updated.', 'success');
+        }
         loadOrders();
       });
     });
