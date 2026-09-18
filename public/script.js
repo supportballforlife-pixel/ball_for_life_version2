@@ -398,6 +398,57 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 5000);
 })();
 
+// Free shipping promo popup
+(function () {
+  if (document.body.classList.contains('auth-page') || document.body.classList.contains('admin-page')) return;
+
+  const PROMO_SESSION_KEY = '__bfl_freeship_promo_seen__';
+  const PROMO_CODE = 'FREESHIP';
+  if (sessionStorage.getItem(PROMO_SESSION_KEY)) return;
+
+  document.body.insertAdjacentHTML('beforeend', `
+    <aside class="promo-pop" data-promo-pop aria-live="polite" aria-label="Free shipping promotion">
+      <div class="promo-pop-inner">
+        <button class="promo-pop-close" type="button" data-promo-close aria-label="Close promotion">×</button>
+        <p class="promo-pop-kicker">Ends next week</p>
+        <h3>Free shipping on this drop</h3>
+        <p class="promo-pop-copy">Use code <strong>${PROMO_CODE}</strong> at checkout before the offer ends next week.</p>
+        <div class="promo-code-row">
+          <strong>${PROMO_CODE}</strong>
+          <button type="button" data-promo-copy>Copy</button>
+        </div>
+        <div class="promo-pop-actions">
+          <a href="shop.html?cat=tees">Shop graphic tees</a>
+          <span class="promo-pop-note">One code. Limited time.</span>
+        </div>
+      </div>
+    </aside>
+  `);
+
+  const promo = document.querySelector('[data-promo-pop]');
+  const close = promo?.querySelector('[data-promo-close]');
+  const copy = promo?.querySelector('[data-promo-copy]');
+  if (!promo) return;
+
+  function closePromo() {
+    promo.classList.remove('open');
+    sessionStorage.setItem(PROMO_SESSION_KEY, 'true');
+  }
+
+  close?.addEventListener('click', closePromo);
+  copy?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(PROMO_CODE);
+      copy.textContent = 'Copied';
+      setTimeout(() => { copy.textContent = 'Copy'; }, 1600);
+    } catch {
+      copy.textContent = PROMO_CODE;
+    }
+  });
+
+  setTimeout(() => promo.classList.add('open'), 1200);
+})();
+
 // Email marketing signup — popup + homepage newsletter
 (function () {
   const NEWSLETTER_FUNCTION_URL =
