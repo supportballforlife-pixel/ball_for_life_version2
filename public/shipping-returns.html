@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shipping & Returns — Ball For Life</title>
-  <meta name="description" content="Ball For Life shipping, delivery and returns policy.">
+  <meta name="description" content="Ball For Life shipping, delivery, returns and refund policy. Clear delivery estimates, 14-day returns, lost parcel support and customer care information.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -14,6 +14,8 @@
     .policy-kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);margin-bottom:18px;}
     .policy-hero h1{font-family:'Archivo Black','Inter',sans-serif;text-transform:uppercase;font-size:clamp(44px,7vw,92px);line-height:.94;letter-spacing:-.02em;max-width:900px;}
     .policy-intro{max-width:620px;margin-top:24px;color:var(--grey-dark);font-size:14.5px;line-height:1.7;}
+    .policy-hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;}
+    .policy-mini-note{margin-top:18px;font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.6;color:var(--grey);}
     .policy-layout{display:grid;grid-template-columns:220px minmax(0,760px);gap:80px;align-items:start;padding:72px 0 120px;}
     .policy-nav{position:sticky;top:98px;display:grid;gap:3px;border-top:1px solid var(--line-light);}
     .policy-nav a{padding:13px 0;border-bottom:1px solid var(--line-light);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--grey-dark);}
@@ -28,8 +30,11 @@
     .policy-list li{position:relative;padding-left:18px;font-size:14px;line-height:1.65;color:var(--grey-dark);}
     .policy-list li::before{content:"—";position:absolute;left:0;color:var(--black);}
     .policy-callout{margin-top:26px;border:1px solid var(--line-light);background:var(--paper);padding:22px 24px;}
+    .policy-callout.dark{background:var(--black);color:var(--white);border-color:var(--black);}
     .policy-callout .label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);margin-bottom:10px;}
     .policy-callout p{margin:0;color:var(--black);}
+    .policy-callout.dark .label{color:rgba(255,255,255,.55);}
+    .policy-callout.dark p{color:var(--white);}
     .customer-promise{margin-top:34px;border:1px solid var(--line-light);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--white);}
     .customer-promise div{padding:18px;border-right:1px solid var(--line-light);}
     .customer-promise div:last-child{border-right:0;}
@@ -39,8 +44,16 @@
     .policy-contact-item{border:1px solid var(--line-light);padding:16px;}
     .policy-contact-item span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--grey);margin-bottom:5px;}
     .policy-contact-item strong{font-size:12.5px;font-weight:600;}
-    @media(max-width:860px){.policy-hero{padding:64px 0 52px}.policy-layout{grid-template-columns:1fr;gap:42px;padding:52px 0 88px}.policy-nav{position:static;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}}
-    @media(max-width:520px){.policy-hero{padding:50px 0 42px}.policy-hero h1{font-size:40px}.policy-layout{padding:42px 0 72px}.policy-section{padding-bottom:40px;margin-bottom:40px}.policy-section h2{font-size:28px}.policy-contact-grid{grid-template-columns:1fr}.customer-promise{grid-template-columns:1fr}.customer-promise div{border-right:0;border-bottom:1px solid var(--line-light)}.customer-promise div:last-child{border-bottom:0}}
+    .policy-reassurance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:26px 0 8px;}
+    .policy-reassurance div{border:1px solid var(--line-light);background:var(--paper);padding:18px;}
+    .policy-reassurance span{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);margin-bottom:8px;}
+    .policy-reassurance strong{display:block;font-size:13px;line-height:1.45;}
+    .return-steps{counter-reset:return-step;display:grid;gap:10px;margin:20px 0;}
+    .return-steps li{counter-increment:return-step;display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;border:1px solid var(--line-light);padding:14px;background:var(--white);font-size:14px;line-height:1.55;color:var(--grey-dark);}
+    .return-steps li::before{content:counter(return-step);display:grid;place-items:center;width:28px;height:28px;background:var(--black);color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:11px;}
+    .policy-inline-link{font-weight:700;text-decoration:underline;}
+    @media(max-width:860px){.policy-hero{padding:64px 0 52px}.policy-layout{grid-template-columns:1fr;gap:42px;padding:52px 0 88px}.policy-nav{position:static;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}.policy-reassurance{grid-template-columns:1fr}}
+    @media(max-width:520px){.policy-hero{padding:50px 0 42px}.policy-hero h1{font-size:40px}.policy-layout{padding:42px 0 72px}.policy-section{padding-bottom:40px;margin-bottom:40px}.policy-section h2{font-size:28px}.policy-contact-grid{grid-template-columns:1fr}.customer-promise{grid-template-columns:1fr}.customer-promise div{border-right:0;border-bottom:1px solid var(--line-light)}.customer-promise div:last-child{border-bottom:0}.policy-hero-actions .btn{width:100%;justify-content:center}.return-steps li{grid-template-columns:30px 1fr}}
   </style>
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
@@ -88,12 +101,17 @@
     <div class="wrap">
       <div class="policy-kicker">Customer Care / 01</div>
       <h1>Shipping &amp;<br>Returns</h1>
-      <p class="policy-intro">Please read the information below before placing an order or requesting a return. We have kept it straightforward so you know what to expect from delivery through to aftercare.</p>
+      <p class="policy-intro">We want you to feel comfortable ordering from Ball For Life. This page explains delivery, returns, refunds and what happens if anything goes wrong, in plain English.</p>
+      <div class="policy-hero-actions">
+        <a href="shop.html?cat=tees" class="btn btn-solid-dark">Shop Graphic Tees</a>
+        <a href="contact.html" class="btn btn-outline-dark">Ask A Question</a>
+      </div>
+      <p class="policy-mini-note">Need sizing help before you order? Message us first and we will help you choose the right fit.</p>
       <div class="customer-promise" aria-label="Ball For Life customer promise">
         <div><span>Checkout</span><strong>Secure payment through Stripe</strong></div>
-        <div><span>Returns</span><strong>14-day change-of-mind returns</strong></div>
-        <div><span>Shipping</span><strong>Free UK shipping over &pound;65</strong></div>
-        <div><span>Support</span><strong>Order help by email</strong></div>
+        <div><span>Returns</span><strong>No restocking fee on eligible returns</strong></div>
+        <div><span>Shipping</span><strong>Tracked order updates when available</strong></div>
+        <div><span>Support</span><strong>Real help before and after purchase</strong></div>
       </div>
     </div>
   </section>
@@ -101,20 +119,26 @@
   <div class="wrap"><div class="policy-layout">
     <aside class="policy-nav" aria-label="Shipping and returns sections">
       <a href="#shipping">Shipping</a><a href="#delays">Delivery Delays</a><a href="#cancellation">14-Day Cancellation</a>
-      <a href="#faulty">Faulty / Incorrect</a><a href="#condition">Return Condition</a><a href="#postage">Return Postage</a><a href="#refunds">Refunds</a><a href="#contact">Start A Return</a>
+      <a href="#faulty">Faulty / Incorrect</a><a href="#condition">Return Condition</a><a href="#postage">Return Postage</a><a href="#refunds">Refunds</a><a href="#exchange">Size Exchanges</a><a href="#contact">Start A Return</a>
     </aside>
 
     <div class="policy-content">
       <section class="policy-section" id="shipping">
         <div class="policy-number">01 / SHIPPING</div><h2>Delivery Times</h2>
-        <p>At Ball For Life, we aim to get your order to you as quickly as possible.</p>
+        <p>Every Ball For Life order is packed with care and sent to the delivery address entered at checkout. After your order is placed, you will receive an order confirmation and you can use your order page to check progress.</p>
         <p>Most orders are expected to arrive within <strong>4–7 working days after dispatch</strong>. Delivery times are estimates and can vary depending on your location, courier delays, customs processing and other circumstances outside of our control.</p>
         <p>For some international or overseas shipments, delivery may take <strong>up to 3 weeks</strong>. Longer delivery times can occur due to overseas transit, customs or courier disruption.</p>
         <p>UK delivery is <strong>&pound;4.99</strong>, or free when your order is over <strong>&pound;65 after discounts</strong>. We currently ship to selected countries in Europe and North America, with international delivery rates shown at checkout before payment.</p>
+        <div class="policy-reassurance" aria-label="Delivery reassurance">
+          <div><span>Before Payment</span><strong>Shipping cost is shown at checkout before you pay.</strong></div>
+          <div><span>After Order</span><strong>You receive an order number so support can find your order quickly.</strong></div>
+          <div><span>Need Help?</span><strong>If something looks wrong, contact us and we will check it.</strong></div>
+        </div>
       </section>
 
       <section class="policy-section" id="delays">
         <div class="policy-number">02 / DELIVERY DELAYS</div><h2>Parcel Not Arrived?</h2>
+        <p>If your parcel is late, please do not stress. Contact us with your order number and we will help check what is happening.</p>
         <p>If you have not received your parcel within <strong>3 weeks of dispatch</strong>, please contact us as soon as possible with your order number so that we can investigate the shipment.</p>
         <p>Claims regarding parcels that have not arrived should be raised promptly. If you do not contact us within <strong>2 months of the expected delivery date</strong>, our ability to investigate the shipment with the courier may be limited and we may be unable to assist with a delayed-delivery claim.</p>
         <div class="policy-callout"><span class="label">Lost / Undelivered Parcels</span><p>Where an order is confirmed as lost or undelivered, Ball For Life will provide an appropriate resolution, which may include a <strong>replacement or full refund</strong>, subject to your applicable consumer rights.</p></div>
@@ -125,18 +149,20 @@
         <p>If you buy from us online as a UK consumer, you normally have the right to cancel your order within <strong>14 days after the day you receive it</strong>. You do not need to give a reason.</p>
         <p>After telling us that you want to cancel, you should send the item back within <strong>14 days</strong>. Please contact us first so we can confirm the return address and the details we need to match the return to your order.</p>
         <p>This right may not apply to items that have been personalised, made to your specification, or sealed items that are not suitable for return for hygiene reasons once unsealed.</p>
+        <div class="policy-callout dark"><span class="label">Our Customer-Friendly Promise</span><p>We do not charge a restocking fee on eligible change-of-mind returns. If the item is returned in the right condition, we keep the process straightforward.</p></div>
         <div class="policy-callout"><span class="label">Good To Know</span><p>Please try items on indoors only and keep all packaging until you know you are keeping the order.</p></div>
       </section>
 
       <section class="policy-section" id="faulty">
         <div class="policy-number">04 / FAULTY OR INCORRECT PRODUCTS</div><h2>Faults, Damage Or Wrong Items</h2>
-        <p>Please inspect your order as soon as it arrives. Contact us promptly if the item is faulty, damaged, not as described, or if we sent the wrong product, colour or size.</p>
+        <p>If we make a mistake, we will help put it right. Please inspect your order as soon as it arrives and contact us promptly if the item is faulty, damaged, not as described, or if we sent the wrong product, colour or size.</p>
         <ul class="policy-list">
           <li>Include your order number.</li>
           <li>Send clear photographs or videos showing the issue.</li>
           <li>Keep the item and packaging while we review the claim.</li>
         </ul>
         <p>If the issue is confirmed, we will offer a suitable resolution, which may include a replacement, repair, refund, or return instructions depending on the circumstances and your consumer rights.</p>
+        <div class="policy-callout"><span class="label">Faulty / Wrong Item Return Postage</span><p>If the item is confirmed as faulty, damaged, incorrect or not as described, we will explain the return postage process and make sure you are not left out of pocket for a problem caused by us.</p></div>
       </section>
 
       <section class="policy-section" id="condition">
@@ -148,7 +174,7 @@
       <section class="policy-section" id="postage">
         <div class="policy-number">06 / RETURN POSTAGE</div><h2>Who Pays Return Postage?</h2>
         <p>For change-of-mind cancellations, you are responsible for the cost of returning the item unless we tell you otherwise.</p>
-        <p>If the item is faulty, damaged, incorrect or not as described, we will explain the return postage process when we review your claim.</p>
+        <p>If the item is faulty, damaged, incorrect or not as described, we will explain the return postage process when we review your claim and provide the right resolution.</p>
         <p>We recommend using a tracked service and keeping proof of postage until your return has been processed.</p>
       </section>
 
@@ -159,9 +185,22 @@
         <p>Original delivery charges are handled in line with your consumer rights and the reason for the return.</p>
       </section>
 
+      <section class="policy-section" id="exchange">
+        <div class="policy-number">08 / SIZE EXCHANGES</div><h2>Need A Different Size?</h2>
+        <p>If your tee does not fit how you expected, contact us within the return window. Where stock is available, we will help you with the best option for changing size.</p>
+        <p>Because sizes and colours can sell out, exchanges are not guaranteed until we confirm availability. If an exchange is not available, you can still use the normal eligible return process.</p>
+        <div class="policy-callout"><span class="label">Before You Buy</span><p>If you are between sizes, check the <a href="size-guide.html" class="policy-inline-link">Size Guide</a> or email us before ordering. We would rather help you choose properly than have you worry after checkout.</p></div>
+      </section>
+
       <section class="policy-section" id="contact">
-        <div class="policy-number">08 / START A RETURN</div><h2>How To Initiate A Return</h2>
+        <div class="policy-number">09 / START A RETURN</div><h2>How To Initiate A Return</h2>
         <p>Email us before sending anything back so we can give you the correct return instructions.</p>
+        <ol class="return-steps">
+          <li>Email us with your order number and reason for return.</li>
+          <li>Wait for our reply with the correct return instructions.</li>
+          <li>Pack the item safely and use a tracked return service.</li>
+          <li>Once received and checked, we process the eligible refund or exchange.</li>
+        </ol>
         <div class="policy-contact-grid">
           <div class="policy-contact-item"><span>Email</span><strong><a href="mailto:supportballforlife@gmail.com">supportballforlife@gmail.com</a></strong></div>
           <div class="policy-contact-item"><span>01</span><strong>Full name</strong></div>
