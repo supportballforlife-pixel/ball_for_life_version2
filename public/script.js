@@ -164,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = Array.from(carousel.querySelectorAll('[data-community-card]'));
     const prev = carousel.querySelector('[data-community-prev]');
     const next = carousel.querySelector('[data-community-next]');
+    if (carousel.hasAttribute('data-community-static')) return;
     if (!track || cards.length <= 1) return;
 
     let index = 0;
@@ -195,9 +196,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const startAuto = () => {
       window.clearInterval(timer);
+      const intervalMs = carousel.querySelector('.community-photo-slider') ? 12000 : 3600;
       timer = window.setInterval(() => {
         if (!userPaused && !hoverPaused && !focusPaused) goTo(index + 1, false);
-      }, 3600);
+      }, intervalMs);
     };
 
     prev?.addEventListener('click', () => goTo(index - 1));
