@@ -134,6 +134,8 @@
     'light-pink', 'red', 'yellow', 'lake-blue'
   ];
 
+  const TEE_FLASH_SALE_PRICE = 19.95;
+
   const PRODUCTS = [
     product('ball-for-life-graphic-tee', 'Ball For Life Graphic Tee', 'Ball-For-Life-Graphic-Tee', ['black', 'water-blue', 'apricot', 'light-pink', 'pirate-grey'], 34.99),
     product('lebron-james-oversized-snowly-washed-graphic-tee', 'LeBron James Oversized Snowly Washed Graphic Tee', 'LeBron-James-Oversized-Snowly-Washed-Graphic-Tee', lebronColors, 27.99),
@@ -252,7 +254,7 @@
   };
 
   function product(id, name, folder, colors, price) {
-    return { id, name, folder, colors, price, category: 'Graphic Tees' };
+    return { id, name, folder, colors, price: TEE_FLASH_SALE_PRICE, originalPrice: price, category: 'Graphic Tees' };
   }
 
   function titleFromColor(slug) {
@@ -265,6 +267,13 @@
 
   function money(value) {
     return window.__bfl_money ? window.__bfl_money(value) : `£${value.toFixed(2)}`;
+  }
+
+  function priceMarkup(item) {
+    if (item.originalPrice && item.originalPrice > item.price) {
+      return `<span class="sale-price-pair"><s data-money-gbp="${item.originalPrice}">${money(item.originalPrice)}</s><b data-money-gbp="${item.price}">${money(item.price)}</b><em>1 week only</em></span>`;
+    }
+    return `<b data-money-gbp="${item.price}">${money(item.price)}</b>`;
   }
 
   function byId(id) {
@@ -295,7 +304,7 @@
         <aside class="product-info-panel">
           <div class="product-kicker">${item.category}</div>
           <h1>${escapeHtml(item.name)}</h1>
-          <div class="product-price" data-product-price>${money(item.price)}</div>
+          <div class="product-price" data-product-price>${priceMarkup(item)}</div>
           <div class="product-fabric-line">Heavyweight 250 GSM &bull; 100% cotton</div>
           <div class="product-accordion">
             <details open>
@@ -427,7 +436,7 @@
     const qtyValue = app.querySelector('.product-qty-value');
 
     function updatePriceText() {
-      app.querySelector('[data-product-price]').textContent = money(item.price);
+      app.querySelector('[data-product-price]').innerHTML = priceMarkup(item);
       app.querySelector('[data-product-add]').textContent = `Add to Cart - ${money(item.price)}`;
       app.querySelector('[data-mobile-buy-price]').textContent = money(item.price);
       app.querySelectorAll('[data-money-gbp]').forEach((el) => {
@@ -515,5 +524,9 @@
     }[char]));
   }
 
-  document.addEventListener('DOMContentLoaded', render);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
 })();

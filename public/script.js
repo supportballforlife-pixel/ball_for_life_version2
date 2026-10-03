@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!Number.isNaN(value)) el.textContent = money(value);
     });
     document.querySelectorAll('[data-free-shipping]').forEach((el) => {
-      el.textContent = `Free UK shipping over ${money(parseFloat(el.dataset.freeShipping) || 65)} - new drop live now`;
+      el.textContent = `1000 followers on TikTok - every tee ${money(19.95)} for one week`;
     });
   }
 
@@ -384,9 +384,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const announcement = document.querySelector('.announce-message');
   if (!announcement) return;
   const messages = () => [
-    `Free UK shipping over ${window.__bfl_money ? window.__bfl_money(65) : '£65.00'} - new drop live now`,
-    'Sign up to get exclusive member offer',
-    'Pay with Klarna'
+    `1000 followers on TikTok - every tee ${window.__bfl_money ? window.__bfl_money(19.95) : '£19.95'} for one week`,
+    `Old prices swiped - tees now ${window.__bfl_money ? window.__bfl_money(19.95) : '£19.95'}`,
+    'Tap to follow us on TikTok'
   ];
   let index = 0;
   setInterval(() => {
@@ -400,28 +400,35 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 5000);
 })();
 
-// Free shipping promo popup
+// TikTok follower celebration popup
 (function () {
   if (document.body.classList.contains('auth-page') || document.body.classList.contains('admin-page')) return;
 
-  const PROMO_SESSION_KEY = '__bfl_freeship_promo_seen__';
-  const PROMO_CODE = 'FREESHIP';
+  const PROMO_SESSION_KEY = '__bfl_tiktok_1000_seen__';
+  const TIKTOK_URL = 'https://www.tiktok.com/@ball_for_life_store';
+  const SALE_END_DATE = new Date('2026-10-11T00:00:00+01:00');
   if (sessionStorage.getItem(PROMO_SESSION_KEY)) return;
 
   document.body.insertAdjacentHTML('beforeend', `
-    <aside class="promo-pop" data-promo-pop aria-live="polite" aria-label="Free shipping promotion">
+    <aside class="promo-pop tiktok-pop" data-promo-pop aria-live="polite" aria-label="TikTok follower celebration">
       <div class="promo-pop-inner">
         <button class="promo-pop-close" type="button" data-promo-close aria-label="Close promotion">×</button>
-        <p class="promo-pop-kicker">Ends next week</p>
-        <h3>Free shipping on this drop</h3>
-        <p class="promo-pop-copy">Use code <strong>${PROMO_CODE}</strong> at checkout before the offer ends next week.</p>
+        <p class="promo-pop-kicker">1000 TikTok followers</p>
+        <h3>Big flash sale all week</h3>
+        <p class="promo-pop-copy">To celebrate hitting 1000 followers on TikTok, every graphic tee is <strong>£19.95</strong> for one week.</p>
+        <div class="promo-countdown" data-sale-countdown aria-label="Flash sale countdown">
+          <div><strong data-countdown-days>07</strong><span>Days</span></div>
+          <div><strong data-countdown-hours>00</strong><span>Hours</span></div>
+          <div><strong data-countdown-minutes>00</strong><span>Mins</span></div>
+          <div><strong data-countdown-seconds>00</strong><span>Secs</span></div>
+        </div>
         <div class="promo-code-row">
-          <strong>${PROMO_CODE}</strong>
-          <button type="button" data-promo-copy>Copy</button>
+          <strong>£19.95 tees</strong>
+          <a href="${TIKTOK_URL}" target="_blank" rel="noopener">Follow TikTok</a>
         </div>
         <div class="promo-pop-actions">
           <a href="shop.html?cat=tees">Shop graphic tees</a>
-          <span class="promo-pop-note">One code. Limited time.</span>
+          <span class="promo-pop-note">One week only.</span>
         </div>
       </div>
     </aside>
@@ -429,7 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const promo = document.querySelector('[data-promo-pop]');
   const close = promo?.querySelector('[data-promo-close]');
-  const copy = promo?.querySelector('[data-promo-copy]');
   if (!promo) return;
 
   function closePromo() {
@@ -438,15 +444,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   close?.addEventListener('click', closePromo);
-  copy?.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(PROMO_CODE);
-      copy.textContent = 'Copied';
-      setTimeout(() => { copy.textContent = 'Copy'; }, 1600);
-    } catch {
-      copy.textContent = PROMO_CODE;
-    }
-  });
+
+  function updateCountdown() {
+    const remaining = Math.max(0, SALE_END_DATE.getTime() - Date.now());
+    const totalSeconds = Math.floor(remaining / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const pad = (value) => String(value).padStart(2, '0');
+
+    promo.querySelector('[data-countdown-days]').textContent = pad(days);
+    promo.querySelector('[data-countdown-hours]').textContent = pad(hours);
+    promo.querySelector('[data-countdown-minutes]').textContent = pad(minutes);
+    promo.querySelector('[data-countdown-seconds]').textContent = pad(seconds);
+  }
+
+  updateCountdown();
+  const countdownInterval = setInterval(updateCountdown, 1000);
+  window.addEventListener('pagehide', () => clearInterval(countdownInterval), { once: true });
 
   setTimeout(() => promo.classList.add('open'), 1200);
 })();

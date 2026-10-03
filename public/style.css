@@ -48,6 +48,23 @@ input{font-family:inherit;}
   font-size:13px; letter-spacing:0.01em;
   padding:11px 0;
 }
+.announce .tiktok-announce{
+  color:var(--white);
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.announce .tiktok-announce strong{
+  text-transform:uppercase;
+}
+.announce .tiktok-announce span{
+  font-size:11px;
+  text-transform:uppercase;
+  opacity:.82;
+}
 
 /* -------------------- HEADER -------------------- */
 header{
@@ -316,7 +333,50 @@ body.home-page header .currency-select{
 .pcard .p-name{font-size:14.5px; font-weight:600; margin-bottom:4px;}
 .pcard .p-tag{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--grey); text-transform:uppercase;}
 .pcard .p-spec{font-size:11px; color:#555; margin-top:5px; line-height:1.35;}
-.pcard .p-price{font-family:'IBM Plex Mono',monospace; font-size:13.5px;}
+.pcard .p-price{font-family:'Inter',sans-serif; font-size:13.5px;}
+.sale-price-pair{
+  display:flex;
+  align-items:baseline;
+  justify-content:flex-end;
+  gap:7px;
+  flex-wrap:wrap;
+  font-family:'Inter',sans-serif;
+  line-height:1.2;
+}
+.sale-price-pair s{
+  position:relative;
+  color:rgba(8,8,8,.46);
+  font-weight:500;
+  text-decoration:none;
+}
+.sale-price-pair s::after{
+  content:"";
+  position:absolute;
+  left:-4px;
+  right:-4px;
+  top:50%;
+  height:1px;
+  background:var(--black);
+  transform:rotate(-7deg);
+  transform-origin:center;
+}
+.sale-price-pair b{
+  color:var(--black);
+  font-weight:600;
+}
+.sale-price-pair em{
+  flex-basis:100%;
+  font-style:normal;
+  font-size:10px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(8,8,8,.58);
+  font-weight:500;
+}
+.product-price .sale-price-pair{
+  justify-content:flex-start;
+  font-size:14px;
+}
 
 /* -------------------- COMMUNITY REVIEWS -------------------- */
 .community-section{
@@ -324,7 +384,7 @@ body.home-page header .currency-select{
   background:var(--black);
   color:var(--white);
   overflow:hidden;
-  padding:64px 0 74px;
+  padding:52px 0 60px;
   border-top:1px solid var(--black);
   border-bottom:1px solid var(--black);
 }
@@ -341,21 +401,21 @@ body.home-page header .currency-select{
 .community-editorial{
   display:block;
   max-width:1040px;
-  margin:0 auto 34px;
+  margin:0 auto 26px;
   text-align:center;
 }
 .community-editorial .eyebrow{
   margin-bottom:14px;
 }
 .community-editorial h2{
-  font-size:clamp(40px, 6.4vw, 78px);
-  line-height:.94;
+  font-size:clamp(32px, 4.8vw, 56px);
+  line-height:1;
   max-width:1040px;
   margin:0 auto;
   text-wrap:balance;
 }
 .community-editorial p{
-  margin:18px auto 0;
+  margin:14px auto 0;
   max-width:510px;
 }
 .community-editorial .btn{
@@ -385,10 +445,10 @@ body.home-page header .currency-select{
 }
 .community-carousel[data-community-static] .community-track{
   display:grid;
-  grid-template-columns:repeat(2, minmax(0, 335px));
+  grid-template-columns:repeat(2, minmax(0, 290px));
   justify-content:center;
   align-items:stretch;
-  gap:16px;
+  gap:14px;
   transition:none;
   will-change:auto;
 }
@@ -417,7 +477,7 @@ body.home-page header .currency-select{
 }
 .community-media{
   position:relative;
-  aspect-ratio:3/4;
+  aspect-ratio:4/5;
   background:#050505;
   overflow:hidden;
 }
@@ -460,8 +520,8 @@ body.home-page header .currency-select{
 }
 .community-play{
   position:absolute;
-  left:16px;
-  top:16px;
+  left:13px;
+  top:13px;
   width:auto;
   height:27px;
   padding:0 9px;
@@ -482,7 +542,7 @@ body.home-page header .currency-select{
   padding:0;
   border:0;
   background:transparent;
-  font-size:19px;
+  font-size:16px;
   line-height:1;
   letter-spacing:.11em;
   text-shadow:0 2px 14px rgba(0,0,0,.55);
@@ -493,7 +553,7 @@ body.home-page header .currency-select{
   right:0;
   bottom:0;
   z-index:2;
-  padding:18px;
+  padding:14px;
   color:var(--white);
 }
 .community-copy span{
@@ -503,19 +563,19 @@ body.home-page header .currency-select{
   letter-spacing:.08em;
   text-transform:uppercase;
   color:rgba(255,255,255,.7);
-  margin-bottom:10px;
+  margin-bottom:7px;
 }
 .community-copy strong{
   display:block;
-  font-size:clamp(16px, 1.75vw, 20px);
+  font-size:clamp(14px, 1.45vw, 17px);
   line-height:1.25;
-  margin-bottom:8px;
+  margin-bottom:6px;
 }
 .community-copy p{
-  font-size:11.5px;
-  line-height:1.45;
+  font-size:10.5px;
+  line-height:1.38;
   color:rgba(255,255,255,.76);
-  margin-bottom:12px;
+  margin-bottom:9px;
 }
 .community-copy a{
   color:var(--white);
@@ -608,11 +668,11 @@ body.home-page header .currency-select{
   .reviews-page .community-review-grid{grid-template-columns:minmax(0, 380px);}
 }
 @media (max-width:620px){
-  .community-section{padding:54px 0 64px;}
-  .community-editorial{margin-bottom:24px;}
-  .community-editorial h2{font-size:clamp(38px, 12vw, 58px);}
+  .community-section{padding:42px 0 50px;}
+  .community-editorial{margin-bottom:18px;}
+  .community-editorial h2{font-size:clamp(30px, 9vw, 42px);}
   .community-editorial .btn{margin-top:24px;}
-  .community-carousel{max-width:100%; padding:12px;}
+  .community-carousel{max-width:100%; padding:10px;}
   .community-carousel[data-community-static]{
     overflow-x:auto;
     overflow-y:hidden;
@@ -627,11 +687,11 @@ body.home-page header .currency-select{
     padding-right:12px;
   }
   .community-carousel[data-community-static] .community-card{
-    width:calc(100vw - 58px);
-    max-width:315px;
+    width:calc(100vw - 86px);
+    max-width:285px;
     scroll-snap-align:start;
   }
-  .community-media{aspect-ratio:3/4;}
+  .community-media{aspect-ratio:4/5;}
   .community-actions{justify-content:center; gap:10px;}
   .community-actions .btn{padding:13px 14px; font-size:10px;}
   .community-nav{min-width:58px; font-size:10px;}
@@ -976,6 +1036,33 @@ footer{background:var(--white); padding:76px 0 0;}
   font-size:13.5px;
   line-height:1.55;
 }
+.promo-countdown{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:6px;
+  margin:0 0 16px;
+}
+.promo-countdown div{
+  border:1px solid rgba(8,8,8,.16);
+  background:rgba(255,255,255,.72);
+  text-align:center;
+  padding:9px 4px 8px;
+}
+.promo-countdown strong{
+  display:block;
+  font-family:'Inter',sans-serif;
+  font-size:18px;
+  line-height:1;
+  color:var(--black);
+}
+.promo-countdown span{
+  display:block;
+  margin-top:5px;
+  font-size:9px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(8,8,8,.58);
+}
 .promo-code-row{
   display:grid;
   grid-template-columns:1fr auto;
@@ -988,13 +1075,27 @@ footer{background:var(--white); padding:76px 0 0;}
   font-size:18px;
   letter-spacing:.12em;
 }
-.promo-code-row button{
+.promo-code-row button,
+.promo-code-row a{
   border-left:1px dashed var(--black);
   padding:0 14px;
   font-size:11px;
   letter-spacing:.09em;
   text-transform:uppercase;
   font-weight:800;
+}
+.promo-code-row a{
+  display:grid;
+  place-items:center;
+  color:var(--black);
+  text-decoration:none;
+  min-height:48px;
+}
+.tiktok-pop .promo-code-row{
+  border-style:solid;
+}
+.tiktok-pop .promo-code-row strong{
+  color:var(--black);
 }
 .promo-pop-actions{
   display:flex;
@@ -2057,7 +2158,7 @@ footer .logo-center .brand-logo{width:150px;}
   margin-bottom:8px;
 }
 .product-price{
-  font-family:'IBM Plex Mono',monospace;
+  font-family:'Inter',sans-serif;
   font-size:12px;
   color:var(--grey-dark);
   margin-bottom:24px;
