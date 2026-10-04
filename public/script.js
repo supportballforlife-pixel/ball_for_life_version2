@@ -164,7 +164,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = Array.from(carousel.querySelectorAll('[data-community-card]'));
     const prev = carousel.querySelector('[data-community-prev]');
     const next = carousel.querySelector('[data-community-next]');
-    if (carousel.hasAttribute('data-community-static')) return;
+    if (carousel.hasAttribute('data-community-static')) {
+      if (!track || cards.length <= 1 || !window.matchMedia('(pointer:fine)').matches) return;
+
+      let isDragging = false;
+      let didDrag = false;
+      let startX = 0;
+      let startScrollLeft = 0;
+
+      carousel.addEventListener('pointerdown', (event) => {
+        if (event.button !== 0) return;
+        isDragging = true;
+        didDrag = false;
+        startX = event.clientX;
+        startScrollLeft = carousel.scrollLeft;
+        carousel.classList.add('is-dragging');
+        carousel.setPointerCapture?.(event.pointerId);
+      });
+
+      carousel.addEventListener('pointermove', (event) => {
+        if (!isDragging) return;
+        const delta = event.clientX - startX;
+        if (Math.abs(delta) > 5) didDrag = true;
+        carousel.scrollLeft = startScrollLeft - delta;
+      });
+
+      function stopCommunityDrag(event) {
+        if (!isDragging) return;
+        isDragging = false;
+        carousel.classList.remove('is-dragging');
+        carousel.releasePointerCapture?.(event.pointerId);
+      }
+
+      carousel.addEventListener('pointerup', stopCommunityDrag);
+      carousel.addEventListener('pointercancel', stopCommunityDrag);
+      carousel.addEventListener('click', (event) => {
+        if (!didDrag) return;
+        event.preventDefault();
+        event.stopPropagation();
+        didDrag = false;
+      }, true);
+      return;
+    }
     if (!track || cards.length <= 1) return;
 
     let index = 0;

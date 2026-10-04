@@ -677,19 +677,29 @@ body.home-page header .currency-select{
     overflow-x:auto;
     overflow-y:hidden;
     scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
     scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-x;
+    cursor:grab;
+  }
+  .community-carousel[data-community-static].is-dragging{
+    cursor:grabbing;
+    user-select:none;
   }
   .community-carousel[data-community-static]::-webkit-scrollbar{display:none;}
   .community-carousel[data-community-static] .community-track{
     display:flex;
-    gap:12px;
+    gap:10px;
     width:max-content;
-    padding-right:12px;
+    padding-right:10px;
   }
   .community-carousel[data-community-static] .community-card{
-    width:calc(100vw - 86px);
-    max-width:285px;
+    flex:0 0 min(calc((100vw - 40px) * .86), 320px);
+    width:min(calc((100vw - 40px) * .86), 320px);
+    max-width:none;
     scroll-snap-align:start;
+    scroll-snap-stop:always;
   }
   .community-media{aspect-ratio:4/5;}
   .community-actions{justify-content:center; gap:10px;}
