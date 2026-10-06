@@ -222,13 +222,20 @@
 
   function renderCreatorStats(orders, creatorCodes = []) {
     if (!creatorStatsEl) return;
-    const paidCreatorOrders = orders.filter((order) => order.payment_status === 'paid' && order.creator_code);
-    if (!paidCreatorOrders.length && !creatorCodes.length) {
+    const hiddenCreatorNames = new Set(['10% off', '30% off']);
+    const isHiddenCreator = (value) => hiddenCreatorNames.has(String(value || '').trim().toLowerCase());
+    const visibleCreatorCodes = creatorCodes.filter((creator) => !isHiddenCreator(creator.creator_name));
+    const paidCreatorOrders = orders.filter((order) => (
+      order.payment_status === 'paid'
+      && order.creator_code
+      && !isHiddenCreator(order.creator_name)
+    ));
+    if (!paidCreatorOrders.length && !visibleCreatorCodes.length) {
       creatorStatsEl.innerHTML = '<div class="auth-empty">No paid creator-code orders yet.</div>';
       return;
     }
 
-    const startingStats = creatorCodes.reduce((map, creator) => {
+    const startingStats = visibleCreatorCodes.reduce((map, creator) => {
       const code = String(creator.code || '').toUpperCase();
       if (!code) return map;
       map.set(code, {

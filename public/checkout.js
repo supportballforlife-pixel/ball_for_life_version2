@@ -233,8 +233,8 @@
     );
     setRewardMessage(
       currentUser
-        ? 'Use TIKTOK10 for 10% off, or enter an unlocked account reward code.'
-        : 'Use TIKTOK10 for 10% off. Log in to use earned reward codes too.',
+        ? 'Enter a discount or unlocked account reward code.'
+        : 'Enter a discount code, or log in to use earned reward codes too.',
       ''
     );
   }
