@@ -526,6 +526,20 @@ document.addEventListener('DOMContentLoaded', () => {
       throw new Error(data.error || 'Unable to subscribe right now.');
     }
 
+    const client = window.BFL_SUPABASE_CLIENT || null;
+    if (client) {
+      await client
+        .from('newsletter_subscribers')
+        .upsert({
+          email,
+          source,
+          subscribed: true,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'email' })
+        .then(() => null)
+        .catch(() => null);
+    }
+
     return data;
   }
 

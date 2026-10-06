@@ -19,7 +19,7 @@
 </style>
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
-<body class="auth-page admin-page">
+<body class="auth-page admin-page" data-admin-page="overview">
 
 <div class="announce" aria-live="polite"><a class="announce-message tiktok-announce" href="https://www.tiktok.com/@ball_for_life_store" target="_blank" rel="noopener"><strong>1000 followers on TikTok</strong><span>Every tee is £19.95 for one week</span></a></div>
 
@@ -61,8 +61,8 @@
   <section class="admin-head">
     <div>
       <div class="eyebrow">Admin</div>
-      <h1 class="display">Orders</h1>
-      <p>View customer orders and update tracking status.</p>
+      <h1 class="display">Overview</h1>
+      <p>Quick view of traffic and creator code performance.</p>
     </div>
     <div class="admin-head-actions">
       <button type="button" class="btn btn-outline-dark" data-sale-alert-toggle>Enable sale alerts</button>
@@ -79,6 +79,14 @@
   </section>
 
   <section class="admin-app" data-admin-app hidden>
+    <nav class="admin-subnav" aria-label="Admin pages">
+      <a class="active" href="admin.html">Overview</a>
+      <a href="admin-orders.html">Orders</a>
+      <a href="admin-delivered.html">Delivered</a>
+      <a href="admin-newsletter.html">Newsletter</a>
+      <a href="admin-accounts.html">Accounts</a>
+    </nav>
+
     <section class="admin-analytics" aria-label="Visitor analytics">
       <article class="admin-stat">
         <span>Live visitors</span>
@@ -127,9 +135,6 @@
         <div class="auth-empty">Loading creator code performance...</div>
       </div>
     </section>
-    <div class="admin-orders" data-admin-orders>
-      <div class="auth-empty">Loading orders...</div>
-    </div>
   </section>
 </main>
 

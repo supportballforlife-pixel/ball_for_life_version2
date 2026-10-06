@@ -81,11 +81,21 @@ create table if not exists public.site_visitors (
   last_seen_at timestamptz not null default now()
 );
 
+create table if not exists public.newsletter_subscribers (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  source text,
+  subscribed boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 alter table public.orders enable row level security;
 alter table public.reward_codes enable row level security;
 alter table public.admin_emails enable row level security;
 alter table public.creator_codes enable row level security;
 alter table public.site_visitors enable row level security;
+alter table public.newsletter_subscribers enable row level security;
 
 alter table public.orders alter column user_id drop not null;
 alter table public.orders add column if not exists payment_status text not null default 'pending_payment';
@@ -133,9 +143,13 @@ create index if not exists limited_discount_codes_code_idx on public.limited_dis
 create index if not exists site_visitors_session_id_idx on public.site_visitors(session_id);
 create index if not exists site_visitors_last_seen_idx on public.site_visitors(last_seen_at desc);
 create index if not exists site_visitors_first_seen_idx on public.site_visitors(first_seen_at desc);
+create index if not exists newsletter_subscribers_email_idx on public.newsletter_subscribers(lower(email));
+create index if not exists newsletter_subscribers_created_idx on public.newsletter_subscribers(created_at desc);
 
 grant insert, update on public.site_visitors to anon, authenticated;
 grant select on public.site_visitors to authenticated;
+grant insert, update on public.newsletter_subscribers to anon, authenticated;
+grant select on public.newsletter_subscribers to authenticated;
 
 create or replace function public.record_site_visit(
   p_session_id text,
@@ -187,6 +201,41 @@ end;
 $$;
 
 grant execute on function public.record_site_visit(text, uuid, text, text, text, text, text) to anon, authenticated;
+
+create or replace function public.admin_list_accounts()
+returns table (
+  id uuid,
+  email text,
+  created_at timestamptz,
+  last_sign_in_at timestamptz,
+  email_confirmed_at timestamptz,
+  order_count bigint,
+  total_spend_gbp numeric
+)
+language sql
+security definer
+set search_path = public, auth
+as $$
+  select
+    users.id,
+    users.email::text,
+    users.created_at,
+    users.last_sign_in_at,
+    users.email_confirmed_at,
+    coalesce(count(orders.id), 0)::bigint as order_count,
+    coalesce(sum(orders.total_gbp), 0)::numeric as total_spend_gbp
+  from auth.users
+  left join public.orders on orders.user_id = users.id
+  where exists (
+    select 1
+    from public.admin_emails
+    where lower(admin_emails.email) = lower(auth.jwt() ->> 'email')
+  )
+  group by users.id, users.email, users.created_at, users.last_sign_in_at, users.email_confirmed_at
+  order by users.created_at desc;
+$$;
+
+grant execute on function public.admin_list_accounts() to authenticated;
 
 -- After running this file, replace the email below with your login email and run it once:
 -- insert into public.admin_emails (email) values ('you@example.com') on conflict (email) do nothing;
@@ -363,6 +412,34 @@ with check (true);
 drop policy if exists "Admins can read visitor analytics" on public.site_visitors;
 create policy "Admins can read visitor analytics"
 on public.site_visitors
+for select
+to authenticated
+using (
+  exists (
+    select 1
+    from public.admin_emails
+    where lower(admin_emails.email) = lower(auth.jwt() ->> 'email')
+  )
+);
+
+drop policy if exists "Visitors can subscribe to newsletter" on public.newsletter_subscribers;
+create policy "Visitors can subscribe to newsletter"
+on public.newsletter_subscribers
+for insert
+to anon, authenticated
+with check (true);
+
+drop policy if exists "Visitors can update newsletter subscription" on public.newsletter_subscribers;
+create policy "Visitors can update newsletter subscription"
+on public.newsletter_subscribers
+for update
+to anon, authenticated
+using (true)
+with check (true);
+
+drop policy if exists "Admins can read newsletter subscribers" on public.newsletter_subscribers;
+create policy "Admins can read newsletter subscribers"
+on public.newsletter_subscribers
 for select
 to authenticated
 using (

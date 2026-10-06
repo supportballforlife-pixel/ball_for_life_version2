@@ -11,6 +11,16 @@
   const topPagesEl = document.querySelector('[data-top-pages]');
   const creatorStatsEl = document.querySelector('[data-creator-stats]');
   const creatorCodeForm = document.querySelector('[data-creator-code-form]');
+  const adminPage = document.body.dataset.adminPage || 'overview';
+  const orderMode = document.body.dataset.orderMode || 'all';
+  const orderSearchInput = document.querySelector('[data-admin-order-search]');
+  const listSearchInput = document.querySelector('[data-admin-list-search]');
+  const newsletterListEl = document.querySelector('[data-newsletter-list]');
+  const accountsListEl = document.querySelector('[data-accounts-list]');
+  const newsletterCountEls = document.querySelectorAll('[data-newsletter-count]');
+  const accountCountEls = document.querySelectorAll('[data-account-count]');
+  const activeCountEls = document.querySelectorAll('[data-active-count]');
+  const deliveredCountEls = document.querySelectorAll('[data-delivered-count]');
   const TEE_PRODUCTION_COST_GBP = 13.63;
   const STRIPE_PERCENT = 0.015;
   const STRIPE_FIXED_GBP = 0.20;
@@ -18,6 +28,9 @@
   let saleAlertsEnabled = localStorage.getItem(SALE_ALERTS_KEY) === '1';
   let latestSeenPaidOrderTime = null;
   let saleAlertAudioContext = null;
+  let latestOrders = [];
+  let latestNewsletterRows = [];
+  let latestAccountRows = [];
   const TAPSTITCH_SHIPPING_RATES_GBP = Object.freeze({
     'United Kingdom': { first: 3.02, additional: 1.22 },
     Austria: { first: 4.25, additional: 1.49 },
@@ -131,6 +144,55 @@
     }[char]));
   }
 
+  function setCount(els, value) {
+    els.forEach((el) => {
+      el.textContent = String(value);
+    });
+  }
+
+  function normalise(value) {
+    return String(value || '').toLowerCase().trim();
+  }
+
+  function isDelivered(order) {
+    return normalise(order.tracking_status) === 'delivered' || normalise(order.status) === 'delivered';
+  }
+
+  function orderSearchText(order) {
+    return [
+      order.order_number,
+      order.user_email,
+      order.shipping_email,
+      order.shipping_name,
+      order.shipping_phone,
+      order.tracking_number,
+      order.shipping_postcode,
+    ].join(' ').toLowerCase();
+  }
+
+  function updateOrderCounts(orders) {
+    setCount(activeCountEls, orders.filter((order) => !isDelivered(order)).length);
+    setCount(deliveredCountEls, orders.filter(isDelivered).length);
+  }
+
+  function filteredOrders(orders) {
+    const query = normalise(orderSearchInput?.value);
+    return orders
+      .filter((order) => {
+        if (orderMode === 'active') return !isDelivered(order);
+        if (orderMode === 'delivered') return isDelivered(order);
+        return true;
+      })
+      .filter((order) => !query || orderSearchText(order).includes(query));
+  }
+
+  function formatDate(value) {
+    if (!value) return 'Unknown date';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Unknown date';
+    return date.toLocaleString();
+  }
+
   function itemCount(order) {
     const items = Array.isArray(order.items) ? order.items : [];
     return items.reduce((sum, item) => sum + Number(item.qty || 1), 0);
@@ -238,12 +300,14 @@
 
   function renderOrders(orders) {
     if (!ordersEl) return;
-    if (!orders.length) {
-      ordersEl.innerHTML = '<div class="auth-empty">No orders yet.</div>';
+    const visibleOrders = filteredOrders(orders);
+    if (!visibleOrders.length) {
+      const label = orderMode === 'delivered' ? 'delivered orders' : orderMode === 'active' ? 'active orders' : 'orders';
+      ordersEl.innerHTML = `<div class="auth-empty">No ${label}${orderSearchInput?.value ? ' match your search.' : ' yet.'}</div>`;
       return;
     }
 
-    ordersEl.innerHTML = orders.map((order) => {
+    ordersEl.innerHTML = visibleOrders.map((order) => {
       const items = Array.isArray(order.items) ? order.items : [];
       const paymentStatus = order.payment_status || 'pending_payment';
       const shipping = [
@@ -258,16 +322,16 @@
           <div class="admin-order-top">
             <div>
               <strong>${escapeHtml(order.order_number)}</strong>
-              <span>${new Date(order.created_at).toLocaleString()}</span>
+              <span>${formatDate(order.created_at)}</span>
             </div>
             <div>
-              <strong>${money(order.subtotal_gbp)}</strong>
+              <strong>${money(order.total_gbp || order.subtotal_gbp)}</strong>
               <span>${escapeHtml(order.user_email || 'Customer')}</span>
             </div>
           </div>
 
           <div class="admin-order-items">
-            ${items.map((item) => `<span>${escapeHtml(item.name)} / ${escapeHtml(item.size)} x ${Number(item.qty || 1)}</span>`).join('')}
+            ${items.length ? items.map((item) => `<span>${escapeHtml(item.name)} / ${escapeHtml(item.size)} x ${Number(item.qty || 1)}</span>`).join('') : '<span>No items saved</span>'}
           </div>
 
           <div class="admin-order-meta">
@@ -396,6 +460,136 @@
     });
   }
 
+  function renderNewsletterRows(rows) {
+    if (!newsletterListEl) return;
+    const query = normalise(listSearchInput?.value);
+    const filtered = rows.filter((row) => {
+      const haystack = [row.email, row.source, row.created_at, row.updated_at].join(' ').toLowerCase();
+      return !query || haystack.includes(query);
+    });
+    setCount(newsletterCountEls, rows.length);
+    if (!filtered.length) {
+      newsletterListEl.innerHTML = `<div class="auth-empty">No subscribers${query ? ' match your search.' : ' yet.'}</div>`;
+      return;
+    }
+    newsletterListEl.innerHTML = filtered.map((row) => `
+      <article class="admin-list-row">
+        <div>
+          <strong>${escapeHtml(row.email || 'Unknown email')}</strong>
+          <span>${escapeHtml(row.source || 'Unknown source')}</span>
+        </div>
+        <small>${formatDate(row.created_at || row.updated_at)}</small>
+      </article>
+    `).join('');
+  }
+
+  async function loadNewsletter() {
+    if (!client || !newsletterListEl) return;
+    setMessage('Loading newsletter subscribers...', '');
+    const tableNames = ['newsletter_subscribers', 'marketing_subscribers', 'subscribers'];
+
+    for (const tableName of tableNames) {
+      const { data, error } = await client
+        .from(tableName)
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error) {
+        latestNewsletterRows = data || [];
+        renderNewsletterRows(latestNewsletterRows);
+        setMessage(`${latestNewsletterRows.length} subscriber${latestNewsletterRows.length === 1 ? '' : 's'} found.`, 'success');
+        return;
+      }
+    }
+
+    newsletterListEl.innerHTML = `
+      <div class="auth-empty">
+        Newsletter subscribers need a Supabase table. Run the updated newsletter section in supabase-schema.sql, or connect this page to the table your Edge Function uses.
+      </div>
+    `;
+    setMessage('Newsletter table was not found yet.', 'warning');
+  }
+
+  function renderAccountRows(rows, note) {
+    if (!accountsListEl) return;
+    const query = normalise(listSearchInput?.value);
+    const filtered = rows.filter((row) => {
+      const haystack = [row.email, row.created_at, row.last_sign_in_at, row.order_count, row.total_spend_gbp].join(' ').toLowerCase();
+      return !query || haystack.includes(query);
+    });
+    setCount(accountCountEls, rows.length);
+    if (!filtered.length) {
+      accountsListEl.innerHTML = `<div class="auth-empty">No accounts${query ? ' match your search.' : ' found yet.'}</div>`;
+      return;
+    }
+    accountsListEl.innerHTML = `
+      ${note ? `<div class="auth-empty admin-inline-note">${escapeHtml(note)}</div>` : ''}
+      ${filtered.map((row) => `
+        <article class="admin-list-row">
+          <div>
+            <strong>${escapeHtml(row.email || 'Unknown email')}</strong>
+            <span>${row.email_confirmed_at ? 'Email confirmed' : 'Email not confirmed'} / ${Number(row.order_count || 0)} order${Number(row.order_count || 0) === 1 ? '' : 's'}</span>
+          </div>
+          <div>
+            <strong>${money(row.total_spend_gbp || 0)}</strong>
+            <small>${row.last_sign_in_at ? `Last sign in ${formatDate(row.last_sign_in_at)}` : `Created ${formatDate(row.created_at)}`}</small>
+          </div>
+        </article>
+      `).join('')}
+    `;
+  }
+
+  function accountFallbackFromOrders(orders) {
+    const accounts = new Map();
+    orders.forEach((order) => {
+      const email = order.user_email || order.shipping_email;
+      if (!email) return;
+      const key = email.toLowerCase();
+      const existing = accounts.get(key) || {
+        email,
+        created_at: order.created_at,
+        email_confirmed_at: null,
+        last_sign_in_at: null,
+        order_count: 0,
+        total_spend_gbp: 0,
+      };
+      existing.created_at = existing.created_at && new Date(existing.created_at) < new Date(order.created_at)
+        ? existing.created_at
+        : order.created_at;
+      existing.order_count += 1;
+      existing.total_spend_gbp += Number(order.total_gbp || order.subtotal_gbp || 0);
+      accounts.set(key, existing);
+    });
+    return Array.from(accounts.values()).sort((a, b) => String(a.email).localeCompare(String(b.email)));
+  }
+
+  async function loadAccounts() {
+    if (!client || !accountsListEl) return;
+    setMessage('Loading accounts...', '');
+    const { data, error } = await client.rpc('admin_list_accounts');
+    if (!error) {
+      latestAccountRows = data || [];
+      renderAccountRows(latestAccountRows);
+      setMessage(`${latestAccountRows.length} account${latestAccountRows.length === 1 ? '' : 's'} found.`, 'success');
+      return;
+    }
+
+    const { data: orderData, error: orderError } = await client
+      .from('orders')
+      .select('user_email, shipping_email, subtotal_gbp, total_gbp, created_at')
+      .not('user_id', 'is', null)
+      .order('created_at', { ascending: false });
+
+    if (orderError) {
+      accountsListEl.innerHTML = '<div class="auth-empty">Accounts need the admin_list_accounts function from supabase-schema.sql.</div>';
+      setMessage('Could not load account list yet.', 'warning');
+      return;
+    }
+
+    latestAccountRows = accountFallbackFromOrders(orderData || []);
+    renderAccountRows(latestAccountRows, 'Showing account-linked orders only. Run the updated admin_list_accounts SQL function to see full account signup details.');
+    setMessage(`${latestAccountRows.length} account-linked customer${latestAccountRows.length === 1 ? '' : 's'} found.`, 'warning');
+  }
+
   function setAnalyticsEmpty() {
     if (liveVisitorsEl) liveVisitorsEl.textContent = '0';
     if (todayVisitorsEl) todayVisitorsEl.textContent = '0';
@@ -477,16 +671,31 @@
       return;
     }
 
-    renderOrders(data || []);
-    renderCreatorStats(data || [], creatorResult.data || []);
-    const hadNewPaidOrder = checkForNewPaidOrders(data || []);
+    latestOrders = data || [];
+    updateOrderCounts(latestOrders);
+    renderOrders(latestOrders);
+    renderCreatorStats(latestOrders, creatorResult.data || []);
+    const hadNewPaidOrder = checkForNewPaidOrders(latestOrders);
     if (!hadNewPaidOrder && !silent) {
-      setMessage(`${(data || []).length} order${(data || []).length === 1 ? '' : 's'} found.`, 'success');
+      const visibleCount = ordersEl ? filteredOrders(latestOrders).length : latestOrders.length;
+      setMessage(`${visibleCount} ${orderMode === 'delivered' ? 'delivered ' : orderMode === 'active' ? 'active ' : ''}order${visibleCount === 1 ? '' : 's'} found.`, 'success');
     }
   }
 
   async function loadDashboard() {
-    await Promise.all([loadOrders(), loadAnalytics()]);
+    if (adminPage === 'newsletter') {
+      await loadNewsletter();
+      return;
+    }
+    if (adminPage === 'accounts') {
+      await loadAccounts();
+      return;
+    }
+    if (adminPage === 'overview') {
+      await Promise.all([loadOrders(), loadAnalytics()]);
+      return;
+    }
+    await loadOrders();
   }
 
   async function createCreatorCode(event) {
@@ -564,11 +773,16 @@
     if (guard) guard.hidden = true;
     if (app) app.hidden = false;
     await loadDashboard();
-    setInterval(loadAnalytics, 30000);
-    setInterval(() => loadOrders({ silent: true }), 30000);
+    if (adminPage === 'overview') setInterval(loadAnalytics, 30000);
+    if (ordersEl || creatorStatsEl) setInterval(() => loadOrders({ silent: true }), 30000);
   }
 
   refreshButton?.addEventListener('click', loadDashboard);
+  orderSearchInput?.addEventListener('input', () => renderOrders(latestOrders));
+  listSearchInput?.addEventListener('input', () => {
+    if (newsletterListEl) renderNewsletterRows(latestNewsletterRows);
+    if (accountsListEl) renderAccountRows(latestAccountRows);
+  });
   saleAlertButton?.addEventListener('click', async () => {
     saleAlertsEnabled = !saleAlertsEnabled;
     localStorage.setItem(SALE_ALERTS_KEY, saleAlertsEnabled ? '1' : '0');
