@@ -381,5 +381,9 @@
   });
   form?.querySelector('[name="country"]')?.addEventListener('change', renderSummary);
   document.addEventListener('bfl:currency-change', renderSummary);
+  document.addEventListener('bfl:sale-change', () => {
+    readCart();
+    renderSummary();
+  });
   init();
 })();

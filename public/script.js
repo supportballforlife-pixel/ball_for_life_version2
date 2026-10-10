@@ -3,7 +3,51 @@
 // Cart state is saved in the browser so login/checkout can keep the bag.
 // ============================================================
 
+(function () {
+  const SALE_PRICE_GBP = 19.95;
+  const SALE_END_DATE = new Date('2026-10-11T00:00:00+01:00');
+  const isSaleActive = (now = new Date()) => now.getTime() < SALE_END_DATE.getTime();
+  window.__bfl_sale = {
+    price: SALE_PRICE_GBP,
+    endsAt: SALE_END_DATE.toISOString(),
+    isActive: isSaleActive,
+    priceFor: (normalPrice) => isSaleActive() ? Math.min(SALE_PRICE_GBP, Number(normalPrice || 0)) : Number(normalPrice || 0),
+  };
+  window.__bfl_getSalePrice = window.__bfl_sale.priceFor;
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
+  /* ---------- Sale pricing ---------- */
+  const SALE_PRICE_GBP = 19.95;
+  const SALE_END_DATE = new Date('2026-10-11T00:00:00+01:00');
+
+  function isSaleActive(now = new Date()) {
+    return now.getTime() < SALE_END_DATE.getTime();
+  }
+
+  function currentSalePrice(normalPrice) {
+    const price = Number(normalPrice || 0);
+    return isSaleActive() ? Math.min(SALE_PRICE_GBP, price) : price;
+  }
+
+  function normalPriceForCartItem(item) {
+    const savedNormal = Number(item?.originalPrice || item?.normalPrice || 0);
+    if (savedNormal > 0) return savedNormal;
+    const name = String(item?.name || '').toLowerCase();
+    if (name.includes('ball for life graphic tee')) return 34.99;
+    if (name.includes('g.o.a.t x god') || name.includes('goat x god') || name.includes('i see god')) return 29.99;
+    const currentPrice = Number(item?.price || 0);
+    return Math.abs(currentPrice - SALE_PRICE_GBP) < 0.01 ? 27.99 : currentPrice;
+  }
+
+  window.__bfl_sale = {
+    price: SALE_PRICE_GBP,
+    endsAt: SALE_END_DATE.toISOString(),
+    isActive: isSaleActive,
+    priceFor: currentSalePrice,
+  };
+  window.__bfl_getSalePrice = currentSalePrice;
+
   /* ---------- Currency ---------- */
   const CURRENCY_KEY = '__bfl_currency__';
   const CURRENCIES = {
@@ -48,7 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!Number.isNaN(value)) el.textContent = money(value);
     });
     document.querySelectorAll('[data-free-shipping]').forEach((el) => {
-      el.textContent = `1000 followers on TikTok - every tee ${money(19.95)} for one week`;
+      el.textContent = isSaleActive()
+        ? `1000 followers on TikTok - every tee ${money(SALE_PRICE_GBP)} for one week`
+        : 'Free UK shipping when you spend over £65';
     });
   }
 
@@ -107,6 +153,49 @@ document.addEventListener('DOMContentLoaded', () => {
   window.__bfl_getCurrency = () => activeCurrency;
   window.__bfl_deliveryEstimateText = deliveryEstimateText;
   window.__bfl_updateDeliveryEstimateLabels = updateDeliveryPromise;
+
+  function updateSaleProductCards() {
+    document.querySelectorAll('.pcard').forEach((card) => {
+      const quickAdd = card.querySelector('[data-quick-add]');
+      const priceBox = card.querySelector('.p-price');
+      const originalEl = priceBox?.querySelector('s[data-money-gbp]');
+      const saleEl = priceBox?.querySelector('b[data-money-gbp]');
+      const originalPrice = Number(
+        quickAdd?.dataset.originalPrice ||
+        originalEl?.dataset.moneyGbp ||
+        saleEl?.dataset.moneyGbp ||
+        quickAdd?.dataset.price ||
+        0
+      );
+      if (!originalPrice) return;
+
+      const activePrice = currentSalePrice(originalPrice);
+      if (quickAdd) {
+        quickAdd.dataset.originalPrice = String(originalPrice);
+        quickAdd.dataset.price = String(activePrice);
+      }
+
+      if (!priceBox) return;
+      if (isSaleActive() && activePrice < originalPrice) {
+        priceBox.classList.add('sale-price-pair');
+        priceBox.innerHTML = `<s data-money-gbp="${originalPrice.toFixed(2)}">${money(originalPrice)}</s><b data-money-gbp="${activePrice.toFixed(2)}">${money(activePrice)}</b>`;
+      } else {
+        priceBox.classList.remove('sale-price-pair');
+        priceBox.innerHTML = `<b data-money-gbp="${originalPrice.toFixed(2)}">${money(originalPrice)}</b>`;
+      }
+    });
+  }
+
+  function scheduleSaleExpiryRefresh() {
+    const msUntilExpiry = SALE_END_DATE.getTime() - Date.now();
+    if (msUntilExpiry <= 0 || msUntilExpiry > 2147483647) return;
+    window.setTimeout(() => {
+      updateSaleProductCards();
+      updateMoneyLabels();
+      renderCart();
+      document.dispatchEvent(new CustomEvent('bfl:sale-change'));
+    }, msUntilExpiry + 1000);
+  }
 
   document.querySelectorAll('[data-currency-select]').forEach((select) => {
     select.value = activeCurrency;
@@ -269,6 +358,17 @@ document.addEventListener('DOMContentLoaded', () => {
     window.__bfl_cart__ = [];
   }
 
+  function normalizeCartPrices() {
+    let changed = false;
+    window.__bfl_cart__ = window.__bfl_cart__.map((item) => {
+      const originalPrice = normalPriceForCartItem(item);
+      const price = currentSalePrice(originalPrice);
+      if (Number(item.price || 0) !== price || Number(item.originalPrice || 0) !== originalPrice) changed = true;
+      return { ...item, price, originalPrice };
+    });
+    if (changed) saveCart();
+  }
+
   function saveCart(){
     localStorage.setItem(CART_KEY, JSON.stringify(window.__bfl_cart__));
   }
@@ -284,6 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderCart(){
+    normalizeCartPrices();
     const cart = window.__bfl_cart__;
     const itemsEl = document.querySelector('.cart-items');
     const countEls = document.querySelectorAll('.cart-count');
@@ -352,7 +453,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.cart-foot .btn')?.addEventListener('click', checkoutCart);
 
   renderCart();
+  updateSaleProductCards();
   updateMoneyLabels();
+  scheduleSaleExpiryRefresh();
 
   /* ---------- Quick add (New Arrivals / Shop grid) ---------- */
   document.querySelectorAll('[data-quick-add]').forEach(btn=>{
@@ -362,6 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
       addToCart({
         name: btn.dataset.name,
         price: parseFloat(btn.dataset.price),
+        originalPrice: parseFloat(btn.dataset.originalPrice || btn.dataset.price),
         size: 'M',
         qty: 1,
         mark: btn.dataset.mark || 'BFL',
@@ -424,11 +528,19 @@ document.addEventListener('DOMContentLoaded', () => {
 (function () {
   const announcement = document.querySelector('.announce-message');
   if (!announcement) return;
-  const messages = () => [
-    `1000 followers on TikTok - every tee ${window.__bfl_money ? window.__bfl_money(19.95) : '£19.95'} for one week`,
-    `Old prices swiped - tees now ${window.__bfl_money ? window.__bfl_money(19.95) : '£19.95'}`,
-    'Tap to follow us on TikTok'
-  ];
+  const sale = window.__bfl_sale;
+  const salePrice = sale?.price || 19.95;
+  const messages = () => sale?.isActive?.()
+    ? [
+      `1000 followers on TikTok - every tee ${window.__bfl_money ? window.__bfl_money(salePrice) : '£19.95'} for one week`,
+      `Old prices swiped - tees now ${window.__bfl_money ? window.__bfl_money(salePrice) : '£19.95'}`,
+      'Tap to follow us on TikTok'
+    ]
+    : [
+      'Free UK shipping when you spend over £65',
+      'Secure checkout with card, Apple Pay or Klarna',
+      '14-day returns on unworn items'
+    ];
   let index = 0;
   setInterval(() => {
     announcement.classList.add('is-changing');
@@ -447,7 +559,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const PROMO_SESSION_KEY = '__bfl_tiktok_1000_seen__';
   const TIKTOK_URL = 'https://www.tiktok.com/@ball_for_life_store';
-  const SALE_END_DATE = new Date('2026-10-11T00:00:00+01:00');
+  const sale = window.__bfl_sale;
+  const SALE_END_DATE = new Date(sale?.endsAt || '2026-10-11T00:00:00+01:00');
+  if (!sale?.isActive?.()) return;
   if (sessionStorage.getItem(PROMO_SESSION_KEY)) return;
 
   document.body.insertAdjacentHTML('beforeend', `

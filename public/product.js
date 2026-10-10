@@ -134,7 +134,10 @@
     'light-pink', 'red', 'yellow', 'lake-blue'
   ];
 
-  const TEE_FLASH_SALE_PRICE = 19.95;
+  function currentProductPrice(normalPrice) {
+    if (window.__bfl_getSalePrice) return window.__bfl_getSalePrice(normalPrice);
+    return normalPrice;
+  }
 
   const PRODUCTS = [
     product('ball-for-life-graphic-tee', 'Ball For Life Graphic Tee', 'Ball-For-Life-Graphic-Tee', ['black', 'water-blue', 'apricot', 'light-pink', 'pirate-grey'], 34.99),
@@ -254,7 +257,17 @@
   };
 
   function product(id, name, folder, colors, price) {
-    return { id, name, folder, colors, price: TEE_FLASH_SALE_PRICE, originalPrice: price, category: 'Graphic Tees' };
+    const activePrice = currentProductPrice(price);
+    return {
+      id,
+      name,
+      folder,
+      colors,
+      price: activePrice,
+      originalPrice: activePrice < price ? price : null,
+      normalPrice: price,
+      category: 'Graphic Tees'
+    };
   }
 
   function titleFromColor(slug) {
@@ -291,6 +304,10 @@
     if (!app) return;
 
     const item = getCurrentProduct();
+    const normalPrice = item.normalPrice || item.originalPrice || item.price;
+    item.price = currentProductPrice(normalPrice);
+    item.originalPrice = item.price < normalPrice ? normalPrice : null;
+    item.normalPrice = normalPrice;
     const state = {
       color: item.colors[0],
       side: 'front',
@@ -462,6 +479,7 @@
         window.__bfl_addToCart({
           name: `${item.name} - ${titleFromColor(state.color)}`,
           price: item.price,
+          originalPrice: item.normalPrice || item.originalPrice || item.price,
           size: state.size,
           qty: state.qty,
           mark: 'BFL',
@@ -529,4 +547,5 @@
   } else {
     render();
   }
+  document.addEventListener('bfl:sale-change', render);
 })();
