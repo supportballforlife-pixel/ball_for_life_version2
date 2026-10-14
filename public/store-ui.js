@@ -1,8 +1,9 @@
 /* Presentation enhancements; commerce stays in the existing store scripts. */
 (() => {
   function init() {
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const icon = name => window.BFL_ICONS?.[name] || '';
+    const catalogEntries = window.__bfl_catalog || [];
+    const catalog = new Map(catalogEntries.map(item => [item.id, item]));
     document.querySelectorAll('.pcard .card-back').forEach(image => {
       const update = () => image.classList.toggle('is-loaded', image.complete && image.naturalWidth > 0);
       image.addEventListener('load', update);
@@ -10,6 +11,41 @@
       update();
     });
     const search = document.querySelector('.search-dialog');
+    if (search) {
+      const input = search.querySelector('input');
+      const popular = search.querySelector('.search-popular');
+      const results = document.createElement('ul');
+      results.className = 'search-results'; results.hidden = true;
+      results.setAttribute('aria-label', 'Matching products');
+      const status = document.createElement('p');
+      status.className = 'search-results-status'; status.hidden = true;
+      status.setAttribute('role', 'status');
+      search.querySelector('form').append(status, results);
+      let timer;
+      input.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          const terms = input.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+          results.replaceChildren(); results.hidden = !terms.length; status.hidden = !terms.length;
+          popular.hidden = Boolean(terms.length);
+          if (!terms.length) return;
+          const matches = catalogEntries.filter(item => terms.every(term => item.name.toLowerCase().includes(term)));
+          status.textContent = matches.length ? `${matches.length} matching ${matches.length === 1 ? 'product' : 'products'}` : 'No matches. Explore the collection.';
+          matches.slice(0, 6).forEach(item => {
+            const row = document.createElement('li');
+            const link = document.createElement('a'); link.href = `product.html?id=${item.id}`;
+            const image = document.createElement('img'); image.src = `assets/product-cards/${item.id}-front.webp`; image.alt = ''; image.width = 44; image.height = 55;
+            const name = document.createElement('span'); name.textContent = item.name.replace(/ Snow Washed Oversized Cotton T-Shirt| Oversized Snowly Washed Graphic Tee/g, ' Tee');
+            const arrow = document.createElement('img'); arrow.src = 'assets/ui/arrow-right.svg'; arrow.alt = ''; arrow.className = 'search-result-arrow';
+            link.append(image, name, arrow); row.append(link); results.append(row);
+          });
+          if (!matches.length) {
+            const row = document.createElement('li'); const link = document.createElement('a');
+            link.href = 'shop.html?cat=all'; link.textContent = 'Shop all products'; row.append(link); results.append(row);
+          }
+        }, 180);
+      });
+    }
     document.querySelectorAll('[data-search-open]').forEach(button => button.addEventListener('click', () => { search.showModal(); search.querySelector('input').focus(); }));
     search?.querySelector('[data-search-close]')?.addEventListener('click', () => search.close());
     document.querySelectorAll('.nav-links > a').forEach(link => {
@@ -32,18 +68,17 @@
       const terms = query.toLowerCase().split(/\s+/);
       let count = 0;
       grid.querySelectorAll('.pcard').forEach(card => {
-        card.hidden = !terms.every(term => card.querySelector('.p-name').textContent.toLowerCase().includes(term));
+        card.hidden = card.hidden || !terms.every(term => card.querySelector('.p-name').textContent.toLowerCase().includes(term));
         if (!card.hidden) count++;
       });
       document.querySelector('[data-shop-title]').textContent = `Search: ${query}`;
       document.querySelector('[data-product-count]').textContent = count;
       if (!count) {
         const empty = document.createElement('div'); empty.className = 'search-empty';
-        empty.innerHTML = '<h2>No tees found.</h2><p>Try a player name or explore the full collection.</p><a class="btn btn-solid-dark" href="shop.html">Shop All Tees</a>';
+        empty.innerHTML = '<h2>No products found.</h2><p>Try another search or explore the full collection.</p><a class="btn btn-solid-dark" href="shop.html">Shop All</a>';
         grid.after(empty);
       }
     }
-    const catalog = new Map((window.__bfl_catalog || []).map(item => [item.id, item]));
     document.querySelectorAll('.pcard').forEach(card => {
       const product = catalog.get(new URL(card.href || card.getAttribute('href'), location.href).searchParams.get('id'));
       if (!product || card.querySelector('.card-colours')) return;
@@ -62,12 +97,6 @@
       if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
     });
-    const story = document.querySelector('.brand-story-copy');
-    if (story && !reducedMotion.matches && 'IntersectionObserver' in window) {
-      story.classList.add('motion-ready');
-      const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) { story.classList.add('in'); observer.disconnect(); } }, { threshold: .15 });
-      observer.observe(story);
-    }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

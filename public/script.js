@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
       if (!originalPrice) return;
 
-      const activePrice = currentSalePrice(originalPrice);
+      const activePrice = card.dataset.saleEligible === 'false' ? originalPrice : currentSalePrice(originalPrice);
       if (quickAdd) {
         quickAdd.dataset.originalPrice = String(originalPrice);
         quickAdd.dataset.price = String(activePrice);
@@ -216,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Product card specs ---------- */
   document.querySelectorAll('.pcard .p-tag').forEach((tag) => {
+    if (tag.closest('.pcard').dataset.kind && tag.closest('.pcard').dataset.kind !== 'tee') return;
     if (tag.nextElementSibling?.classList.contains('p-spec')) return;
     const spec = document.createElement('div');
     spec.className = 'p-spec';
@@ -377,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let changed = false;
     window.__bfl_cart__ = window.__bfl_cart__.map((item) => {
       const originalPrice = normalPriceForCartItem(item);
-      const price = currentSalePrice(originalPrice);
+      const price = item.saleEligible === false ? originalPrice : currentSalePrice(originalPrice);
       if (Number(item.price || 0) !== price || Number(item.originalPrice || 0) !== originalPrice) changed = true;
       return { ...item, price, originalPrice };
     });
@@ -414,8 +415,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       itemsEl.innerHTML = cart.map((item, idx)=>`
         <div class="cart-item">
-          <div class="thumb">
+          <div class="thumb${item.secondaryImage ? ' is-set' : ''}">
             ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}">` : `<span class="num-mark display" style="color:rgba(0,0,0,0.08)">${escapeHtml(item.mark || 'BFL')}</span>`}
+            ${item.secondaryImage ? `<img src="${escapeHtml(item.secondaryImage)}" alt="Hooper Sweatpants included in the set">` : ''}
           </div>
           <div class="info">
             <div class="nm">${escapeHtml(item.name)}</div>
@@ -451,6 +453,8 @@ document.addEventListener('DOMContentLoaded', () => {
     itemsEl.querySelectorAll('.rm').forEach(btn=>{
       btn.addEventListener('click', (e)=>{
         const idx = parseInt(e.target.dataset.idx,10);
+        const item = window.__bfl_cart__[idx];
+        if (item) window.BFLAnalytics?.track('remove_from_cart', { productId: item.productId, quantity: item.qty });
         window.__bfl_cart__.splice(idx,1);
         saveCart();
         renderCart();
@@ -474,6 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(existing){ existing.qty += item.qty; } else { window.__bfl_cart__.push(item); }
     saveCart();
     renderCart();
+    window.BFLAnalytics?.track('add_to_cart', { productId: item.productId, quantity: item.qty });
     openCart();
   }
   window.__bfl_addToCart = addToCart;
@@ -526,6 +531,10 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', (e)=>{
       e.preventDefault();
       e.stopPropagation();
+      const card = btn.closest('.pcard');
+      const productId = new URL(card.getAttribute('href'), location.href).searchParams.get('id');
+      const product = (window.__bfl_catalog || []).find(item => item.id === productId);
+      if (product?.kind === 'set') { location.href = card.getAttribute('href'); return; }
       const cardImage = btn.closest('.pcard')?.querySelector('img')?.getAttribute('src') || '';
       const pending = {
         name: btn.dataset.name,
@@ -534,13 +543,23 @@ document.addEventListener('DOMContentLoaded', () => {
         size: null,
         qty: 1,
         mark: btn.dataset.mark || 'BFL',
-        image: cardImage
+        image: cardImage,
+        productId,
+        kind: product?.kind || 'tee',
+        saleEligible: product?.saleEligible !== false,
       };
       const dialog = document.createElement('dialog');
       dialog.className = 'quick-add-dialog';
       dialog.setAttribute('aria-label', 'Choose a size');
-      dialog.innerHTML = `<div class="quick-add-head"><img src="${escapeHtml(cardImage)}" alt=""><div><h2>${escapeHtml(btn.closest('.pcard')?.querySelector('.p-name')?.textContent || pending.name)}</h2><p>${money(pending.price)} / Black</p></div><button class="icon-btn" type="button" data-quick-close aria-label="Close">&times;</button></div><p>Select your size</p><div class="product-sizes">${['S','M','L','XL','2XL','3XL'].map(size => `<button type="button" class="product-size" data-quick-size="${size}" aria-pressed="false">${size}</button>`).join('')}</div><button type="button" class="product-add" data-quick-confirm disabled>Add to Bag</button><p class="cart-shipping-note">For other colours, <a href="${escapeHtml(btn.closest('.pcard').getAttribute('href'))}">view this tee</a>.</p>`;
+      const measurements = !product || product.kind === 'tee' ? window.__bfl_tee_measurements || [] : [];
+      const sizes = product?.sizes || ['S','M','L','XL','2XL','3XL'];
+      dialog.innerHTML = `<div class="quick-add-head"><img src="${escapeHtml(cardImage)}" alt=""><div><h2>${escapeHtml(btn.closest('.pcard')?.querySelector('.p-name')?.textContent || pending.name)}</h2><p>${money(pending.price)} &middot; Black</p><small>Oversized fit &middot; 100% cotton</small></div><button class="icon-btn" type="button" data-quick-close aria-label="Close quick add" title="Close"><img src="assets/ui/x.svg" alt=""></button></div><p>Select your size</p><div class="product-sizes">${['S','M','L','XL','2XL','3XL'].map(size => `<button type="button" class="product-size" data-quick-size="${size}" aria-pressed="false">${size}</button>`).join('')}</div><details class="quick-size-guide"><summary>Size guide <img src="assets/ui/plus.svg" alt="" width="16" height="16"></summary><p>Measurements in centimetres. 1-3 cm sizing differences may occur.</p><div class="product-size-table-wrap"><table class="product-size-table"><thead><tr><th>Size</th><th>Length</th><th>Shoulder</th><th>Chest</th><th>Sleeve</th></tr></thead><tbody>${measurements.map(row => `<tr>${row.map(value => `<td>${escapeHtml(value)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details><button type="button" class="product-add" data-quick-confirm disabled>Add to Bag</button><a class="quick-returns" href="shipping-returns.html#cancellation">14-day returns</a><p class="cart-shipping-note">For other colours, <a href="${escapeHtml(btn.closest('.pcard').getAttribute('href'))}">view this tee</a>.</p>`;
       document.body.appendChild(dialog);
+      dialog.querySelector('.quick-add-head small').textContent = product?.summary || 'Oversized fit - 100% cotton';
+      dialog.querySelector('.product-sizes').style.setProperty('--size-count', sizes.length);
+      dialog.querySelectorAll('[data-quick-size]').forEach(button => { if (!sizes.includes(button.dataset.quickSize)) button.remove(); });
+      if (!measurements.length) dialog.querySelector('.quick-size-guide').remove();
+      if (product?.colorCount === 1) dialog.querySelector('.cart-shipping-note').remove();
       dialog.addEventListener('close', () => { dialog.remove(); btn.focus(); });
       dialog.querySelector('[data-quick-close]').addEventListener('click', () => dialog.close());
       dialog.querySelectorAll('[data-quick-size]').forEach((sizeButton) => {
@@ -551,6 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
             other.setAttribute('aria-pressed', String(other === sizeButton));
           });
           dialog.querySelector('[data-quick-confirm]').disabled = false;
+          dialog.querySelector('[data-quick-confirm]').textContent = `Add size ${pending.size} to Bag`;
         });
       });
       dialog.querySelector('[data-quick-confirm]').addEventListener('click', () => {
@@ -707,6 +727,10 @@ document.addEventListener('DOMContentLoaded', () => {
 (function () {
   const NEWSLETTER_FUNCTION_URL =
     'https://jhjhzqwwsrymeijaxfob.supabase.co/functions/v1/newsletter-signup';
+  const SIGNUP_JOINED_KEY = '__bfl_newsletter_joined__';
+  const SIGNUP_SEEN_KEY = '__bfl_signup_visit__';
+  const storageGet = (storage, key) => { try { return storage.getItem(key); } catch { return null; } };
+  const storageSet = (storage, key) => { try { storage.setItem(key, 'true'); } catch {} };
 
   async function saveMarketingEmail(email, source) {
     const response = await fetch(NEWSLETTER_FUNCTION_URL, {
@@ -719,20 +743,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!response.ok) {
       throw new Error(data.error || 'Unable to subscribe right now.');
-    }
-
-    const client = window.BFL_SUPABASE_CLIENT || null;
-    if (client) {
-      await client
-        .from('newsletter_subscribers')
-        .upsert({
-          email,
-          source,
-          subscribed: true,
-          updated_at: new Date().toISOString(),
-        }, { onConflict: 'email' })
-        .then(() => null)
-        .catch(() => null);
     }
 
     return data;
@@ -760,6 +770,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const result = await saveMarketingEmail(email, source);
+      storageSet(localStorage, SIGNUP_JOINED_KEY);
+      window.BFLAnalytics?.track('newsletter_signup');
 
       button.textContent = 'Joined ✓';
       input.value = '';
@@ -799,7 +811,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // First-visit popup
-  if (document.body.classList.contains('auth-page') || document.body.classList.contains('admin-page')) return;
+  if (!document.body.classList.contains('home-page')) return;
 
   let modal = document.querySelector('[data-signup-modal]');
   if (!modal) {
@@ -815,7 +827,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <span></span><span></span>
             </button>
             <img class="signup-modal-logo" src="brand-logo.png" alt="Ball For Life">
-            <h2 id="signup-modal-title">Subscribe for the latest Ball For Life drops</h2>
+            <h2 id="signup-modal-title">New drops. Member discounts. First to know.</h2>
             <form class="signup-modal-form" data-signup-form>
               <input type="email" name="email" placeholder="Join our mailing list" aria-label="Email address" required>
               <button type="submit">Sign up</button>
@@ -832,9 +844,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeButtons = modal.querySelectorAll('[data-signup-close]');
   const popupForm = modal.querySelector('[data-signup-form]');
   const popupStatus = modal.querySelector('[data-signup-status]');
-  const SIGNUP_SEEN_KEY = '__bfl_signup_seen__';
+  let previousFocus = null;
 
   function openModal() {
+    storageSet(sessionStorage, SIGNUP_SEEN_KEY);
+    previousFocus = document.activeElement;
     modal.inert = false;
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
@@ -847,6 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.setAttribute('aria-hidden', 'true');
     modal.inert = true;
     document.body.style.overflow = '';
+    previousFocus?.focus();
   }
 
   closeButtons.forEach((button) => button.addEventListener('click', closeModal));
@@ -865,70 +880,14 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   });
 
-  // Show only on the first visit in this browser/device.
-  if (!localStorage.getItem(SIGNUP_SEEN_KEY)) {
-    localStorage.setItem(SIGNUP_SEEN_KEY, 'true');
-    setTimeout(openModal, 450);
+  // One invitation per browser visit, after privacy choices and other dialogs are settled.
+  if (!storageGet(sessionStorage, SIGNUP_SEEN_KEY) && !storageGet(localStorage, SIGNUP_JOINED_KEY)) {
+    const readyAt = Date.now() + 8000;
+    const timer = setInterval(() => {
+      if (storageGet(localStorage, SIGNUP_JOINED_KEY) || storageGet(sessionStorage, SIGNUP_SEEN_KEY)) { clearInterval(timer); return; }
+      if (Date.now() < readyAt || window.BFLPrivacy?.isOpen || document.visibilityState !== 'visible' || document.activeElement?.matches('input,textarea,select') || document.querySelector('dialog[open],.cart-drawer.open,.mobile-drawer.open')) return;
+      clearInterval(timer); openModal();
+    }, 1000);
+    window.addEventListener('pagehide', () => clearInterval(timer), { once: true });
   }
-})();
-
-// Supabase visitor analytics
-(function () {
-  const client = window.BFL_SUPABASE_CLIENT || null;
-  if (!client || document.body.classList.contains('admin-page')) return;
-
-  const VISITOR_KEY = '__bfl_visitor_session__';
-  const HEARTBEAT_MS = 25000;
-
-  function getVisitorSessionId() {
-    const saved = localStorage.getItem(VISITOR_KEY);
-    if (saved) return saved;
-
-    const generated = window.crypto?.randomUUID
-      ? window.crypto.randomUUID()
-      : `bfl-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-    localStorage.setItem(VISITOR_KEY, generated);
-    return generated;
-  }
-
-  function withTimeout(promise, ms) {
-    return Promise.race([
-      promise,
-      new Promise((_, reject) => setTimeout(() => reject(new Error('Visitor tracking timed out')), ms)),
-    ]);
-  }
-
-  async function trackVisitor() {
-    if (document.visibilityState === 'hidden') return;
-
-    const sessionId = getVisitorSessionId();
-    let user = null;
-    try {
-      const sessionResult = await withTimeout(client.auth.getSession(), 2500);
-      user = sessionResult.data?.session?.user || null;
-    } catch {
-      user = null;
-    }
-
-    try {
-      const { error } = await client.rpc('record_site_visit', {
-        p_session_id: sessionId,
-        p_user_id: user?.id || null,
-        p_user_email: user?.email || null,
-        p_page_path: `${window.location.pathname}${window.location.search}`,
-        p_page_title: document.title || 'Ball For Life',
-        p_referrer: document.referrer || null,
-        p_user_agent: navigator.userAgent || null,
-      });
-      if (error) throw error;
-    } catch (error) {
-      console.warn('Visitor tracking failed:', error);
-    }
-  }
-
-  trackVisitor();
-  setInterval(trackVisitor, HEARTBEAT_MS);
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') trackVisitor();
-  });
 })();

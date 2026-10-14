@@ -111,6 +111,7 @@
 
     itemsEl.innerHTML = cart.map((item) => `
       <div class="checkout-item">
+        ${item.image ? `<span class="checkout-item-media${item.secondaryImage ? ' is-set' : ''}"><img class="checkout-item-image" src="${escapeHtml(item.image)}" alt="" width="52" height="65">${item.secondaryImage ? `<img class="checkout-item-image" src="${escapeHtml(item.secondaryImage)}" alt="" width="52" height="65">` : ''}</span>` : ''}
         <div>
           <strong>${escapeHtml(item.name)}</strong>
           <span>Size ${escapeHtml(item.size)} / Qty ${Number(item.qty || 1)}</span>
@@ -369,6 +370,7 @@
     localStorage.setItem(CART_KEY, '[]');
     window.__bfl_cart__ = [];
     clearTimeout(slowCheckoutTimer);
+    if (paymentUrl) window.BFLAnalytics?.track('payment_start');
     window.location.href = paymentUrl || `order-created.html?order=${encodeURIComponent(orderNumber)}`;
   });
 

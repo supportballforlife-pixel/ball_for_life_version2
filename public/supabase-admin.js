@@ -6,9 +6,8 @@
   const refreshButton = document.querySelector('[data-admin-refresh]');
   const saleAlertButton = document.querySelector('[data-sale-alert-toggle]');
   const message = document.querySelector('[data-admin-message]');
-  const liveVisitorsEl = document.querySelector('[data-live-visitors]');
-  const todayVisitorsEl = document.querySelector('[data-today-visitors]');
-  const topPagesEl = document.querySelector('[data-top-pages]');
+  const analyticsPeriod = document.querySelector('[data-analytics-period]');
+  const analyticsStatus = document.querySelector('[data-analytics-status]');
   const creatorStatsEl = document.querySelector('[data-creator-stats]');
   const creatorCodeForm = document.querySelector('[data-creator-code-form]');
   const adminPage = document.body.dataset.adminPage || 'overview';
@@ -204,10 +203,20 @@
   }
 
   function productionCost(order) {
-    return Number((itemCount(order) * TEE_PRODUCTION_COST_GBP).toFixed(2));
+    const garmentCosts = {
+      'cant-rush-greatness-sleeveless-hoodie': 22.71,
+      'hooper-sweatpants': 27.59,
+      'cant-rush-greatness-hooper-set': 50.30,
+    };
+    return Number((Array.isArray(order.items) ? order.items : []).reduce((sum, item) => {
+      const cost = garmentCosts[item.productId] ?? TEE_PRODUCTION_COST_GBP;
+      return sum + cost * Number(item.qty || 1);
+    }, 0).toFixed(2));
   }
 
   function tapstitchShippingCost(order) {
+    // The supplied shipping table is tee-specific; don't estimate heavier garments from it.
+    if ((order.items || []).some(item => item.kind && item.kind !== 'tee')) return null;
     const qty = itemCount(order);
     if (!qty) return 0;
     const country = String(order.shipping_country || 'United Kingdom').trim();
@@ -216,8 +225,10 @@
   }
 
   function estimatedNetProfit(order) {
+    const supplierShipping = tapstitchShippingCost(order);
+    if (supplierShipping === null) return null;
     const total = Number(order.total_gbp || order.subtotal_gbp || 0);
-    return Number((total - productionCost(order) - tapstitchShippingCost(order) - stripeFee(order)).toFixed(2));
+    return Number((total - productionCost(order) - supplierShipping - stripeFee(order)).toFixed(2));
   }
 
   function renderCreatorStats(orders, creatorCodes = []) {
@@ -250,6 +261,7 @@
         tapstitchShipping: 0,
         stripeFees: 0,
         netProfit: 0,
+        pendingShipping: 0,
       });
       return map;
     }, new Map());
@@ -268,15 +280,18 @@
         tapstitchShipping: 0,
         stripeFees: 0,
         netProfit: 0,
+        pendingShipping: 0,
       };
       existing.orders += 1;
       existing.tees += itemCount(order);
       existing.sales += Number(order.total_gbp || order.subtotal_gbp || 0);
       existing.discount += Number(order.discount_gbp || 0);
       existing.productionCost += productionCost(order);
-      existing.tapstitchShipping += tapstitchShippingCost(order);
+      const supplierShipping = tapstitchShippingCost(order);
+      if (supplierShipping === null) existing.pendingShipping += 1;
+      else existing.tapstitchShipping += supplierShipping;
       existing.stripeFees += stripeFee(order);
-      existing.netProfit += estimatedNetProfit(order);
+      existing.netProfit += estimatedNetProfit(order) ?? 0;
       map.set(code, existing);
       return map;
     }, startingStats);
@@ -293,13 +308,13 @@
             </div>
             <strong>${money(creator.sales)}</strong>
             <div class="admin-creator-row"><span>Paid orders</span><span>${creator.orders}</span></div>
-            <div class="admin-creator-row"><span>Tees sold</span><span>${creator.tees}</span></div>
+            <div class="admin-creator-row"><span>Items sold</span><span>${creator.tees}</span></div>
             <div class="admin-creator-row"><span>Discount given</span><span>${money(creator.discount)}</span></div>
-            <div class="admin-creator-row"><span>Production cost est.</span><span>${money(creator.productionCost)}</span></div>
-            <div class="admin-creator-row"><span>Tapstitch shipping est.</span><span>${money(creator.tapstitchShipping)}</span></div>
+            <div class="admin-creator-row"><span>Product costs est.</span><span>${money(creator.productionCost)}</span></div>
+            <div class="admin-creator-row"><span>Tapstitch shipping est.</span><span>${creator.pendingShipping ? 'Awaiting garment shipping costs' : money(creator.tapstitchShipping)}</span></div>
             <div class="admin-creator-row"><span>Stripe fees est.</span><span>${money(creator.stripeFees)}</span></div>
-            <div class="admin-creator-row"><span>Net profit est.</span><span>${money(creator.netProfit)}</span></div>
-            <div class="admin-creator-row"><span>Payout est.</span><span>${money(commission)}</span></div>
+            <div class="admin-creator-row"><span>Net profit est.</span><span>${creator.pendingShipping ? 'Awaiting garment shipping costs' : money(creator.netProfit)}</span></div>
+            <div class="admin-creator-row"><span>Payout est.</span><span>${creator.pendingShipping ? 'Awaiting garment shipping costs' : money(commission)}</span></div>
           </article>
         `;
       }).join('');
@@ -597,65 +612,47 @@
     setMessage(`${latestAccountRows.length} account-linked customer${latestAccountRows.length === 1 ? '' : 's'} found.`, 'warning');
   }
 
-  function setAnalyticsEmpty() {
-    if (liveVisitorsEl) liveVisitorsEl.textContent = '0';
-    if (todayVisitorsEl) todayVisitorsEl.textContent = '0';
-    if (topPagesEl) topPagesEl.innerHTML = '<small>No page data yet.</small>';
-  }
-
-  function renderTopPages(visitors) {
-    if (!topPagesEl) return;
-    const pageCounts = visitors.reduce((map, visitor) => {
-      const page = visitor.page_path || '/';
-      map.set(page, (map.get(page) || 0) + 1);
-      return map;
-    }, new Map());
-    const pages = Array.from(pageCounts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5);
-
-    if (!pages.length) {
-      topPagesEl.innerHTML = '<small>No page data yet.</small>';
-      return;
-    }
-
-    topPagesEl.innerHTML = pages.map(([page, count]) => `
-      <div>
-        <span>${escapeHtml(page)}</span>
-        <strong>${count}</strong>
-      </div>
-    `).join('');
-  }
-
+  let analyticsRequest = 0;
   async function loadAnalytics() {
-    if (!client) return;
-
-    const now = new Date();
-    const liveSince = new Date(now.getTime() - 60 * 1000).toISOString();
-    const todayStart = new Date(now);
-    todayStart.setHours(0, 0, 0, 0);
-
-    const [liveResult, todayResult] = await Promise.all([
-      client
-        .from('site_visitors')
-        .select('id', { count: 'exact', head: true })
-        .gte('last_seen_at', liveSince),
-      client
-        .from('site_visitors')
-        .select('page_path, last_seen_at')
-        .gte('last_seen_at', todayStart.toISOString())
-        .order('last_seen_at', { ascending: false }),
-    ]);
-
-    if (liveResult.error || todayResult.error) {
-      setAnalyticsEmpty();
-      return;
+    if (!client || !analyticsStatus) return;
+    const request = ++analyticsRequest;
+    const days = Number(analyticsPeriod?.value || 1);
+    analyticsStatus.textContent = 'Updating store activity...';
+    try {
+      const { data, error } = await client.rpc('get_store_analytics', { p_days: days });
+      if (request !== analyticsRequest) return;
+      if (error || !data || typeof data !== 'object') throw error || new Error('No analytics returned');
+      document.querySelectorAll('[data-analytics-metric]').forEach(el => {
+        const key = el.dataset.analyticsMetric;
+        const value = Number(data[key] || 0);
+        el.textContent = key === 'revenue_gbp' ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(value) : value.toLocaleString('en-GB');
+      });
+      document.querySelectorAll('[data-analytics-list]').forEach(el => {
+        const type = el.dataset.analyticsList;
+        const rows = Array.isArray(data[type]) ? data[type] : [];
+        el.innerHTML = rows.length ? rows.map(row => {
+          const product = type === 'products' ? (window.__bfl_catalog || []).find(item => item.id === row.label) : null;
+          const label = product?.name || row.label;
+          const count = Number(row.count || 0).toLocaleString('en-GB');
+          return `<div><span>${escapeHtml(label)}</span><strong>${count}${type === 'products' ? ' / ' + Number(row.adds || 0).toLocaleString('en-GB') : ''}</strong></div>`;
+        }).join('') : '<p>No activity recorded in this period.</p>';
+      });
+      const recent = document.querySelector('[data-analytics-recent]');
+      const names = { page_view: 'Page viewed', product_view: 'Product viewed', add_to_cart: 'Added to bag', remove_from_cart: 'Removed from bag', checkout_start: 'Checkout visited', payment_start: 'Payment opened', newsletter_signup: 'Newsletter signup' };
+      if (recent) recent.innerHTML = (data.recent || []).map(row => {
+        const name = (window.__bfl_catalog || []).find(item => item.id === row.product_id)?.name || row.page;
+        return `<div><span>${escapeHtml(names[row.event_type] || 'Store activity')}</span><span>${escapeHtml(name)}</span><time>${escapeHtml(new Date(row.created_at).toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'short', timeStyle: 'short' }))}</time></div>`;
+      }).join('') || '<p>No recent activity.</p>';
+      analyticsStatus.textContent = `Updated ${new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' })} UK time. Refreshes every 30 seconds.`;
+    } catch (error) {
+      if (request !== analyticsRequest) return;
+      document.querySelectorAll('[data-analytics-metric]').forEach(el => { el.textContent = '-'; });
+      document.querySelectorAll('[data-analytics-list], [data-analytics-recent]').forEach(el => { el.textContent = 'Data unavailable.'; });
+      const missing = ['PGRST202', '42883', '42P01'].includes(error?.code);
+      analyticsStatus.innerHTML = missing
+        ? 'Analytics needs its database setup. Run <a href="store-analytics.sql" download>store-analytics.sql</a> in Supabase SQL Editor, then refresh.'
+        : 'Could not load activity. Check your connection and admin access, then use Refresh.';
     }
-
-    const todayVisitors = todayResult.data || [];
-    if (liveVisitorsEl) liveVisitorsEl.textContent = String(liveResult.count || 0);
-    if (todayVisitorsEl) todayVisitorsEl.textContent = String(todayVisitors.length);
-    renderTopPages(todayVisitors);
   }
 
   async function loadOrders(options = {}) {
@@ -785,6 +782,7 @@
   }
 
   refreshButton?.addEventListener('click', loadDashboard);
+  analyticsPeriod?.addEventListener('change', loadAnalytics);
   orderSearchInput?.addEventListener('input', () => renderOrders(latestOrders));
   listSearchInput?.addEventListener('input', () => {
     if (newsletterListEl) renderNewsletterRows(latestNewsletterRows);
@@ -806,5 +804,6 @@
   });
   creatorCodeForm?.addEventListener('submit', createCreatorCode);
   renderSaleAlertButton();
-  init();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
+  else init();
 })();

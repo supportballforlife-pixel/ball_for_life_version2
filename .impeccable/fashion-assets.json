@@ -1,0 +1,30 @@
+{
+  "assets": [
+    {
+      "source": "C:/Users/sue25000644/Downloads/ChatGPT Image Oct 13, 2026, 10_56_23 PM.png",
+      "sourceSha256": "da6224da04b9c79cf4516f8e52e088b9cd390c1fc41433a9875fac3eaa91a9f0",
+      "original": {
+        "width": 1774,
+        "height": 887
+      },
+      "output": "public/assets/ui/wordmark-script.webp",
+      "width": 1200,
+      "height": 468,
+      "bytes": 68246,
+      "processing": "Lossless WebP, empty canvas trim and proportional resize only. Original supplied artwork, no generated lettering."
+    },
+    {
+      "source": "C:/Users/sue25000644/Downloads/ball-for-life-loop-black-preview.png",
+      "sourceSha256": "d7935e0684f095af3a27103fc41055531e5f529a20699e9b70e42509993ef70b",
+      "original": {
+        "width": 800,
+        "height": 800
+      },
+      "output": "public/assets/ui/wordmark-loop.webp",
+      "width": 600,
+      "height": 526,
+      "bytes": 47704,
+      "processing": "Lossless WebP, empty canvas trim and proportional resize only. Original supplied artwork, no generated lettering."
+    }
+  ]
+}

@@ -1,24 +1,25 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-13T00:00:00Z",
+  "generatedAt": "2026-10-14T00:00:00Z",
   "title": "Design System: Ball For Life",
   "extensions": {
     "colorMeta": {
       "black": { "role": "primary", "displayName": "Brand Black" },
       "white": { "role": "neutral", "displayName": "Shopping White" },
-      "paper": { "role": "neutral", "displayName": "Newsletter Paper" },
+      "paper": { "role": "neutral", "displayName": "Newsletter Neutral" },
       "surface": { "role": "neutral", "displayName": "Product Surface" }
     },
     "typographyMeta": {
-      "display": { "displayName": "Condensed Display", "purpose": "Brand and campaign headings." },
+      "display": { "displayName": "Condensed Display", "purpose": "Campaign story accents; homepage identity uses the supplied handwritten raster." },
+      "headline": { "displayName": "Editorial Shopping Heading", "purpose": "Medium-weight Inter section headings in title case." },
+      "product-title": { "displayName": "Product Title", "purpose": "Quiet Inter titles that allow long garment names to wrap." },
       "body": { "displayName": "Store Body", "purpose": "Readable information and shopping controls." }
     },
     "shadows": [],
     "motion": [
-      { "name": "ease-out", "value": "cubic-bezier(.22,1,.36,1)", "purpose": "Drawers and the one-time story reveal." },
+      { "name": "ease-out", "value": "cubic-bezier(.22,1,.36,1)", "purpose": "Drawers and restrained control transitions." },
       { "name": "control", "value": "200ms", "purpose": "Control state and image transitions." },
-      { "name": "drawer", "value": "300ms", "purpose": "Shopping bag and mobile menu." },
-      { "name": "story-reveal", "value": "700ms", "purpose": "A single 20px story entrance; disabled for reduced motion." }
+      { "name": "drawer", "value": "300ms", "purpose": "Shopping bag and mobile menu." }
     ],
     "breakpoints": [
       { "name": "phone", "value": "600px" },
@@ -54,9 +55,9 @@
   ],
   "narrative": {
     "northStar": "Editorial basketball streetwear",
-    "overview": "The store is bold, minimal, confident and athletic, with the visual discipline of the user's Nike and Represent references. Real clothing and real people carry the identity. Condensed headlines give the brand presence; restrained controls keep shopping easy to scan.",
+    "overview": "The store is minimal, confident and fashion-led. Real clothing and real people carry the identity. The supplied handwritten wordmark leads the homepage; quiet Inter shopping typography lets the clothing speak. The original BFL header logo is preserved.",
     "keyCharacteristics": [
-      "Bold condensed headings with quiet shopping controls.",
+      "Supplied handwritten hero lettering and quiet Inter shopping headings.",
       "Authentic campaign, product and customer photography.",
       "White shopping surfaces and full-width black brand sections.",
       "Sharp corners, restrained rules and consistent spacing.",

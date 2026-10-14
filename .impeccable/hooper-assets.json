@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "surface": "Hooper Drop",
+  "projectRoot": "C:/Users/sue25000644/OneDrive - West Nottinghamshire College/ball for life new/ball_for_life_version2",
+  "origin": "Four actual user-supplied garment pictures",
+  "generatedPictures": false,
+  "processing": {
+    "implementation": "tools/add-hooper-drop.cjs",
+    "library": "sharp",
+    "resize": { "width": 1200, "withoutEnlargement": true },
+    "format": "webp",
+    "quality": 92,
+    "edits": "Proportional resize and WebP encoding only; no generated or composited garment pictures.",
+    "verification": "Every optimized image matched an in-memory conversion from its recorded source; every listed copy matched the optimized SHA-256."
+  },
+  "assets": [
+    {
+      "id": "cant-rush-greatness-sleeveless-hoodie-front",
+      "garment": "Can't Rush Greatness Sleeveless Hoodie",
+      "colour": "Black",
+      "view": "front",
+      "source": {
+        "kind": "user-supplied",
+        "file": "C:/Users/sue25000644/Downloads/42a4d56d2baa4f9a898ce27cb6f4d1df.png",
+        "format": "png",
+        "width": 1400,
+        "height": 1400,
+        "sha256": "bf2643578107167a20e41d5c8115c35d92efd70fd8c19dbbe89fbebe449ab9c0"
+      },
+      "optimized": {
+        "file": "public/assets/images/tracksuits/cant-rush-greatness-sleeveless-hoodie/black/front.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 79800,
+        "sha256": "19cbcfddfa39cdd822d7a9e8bfd0e3c169c8349842aaeec3a43a40b4b587bf68"
+      },
+      "identicalCopies": [
+        "public/assets/product-cards/cant-rush-greatness-sleeveless-hoodie-front.webp",
+        "public/assets/product-cards/cant-rush-greatness-hooper-set-front.webp"
+      ],
+      "usage": ["Hoodie front gallery and card", "Set paired front presentation", "Stored set primary image and hoodie-reusing thumbnail"],
+      "verification": { "sourceConversionMatches": true, "copiesIdentical": true }
+    },
+    {
+      "id": "cant-rush-greatness-sleeveless-hoodie-back",
+      "garment": "Can't Rush Greatness Sleeveless Hoodie",
+      "colour": "Black",
+      "view": "back",
+      "source": {
+        "kind": "user-supplied",
+        "file": "C:/Users/sue25000644/Downloads/0d156a18e14f45f78ff39f61a6c16d99.png",
+        "format": "png",
+        "width": 1400,
+        "height": 1400,
+        "sha256": "b8ade154e9a4066c0b7a0ee7bb1fa9f3192c3b185433a41b6a41d62a2b034c70"
+      },
+      "optimized": {
+        "file": "public/assets/images/tracksuits/cant-rush-greatness-sleeveless-hoodie/black/back.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 81354,
+        "sha256": "1140da0d314ef14e079a1360b381777d5b7fed47af1ae2f313338a08e7522e4d"
+      },
+      "identicalCopies": [
+        "public/assets/product-cards/cant-rush-greatness-sleeveless-hoodie-back.webp",
+        "public/assets/product-cards/cant-rush-greatness-hooper-set-back.webp"
+      ],
+      "usage": ["Hoodie back gallery and card hover", "Set paired back gallery, thumbnail and zoom"],
+      "verification": { "sourceConversionMatches": true, "copiesIdentical": true }
+    },
+    {
+      "id": "hooper-sweatpants-front",
+      "garment": "Knee-length Hooper Sweatpants",
+      "colour": "Black",
+      "view": "front",
+      "source": {
+        "kind": "user-supplied",
+        "file": "C:/Users/sue25000644/Downloads/0110711c8e4a42ee9dfa876a3d5ba640.png",
+        "format": "png",
+        "width": 1400,
+        "height": 1400,
+        "sha256": "3e9ee8aea01c82b4cb19a2628993c0867764c665052f282c3f245337583fae62"
+      },
+      "optimized": {
+        "file": "public/assets/images/tracksuits/hooper-sweatpants/black/front.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 156270,
+        "sha256": "5ffa0d6c3bcaf74d2daf47a39e5021841ce478d998a4236106e6ee90cde8f167"
+      },
+      "identicalCopies": ["public/assets/product-cards/hooper-sweatpants-front.webp"],
+      "usage": ["Bottoms front gallery and card", "Set paired front card, gallery, thumbnail and zoom", "Set secondary image in bag and checkout"],
+      "verification": { "sourceConversionMatches": true, "copiesIdentical": true }
+    },
+    {
+      "id": "hooper-sweatpants-back",
+      "garment": "Knee-length Hooper Sweatpants",
+      "colour": "Black",
+      "view": "back",
+      "source": {
+        "kind": "user-supplied",
+        "file": "C:/Users/sue25000644/Downloads/5cdcc3137ce14ec38e67c3b18fef8e28.png",
+        "format": "png",
+        "width": 1400,
+        "height": 1400,
+        "sha256": "1716fb56ad60190d19b1be577a236dbf16e81d2c1b61512f6da3ee8c4a09e2ff"
+      },
+      "optimized": {
+        "file": "public/assets/images/tracksuits/hooper-sweatpants/black/back.webp",
+        "width": 1200,
+        "height": 1200,
+        "bytes": 144560,
+        "sha256": "0694742bd2e2b8f329434f44898069b882b9b43904073777b40f311fe5d73fda"
+      },
+      "identicalCopies": ["public/assets/product-cards/hooper-sweatpants-back.webp"],
+      "usage": ["Bottoms back gallery and card hover", "Set paired back gallery, thumbnail and zoom"],
+      "verification": { "sourceConversionMatches": true, "copiesIdentical": true }
+    }
+  ],
+  "setRepresentation": {
+    "primaryImageAsset": "cant-rush-greatness-sleeveless-hoodie-front",
+    "secondaryImageAsset": "hooper-sweatpants-front",
+    "setNamedCardCopiesReuse": "The corresponding hoodie front/back WebPs byte-for-byte",
+    "pairedHtmlImplementations": ["partials/hooper-cards.html", "public/product.js", "public/script.js", "public/checkout.js"],
+    "composition": "Both real garments appear as separate HTML images; no new set raster was created."
+  }
+}

@@ -5,11 +5,11 @@ colors:
   black: "#111111"
   white: "#ffffff"
   charcoal: "#252525"
-  paper: "#f5f4f0"
-  surface: "#f1f1ef"
+  paper: "#f7f7f7"
+  surface: "#f3f3f3"
   muted: "#686868"
   secondary-text: "#515151"
-  divider: "#dededb"
+  divider: "#e1e1e1"
   dark-divider: "#393939"
 typography:
   display:
@@ -18,16 +18,16 @@ typography:
     lineHeight: 1
     letterSpacing: "0"
   headline:
-    fontFamily: "Barlow Condensed, sans-serif"
-    fontSize: "52px"
-    fontWeight: 800
-    lineHeight: 0.95
+    fontFamily: "Inter, sans-serif"
+    fontSize: "30px"
+    fontWeight: 500
+    lineHeight: 1.2
     letterSpacing: "0"
   product-title:
-    fontFamily: "Barlow Condensed, sans-serif"
-    fontSize: "40px"
-    fontWeight: 700
-    lineHeight: 1.05
+    fontFamily: "Inter, sans-serif"
+    fontSize: "28px"
+    fontWeight: 500
+    lineHeight: 1.3
     letterSpacing: "0"
   body:
     fontFamily: "Inter, sans-serif"
@@ -50,7 +50,7 @@ spacing:
   panel: "24px"
   laptop-gutter: "32px"
   desktop-gutter: "48px"
-  section: "72px"
+  section: "80px"
 components:
   button-primary:
     backgroundColor: "{colors.black}"
@@ -80,13 +80,13 @@ components:
 
 **Creative North Star: "Editorial basketball streetwear"**
 
-The store is bold, minimal, confident and athletic, with the visual discipline of the user's Nike and Represent references. Real clothing and real people carry the identity. Condensed headlines give the brand presence; restrained controls keep shopping easy to scan.
+The store is minimal, confident and fashion-led, with the visual discipline of the user's Nike and Represent references. Real clothing and real people carry the identity. The supplied handwritten wordmark leads the homepage; quiet shopping typography lets the clothing speak. Condensed lettering remains a campaign-story accent, not the voice of every heading.
 
 The active shared implementation is `public/store-design.css`, with presentation interactions in `public/store-ui.js`. `public/style.css` is a retained legacy file and is not loaded by the redesigned pages. Do not extend it for new store work. Header and footer source templates live in `partials/`; `tools/update-store-shell.cjs` compiles them into the existing static HTML pages.
 
 **Key Characteristics:**
 
-- Bold condensed headings with quiet shopping controls.
+- Supplied handwritten hero lettering and quiet Inter shopping headings.
 - Authentic campaign, product and customer photography.
 - White shopping surfaces and full-width black brand sections.
 - Sharp corners, restrained rules and consistent spacing.
@@ -106,9 +106,11 @@ Charcoal supports dark media surfaces. Paper separates the newsletter band; surf
 
 ## Typography
 
-Barlow Condensed is the display face, using bold and extra-bold weights. Inter is the body and control face. Both are self-hosted WOFF2 assets with swap loading and included font licences. Letter spacing is zero.
+Barlow Condensed is reserved for expressive campaign story headings and existing compact tool titles. Inter carries section and page headings, product titles, body copy and controls. Both are self-hosted WOFF2 assets with swap loading and included font licences. Letter spacing is zero.
 
-Use uppercase condensed type for page and section headings. Desktop section headings use the headline role; phone section headings step down to 38px. Product titles use the product-title role and step down to 32px on phones. Body copy stays readable and short; product-card labels and supporting information use compact Inter text. Prices use tabular numerals.
+Use sentence/title case and medium-weight Inter for shopping headings. Desktop section headings use the headline role; phone section headings step down to 24px. Product titles use the product-title role and step down to 24px on phones. Collection and customer-care titles use 40px on desktop and 32px on phones. Body copy stays readable and short; product-card prices sit below the title/category/specification group. Prices use tabular numerals.
+
+The homepage H1 is the actual supplied handwritten wordmark (`assets/ui/wordmark-script.webp`), with accessible Ball For Life alt text and a CSS white treatment over the real campaign photo. Do not approximate the lettering with a font. Keep the original BFL header logo. The looping mark (`assets/ui/wordmark-loop.webp`) appears only in the neutral newsletter band and is not another navigation logo.
 
 **The Hierarchy Rule.** Hero type belongs in a hero. Product controls, panels and admin screens use a smaller, functional scale.
 
@@ -116,7 +118,7 @@ Use uppercase condensed type for page and section headings. Desktop section head
 
 The shared content width is capped at 1536px. Horizontal gutters step from the desktop-gutter token to laptop-gutter below 1101px and mobile-gutter at 600px. Page sections are full-width bands with constrained inner content, not floating cards.
 
-Homepage merchandise uses four columns on desktop and two at 900px and below. Collection merchandise uses four columns from 1101px, three at intermediate widths and two on phones. Product image panels maintain a 4:5 proportion and contain the whole tee. Gallery and purchase information sit beside each other on desktop, then stack at 900px and below.
+Homepage merchandise uses four columns on desktop and two at 900px and below. Collection merchandise uses four columns from 1101px, three at intermediate widths and two on phones. Product image panels contain the whole garment. Gallery and purchase information sit beside each other on desktop, then stack at 900px and below. Keep headline and product information unframed; give repeated merchandise consistent image tracks and quiet spacing.
 
 Navigation is 86px tall on desktop and 72px at 900px and below. The desktop logo is left aligned; mobile places the logo centrally with a menu and shopping bag. Desktop product galleries are capped at 760px high. Keep campaign copy outside the model's garment area, and leave the next section visible in the first viewport.
 
@@ -154,11 +156,11 @@ Keep thumbnails, chosen options, quantity and remove controls visible. Subtotal 
 
 ### Customer Media
 
-Keep attribution, genuine feedback and the correct product link with each photo or video. Customer photos have manual slide controls. Videos have visible playback and sound controls, use real frame posters and attach their sources when entering the viewport. Do not invent ratings or testimonials.
+Use the same white background as shopping sections, with fine divider rules rather than framed cards. Keep attribution, genuine feedback and the correct product link with each photo or video. Show all three reviews on desktop and an accessible horizontal carousel on smaller screens. Customer photos have manual slide controls. Videos have visible playback and sound controls, use real frame posters and attach their sources when entering the viewport. Do not invent ratings or testimonials.
 
 ### Motion
 
-Control feedback and image transitions take approximately 200ms. Drawers use a 300ms transition with the shared ease-out curve. The story copy reveals once with 20px upward movement over 700ms. Respect reduced-motion settings, pause offscreen videos and avoid continuous scroll listeners.
+Control feedback and image transitions take approximately 200ms. Drawers use a 300ms transition with the shared ease-out curve. The removed More Than Basketball section has no active scroll/reveal observer. Respect reduced-motion settings, pause offscreen videos and avoid continuous scroll listeners.
 
 ## Do's and Don'ts
 

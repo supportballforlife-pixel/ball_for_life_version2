@@ -134,7 +134,8 @@
     'light-pink', 'red', 'yellow', 'lake-blue'
   ];
 
-  function currentProductPrice(normalPrice) {
+  function currentProductPrice(normalPrice, saleEligible = true) {
+    if (!saleEligible) return normalPrice;
     if (window.__bfl_getSalePrice) return window.__bfl_getSalePrice(normalPrice);
     return normalPrice;
   }
@@ -184,9 +185,42 @@
     product('la-snow-washed-oversized-cotton-t-shirt', 'LA Snow Washed Oversized Cotton T-Shirt', 'LA-Snow-Washed-Oversized-Cotton-T-Shirt', jaredMccainColors, 27.99),
     product('confidence-snow-washed-oversized-cotton-t-shirt', 'Confidence Snow Washed Oversized Cotton T-Shirt', 'Confidence-Snow-Washed-Oversized-Cotton-T-Shirt', expandedMockupColors, 27.99),
     product('goat-kobe-x-jordan-snow-washed-oversized-cotton-t-shirt', 'GOAT Kobe x Jordan Snow Washed Oversized Cotton T-Shirt', 'GOAT-Kobe-x-Jordan-Snow-Washed-Oversized-Cotton-T-Shirt', fullColors, 27.99),
+    {
+      id: 'cant-rush-greatness-sleeveless-hoodie', name: "Can't Rush Greatness Sleeveless Hoodie",
+      category: 'Tracksuits', kind: 'hoodie', colors: ['black'], sizes: ['S', 'M', 'L', 'XL'],
+      price: 44.99, normalPrice: 44.99, saleEligible: false,
+      imageBase: 'assets/images/tracksuits/cant-rush-greatness-sleeveless-hoodie/black',
+      summary: 'Sleeveless cut. Front statement print. BFL back graphic.',
+      description: "Black sleeveless hoodie with a Can't Rush Greatness front print and a distressed BFL graphic on the back. Part of the Hooper Set, also available separately.",
+      details: [['Colour', 'Black'], ['Cut', 'Sleeveless hooded top'], ['Sizes', 'S, M, L, XL']],
+    },
+    {
+      id: 'hooper-sweatpants', name: 'Ball For Life Un-Guardable Hooper Sweatpants',
+      category: 'Tracksuits', kind: 'bottoms', colors: ['black'], sizes: ['S', 'M', 'L', 'XL'],
+      price: 49.99, normalPrice: 49.99, saleEligible: false,
+      imageBase: 'assets/images/tracksuits/hooper-sweatpants/black',
+      summary: 'Knee-length fit. Layered waistband. Ball For Life graphics.',
+      description: 'Ball For Life Un-Guardable Hooper Sweatpants sit around the knee, with a layered waistband, drawstring, pockets and Ball For Life graphics. These are not full-length trousers.',
+      details: [['Colour', 'Black'], ['Length', 'Around the knee'], ['Sizes', 'S, M, L, XL']],
+    },
+    {
+      id: 'cant-rush-greatness-hooper-set', name: "Can't Rush Greatness Hooper Set",
+      category: 'Tracksuits', kind: 'set', colors: ['black'], sizes: ['S', 'M', 'L', 'XL'],
+      price: 84.99, normalPrice: 84.99, saleEligible: false,
+      imageBase: 'assets/images/tracksuits/cant-rush-greatness-sleeveless-hoodie/black',
+      secondaryImageBase: 'assets/images/tracksuits/hooper-sweatpants/black',
+      summary: 'Sleeveless hoodie + knee-length Hooper Sweatpants.',
+      description: "The complete black Hooper Set: Can't Rush Greatness Sleeveless Hoodie and knee-length Hooper Sweatpants. Choose a separate size for each piece.",
+      details: [['Includes', 'Sleeveless hoodie + Hooper Sweatpants'], ['Colour', 'Black'], ['Sizes', 'S, M, L, XL for each piece']],
+    },
   ];
 
   const SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+  const TEE_MEASUREMENTS = [
+    ['S', 70, 53, 56, 20.8], ['M', 72, 55, 58, 21.5],
+    ['L', 74, 57, 60, 22.2], ['XL', 76, 59, 62, 22.9],
+    ['2XL', 78, 61, 64, 23.6], ['3XL', 79, 63, 67, 23.6],
+  ];
 
   const ALIASES = {
     'tee-01': 'ball-for-life-graphic-tee',
@@ -275,6 +309,7 @@
   }
 
   function imagePath(item, color, side) {
+    if (item.imageBase) return `${item.imageBase}/${side}.webp`;
     return `graphic tee/${item.folder}/${color}/${side}.png`;
   }
 
@@ -305,35 +340,41 @@
 
     const item = getCurrentProduct();
     const normalPrice = item.normalPrice || item.originalPrice || item.price;
-    item.price = currentProductPrice(normalPrice);
+    item.price = currentProductPrice(normalPrice, item.saleEligible !== false);
     item.originalPrice = item.price < normalPrice ? normalPrice : null;
     item.normalPrice = normalPrice;
+    const isTee = item.category === 'Graphic Tees';
+    const isSet = item.kind === 'set';
+    const sizes = item.sizes || SIZES;
     const state = {
       color: item.colors[0],
       side: 'front',
       size: null,
+      hoodieSize: null,
+      bottomsSize: null,
       qty: 1,
     };
 
     document.title = `${item.name} - Ball For Life`;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', item.description || `${item.name}. Heavyweight cotton graphic tee from Ball For Life. Choose your colour and size.`);
     app.innerHTML = `
-      <div class="product-breadcrumb wrap breadcrumb"><a href="index.html">Home</a> / <a href="shop.html?cat=tees">Graphic Tees</a> / ${escapeHtml(item.name.replace(/ Snow Washed Oversized Cotton T-Shirt| Oversized Snowly Washed Graphic Tee/g, ' Tee'))}</div>
+      <div class="product-breadcrumb wrap breadcrumb"><a href="index.html">Home</a> / <a href="shop.html?cat=${isTee ? 'tees' : 'tracksuits'}">${item.category}</a> / ${escapeHtml(item.name.replace(/ Snow Washed Oversized Cotton T-Shirt| Oversized Snowly Washed Graphic Tee/g, ' Tee'))}</div>
       <section class="product-hero">
         <aside class="product-info-panel">
           <div class="product-kicker">${item.category}</div>
           <h1>${escapeHtml(item.name.replace(/ Snow Washed Oversized Cotton T-Shirt| Oversized Snowly Washed Graphic Tee/g, ' Tee'))}</h1>
           <div class="product-price" data-product-price>${priceMarkup(item)}</div>
-          <div class="product-fabric-line">Heavyweight 250 GSM &bull; 100% cotton</div>
+          <div class="product-fabric-line">${isTee ? 'Heavyweight 250 GSM &bull; 100% cotton' : escapeHtml(item.summary)}</div>
+          ${isSet ? `<div class="bundle-includes"><a href="product.html?id=cant-rush-greatness-sleeveless-hoodie"><span>Sleeveless Hoodie</span><span data-money-gbp="44.99">${money(44.99)}</span></a><a href="product.html?id=hooper-sweatpants"><span>Ball For Life Un-Guardable Hooper Sweatpants</span><span data-money-gbp="49.99">${money(49.99)}</span></a><p>Save <strong data-money-gbp="9.99">${money(9.99)}</strong> when you buy the set.</p></div>` : `<div class="product-matching-set" ${isTee ? 'hidden' : ''}><a href="product.html?id=cant-rush-greatness-hooper-set">Shop the matching set <img src="assets/ui/arrow-right.svg" alt="" width="16" height="16"></a></div>`}
           <div class="product-accordion">
             <details open>
               <summary>Product Details</summary>
-              <p>Snow washed oversized cotton tee with a relaxed boxy fit and heavyweight streetwear feel.</p>
+              <p>${escapeHtml(item.description || 'Snow washed oversized cotton tee with a relaxed boxy fit and heavyweight streetwear feel.')}</p>
               <div class="product-detail-specs">
-                <div><span>Material</span><strong>100% cotton</strong></div>
-                <div><span>Fabric Weight</span><strong>250 gsm (7.4 oz)</strong></div>
+                ${(item.details || [['Material', '100% cotton'], ['Fabric Weight', '250 gsm (7.4 oz)']]).map(([label, value]) => `<div><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join('')}
               </div>
             </details>
-            <details>
+            ${isTee ? `<details>
               <summary>Care Instructions</summary>
               <ul class="product-care-list">
                 <li>Machine wash at 30&deg;C (gentle cycle)</li>
@@ -358,16 +399,11 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr><td>S</td><td>70</td><td>53</td><td>56</td><td>20.8</td></tr>
-                    <tr><td>M</td><td>72</td><td>55</td><td>58</td><td>21.5</td></tr>
-                    <tr><td>L</td><td>74</td><td>57</td><td>60</td><td>22.2</td></tr>
-                    <tr><td>XL</td><td>76</td><td>59</td><td>62</td><td>22.9</td></tr>
-                    <tr><td>2XL</td><td>78</td><td>61</td><td>64</td><td>23.6</td></tr>
-                    <tr><td>3XL</td><td>79</td><td>63</td><td>67</td><td>23.6</td></tr>
+                    ${TEE_MEASUREMENTS.map(row => `<tr>${row.map(value => `<td>${value}</td>`).join('')}</tr>`).join('')}
                   </tbody>
                 </table>
               </div>
-            </details>
+            </details>` : ''}
             <details>
               <summary>Shipping Info</summary>
               <p>Free UK shipping on orders over <span data-money-gbp="65">${money(65)}</span> after discount. International delivery is calculated at checkout. <a href="shipping-returns.html">Delivery information</a></p>
@@ -379,9 +415,10 @@
           </div>
         </aside>
 
-        <section class="product-media-panel">
+        <section class="product-media-panel ${isSet ? 'is-set' : ''}">
           <button class="product-side-nav product-side-prev" type="button" aria-label="Previous image"><img src="assets/ui/chevron-left.svg" alt="" width="20" height="20"></button>
           <img class="product-main-image" alt="${escapeHtml(item.name)}">
+          ${isSet ? '<img class="product-secondary-image" alt="Hooper Sweatpants included in the set">' : ''}
           <button class="product-side-nav product-side-next" type="button" aria-label="Next image"><img src="assets/ui/chevron-right.svg" alt="" width="20" height="20"></button>
           <div class="product-side-label">Front</div>
         </section>
@@ -405,12 +442,13 @@
           </div>
 
           <div class="product-option-head product-size-head">
-            <span>Size</span>
-            <button type="button" class="size-guide-link" data-size-guide-link>Size Guide</button>
+            <span>${isSet ? 'Sleeveless hoodie size' : 'Size'}</span>
+            ${isTee ? '<button type="button" class="size-guide-link" data-size-guide-link>Size Guide</button>' : ''}
           </div>
-          <div class="product-sizes">
-            ${SIZES.map((size) => `<button class="product-size ${size === state.size ? 'active' : ''}" type="button" data-size="${size}">${size}</button>`).join('')}
+          <div class="product-sizes" role="group" aria-label="${isSet ? 'Sleeveless hoodie size' : 'Size'}" style="--size-count:${sizes.length}">
+            ${sizes.map((size) => `<button class="product-size" type="button" data-size="${size}" ${isSet ? 'data-size-part="hoodie"' : ''}>${size}</button>`).join('')}
           </div>
+          ${isSet ? `<div class="product-option-head product-size-head"><span>Hooper Sweatpants size</span></div><div class="product-sizes" role="group" aria-label="Hooper Sweatpants size" style="--size-count:4">${sizes.map(size => `<button class="product-size" type="button" data-size="${size}" data-size-part="bottoms">${size}</button>`).join('')}</div>` : ''}
 
           <div class="product-qty">
             <button class="product-qty-minus" type="button" aria-label="Decrease quantity"><img src="assets/ui/minus.svg" alt="" width="14" height="14"></button>
@@ -422,16 +460,17 @@
           <p class="product-selection-message" role="status" data-selection-message></p>
           <div class="product-delivery-note">
             <span>Estimated delivery <strong data-delivery-estimate>5-9 days</strong></span>
-            <span>14-day returns</span>
+            <a href="shipping-returns.html#cancellation">14-day returns <img src="assets/ui/arrow-right.svg" alt="" width="14" height="14"></a>
             <span class="product-delivery-countdown" data-delivery-countdown>Order today to keep this estimate</span>
           </div>
-          <div class="product-fabric-proof">
+          <a class="product-help" href="https://wa.me/447356218992?text=Hi%20Ball%20For%20Life%2C%20can%20you%20help%20me%20choose%20my%20size%3F" target="_blank" rel="noopener"><img src="assets/ui/message-circle.svg" alt="" width="16" height="16">Questions about fit? Talk to us.</a>
+          ${isTee ? `<div class="product-fabric-proof">
             <img src="assets/ui/fabric.webp" alt="Close-up of heavyweight cotton fabric" loading="lazy">
             <div>
               <strong>Heavyweight 250 GSM &bull; 100% cotton</strong>
               <span>Dense snow-washed cotton with a structured oversized fit.</span>
             </div>
-          </div>
+          </div>` : ''}
           <div class="product-pay-row" aria-label="Accepted payment methods">
             <img src="visa.svg" alt="Visa">
             <img src="mastercard-alt.svg" alt="Mastercard">
@@ -459,18 +498,24 @@
     const gallery = document.createElement('div');
     gallery.className = 'product-gallery';
     gallery.appendChild(app.querySelector('.product-media-panel'));
-    gallery.insertAdjacentHTML('beforeend', `<div class="product-thumbs">${['front', 'back'].map(side => `<button type="button" class="product-thumb" data-product-side="${side}" aria-label="View ${side}"><img alt="${side} view" loading="lazy"></button>`).join('')}</div>`);
+    gallery.insertAdjacentHTML('beforeend', `<div class="product-thumbs">${['front', 'back'].map(side => `<button type="button" class="product-thumb ${isSet ? 'is-set' : ''}" data-product-side="${side}" aria-label="View ${side}"><img alt="${side} view" loading="lazy">${isSet ? '<img data-secondary-thumb alt="" loading="lazy">' : ''}</button>`).join('')}</div>`);
+    const wornBy = {
+      'ball-for-life-graphic-tee': ['RST', 'Essex', 'assets/ui/rst-poster.jpg', 'review-rst-name'],
+      'stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt': ['T-jay', 'Reading', 'assets/community/tjay-reading-fit.jpeg', 'review-tjay-name'],
+      'dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt': ['KadenBruney', 'Preston', 'assets/ui/kaden-poster.jpg', 'review-kaden-name'],
+    }[item.id];
+    if (wornBy) gallery.insertAdjacentHTML('beforeend', `<a class="product-worn-link" href="index.html#${wornBy[3]}"><img src="${wornBy[2]}" alt="" width="42" height="52" loading="lazy"><span>Worn by ${wornBy[0]}<small>${wornBy[1]} &middot; See it on court</small></span><img class="worn-arrow" src="assets/ui/arrow-right.svg" alt="" width="18" height="18"></a>`);
     hero.prepend(gallery);
     purchase.append(info, buy, accordion);
     hero.append(purchase);
     const browse = document.createElement('details');
     browse.className = 'product-browse';
-    browse.innerHTML = '<summary>Browse other tees</summary>';
+    browse.innerHTML = '<summary>Browse other pieces</summary>';
     browse.append(app.querySelector('.product-picker-label'), app.querySelector('.product-picker'));
     purchase.append(browse);
     const sizeGuide = [...accordion.querySelectorAll('details')].find(detail => detail.querySelector('summary').textContent === 'Size Guide');
-    sizeGuide.querySelector('p').textContent = 'Measurements in centimetres. 1-3 cm sizing differences may occur.';
-    app.querySelector('[data-size-guide-link]').addEventListener('click', () => {
+    if (sizeGuide) sizeGuide.querySelector('p').textContent = 'Measurements in centimetres. 1-3 cm sizing differences may occur.';
+    app.querySelector('[data-size-guide-link]')?.addEventListener('click', () => {
       sizeGuide.open = true;
       sizeGuide.scrollIntoView({ block: 'center', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
       sizeGuide.querySelector('summary').focus();
@@ -483,12 +528,13 @@
     zoomButton.innerHTML = '<img src="assets/ui/zoom-in.svg" alt="" width="20" height="20">';
     app.querySelector('.product-media-panel').append(zoomButton);
     const zoom = document.createElement('dialog');
-    zoom.className = 'product-zoom';
+    zoom.className = `product-zoom ${isSet ? 'is-set' : ''}`;
     zoom.setAttribute('aria-label', 'Product image zoom');
-    zoom.innerHTML = '<button class="icon-btn" type="button" aria-label="Close zoom"><img src="assets/ui/x.svg" alt="" width="20" height="20"></button><img data-zoom-image alt="">';
+    zoom.innerHTML = '<button class="icon-btn" type="button" aria-label="Close zoom"><img src="assets/ui/x.svg" alt="" width="20" height="20"></button><img data-zoom-image alt="">' + (isSet ? '<img data-zoom-secondary alt="Hooper Sweatpants included in the set">' : '');
     app.append(zoom);
-    const openZoom = () => { zoom.querySelector('[data-zoom-image]').src = image.src; zoom.querySelector('[data-zoom-image]').alt = image.alt; zoom.showModal(); };
+    const openZoom = () => { zoom.querySelector('[data-zoom-image]').src = image.src; zoom.querySelector('[data-zoom-image]').alt = image.alt; if (isSet) zoom.querySelector('[data-zoom-secondary]').src = app.querySelector('.product-secondary-image').src; zoom.showModal(); };
     image.addEventListener('click', openZoom);
+    app.querySelector('.product-secondary-image')?.addEventListener('click', openZoom);
     zoomButton.addEventListener('click', openZoom);
     zoom.querySelector('button').addEventListener('click', () => zoom.close());
     app.querySelectorAll('[data-product-side]').forEach(button => button.addEventListener('click', () => { state.side = button.dataset.productSide; updateImage(); }));
@@ -508,8 +554,8 @@
 
     function updatePriceText() {
       app.querySelector('[data-product-price]').innerHTML = priceMarkup(item);
-      app.querySelector('[data-product-add]').textContent = state.size ? `Add to Bag - ${money(item.price)}` : 'Select a size';
-      app.querySelector('[data-product-mobile-add]').textContent = state.size ? 'Add to Bag' : 'Select a size';
+      app.querySelector('[data-product-add]').textContent = state.size ? `Add to Bag - ${money(item.price)}` : isSet ? 'Choose both sizes' : 'Select a size';
+      app.querySelector('[data-product-mobile-add]').textContent = state.size ? 'Add to Bag' : isSet ? 'Choose sizes' : 'Select a size';
       app.querySelector('[data-mobile-buy-price]').textContent = money(item.price);
       app.querySelectorAll('[data-money-gbp]').forEach((el) => {
         const value = parseFloat(el.dataset.moneyGbp);
@@ -519,22 +565,24 @@
 
     function updateImage() {
       image.src = imagePath(item, state.color, state.side);
+      if (isSet) app.querySelector('.product-secondary-image').src = `${item.secondaryImageBase}/${state.side}.webp`;
       image.alt = `${item.name} ${titleFromColor(state.color)} ${state.side}`;
       sideLabel.textContent = state.side === 'front' ? 'Front' : 'Back';
       selectedColor.textContent = titleFromColor(state.color);
       app.querySelectorAll('.product-swatch').forEach((button) => { button.classList.toggle('active', button.dataset.color === state.color); button.setAttribute('aria-pressed', String(button.dataset.color === state.color)); });
-      app.querySelectorAll('.product-size').forEach((button) => { button.classList.toggle('active', button.dataset.size === state.size); button.setAttribute('aria-pressed', String(button.dataset.size === state.size)); });
-      app.querySelectorAll('[data-product-side]').forEach(button => { button.classList.toggle('active', button.dataset.productSide === state.side); button.setAttribute('aria-pressed', String(button.dataset.productSide === state.side)); button.querySelector('img').src = imagePath(item, state.color, button.dataset.productSide); });
+      app.querySelectorAll('.product-size').forEach((button) => { const chosen = isSet ? state[`${button.dataset.sizePart}Size`] : state.size; button.classList.toggle('active', button.dataset.size === chosen); button.setAttribute('aria-pressed', String(button.dataset.size === chosen)); });
+      app.querySelectorAll('[data-product-side]').forEach(button => { button.classList.toggle('active', button.dataset.productSide === state.side); button.setAttribute('aria-pressed', String(button.dataset.productSide === state.side)); button.querySelector('img').src = imagePath(item, state.color, button.dataset.productSide); if (isSet) button.querySelector('[data-secondary-thumb]').src = `${item.secondaryImageBase}/${button.dataset.productSide}.webp`; });
       qtyValue.textContent = state.qty;
-      app.querySelector('[data-mobile-buy-size]').textContent = `${state.size || 'Select a size'} / ${titleFromColor(state.color)}`;
+      app.querySelector('[data-mobile-buy-size]').textContent = isSet ? `Hoodie ${state.hoodieSize || '-'} / Bottoms ${state.bottomsSize || '-'}` : `${state.size || 'Select a size'} / ${titleFromColor(state.color)}`;
       updatePriceText();
     }
 
     function addSelectedToCart() {
       if (!state.size) {
-        app.querySelector('[data-selection-message]').textContent = 'Choose your size to add this tee to your bag.';
-        app.querySelector('.product-sizes').scrollIntoView({ block: 'center' });
-        app.querySelector('.product-size').focus();
+        const needed = isSet ? `[data-size-part="${state.hoodieSize ? 'bottoms' : 'hoodie'}"]` : '.product-size';
+        app.querySelector('[data-selection-message]').textContent = isSet ? 'Choose a size for both the hoodie and Hooper Sweatpants.' : 'Choose your size to add this item to your bag.';
+        app.querySelector(needed).scrollIntoView({ block: 'center' });
+        app.querySelector(needed).focus();
         return;
       }
       if (typeof window.__bfl_addToCart === 'function') {
@@ -555,6 +603,10 @@
           qty: state.qty,
           mark: 'BFL',
           image: imagePath(item, state.color, 'front'),
+          secondaryImage: isSet ? `${item.secondaryImageBase}/front.webp` : null,
+          productId: item.id,
+          kind: item.kind || 'tee',
+          saleEligible: item.saleEligible !== false,
         });
       }
     }
@@ -573,7 +625,10 @@
 
     app.querySelectorAll('.product-size').forEach((button) => {
       button.addEventListener('click', () => {
-        state.size = button.dataset.size;
+        if (isSet) {
+          state[`${button.dataset.sizePart}Size`] = button.dataset.size;
+          state.size = state.hoodieSize && state.bottomsSize ? `Hoodie ${state.hoodieSize} / Hooper Sweatpants ${state.bottomsSize}` : null;
+        } else state.size = button.dataset.size;
         app.querySelector('[data-selection-message]').textContent = '';
         updateImage();
       });
@@ -614,7 +669,8 @@
     }[char]));
   }
 
-  window.__bfl_catalog = PRODUCTS.map(item => ({ id: item.id, name: item.name, colorCount: item.colors.length, colors: item.colors.slice(0, 4).map(color => ({ name: color, label: titleFromColor(color), swatch: SWATCHES[color] || '#ddd' })) }));
+  window.__bfl_catalog = PRODUCTS.map(item => ({ id: item.id, name: item.name, category: item.category, kind: item.kind || 'tee', sizes: item.sizes || SIZES, summary: item.summary || 'Oversized fit - 100% cotton', saleEligible: item.saleEligible !== false, colorCount: item.colors.length, colors: item.colors.slice(0, 4).map(color => ({ name: color, label: titleFromColor(color), swatch: SWATCHES[color] || '#ddd' })) }));
+  window.__bfl_tee_measurements = TEE_MEASUREMENTS;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', render);
