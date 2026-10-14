@@ -1,0 +1,28 @@
+<div class="announce"><a class="announce-message" href="shipping-returns.html">Free UK shipping on orders over &pound;65</a></div>
+<header class="site-header">
+  <div class="wrap nav-grid">
+    <div class="nav-left">
+      <button class="burger icon-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">{{icon:menu}}</button>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="shop.html">New Drop</a>
+        <a href="shop.html?cat=all">Shop All</a>
+        <a href="shop.html?cat=tees">Graphic Tees</a>
+        <a href="about-us.html">Our Story</a>
+      </nav>
+    </div>
+    <a href="index.html" class="logo-center" aria-label="Ball For Life home"><img src="brand-logo-black.png" class="brand-logo" alt="Ball For Life" width="112" height="63"></a>
+    <div class="nav-right">
+      <select class="currency-select" data-currency-select aria-label="Currency"><option value="GBP">GBP</option><option value="USD">USD</option><option value="EUR">EUR</option></select>
+      <button type="button" class="icon-btn search-open" data-search-open aria-label="Search products" title="Search">{{icon:search}}</button>
+      <a href="login.html" class="icon-btn account-link" aria-label="Account" title="Account">{{icon:user-round}}</a>
+      <a href="checkout.html" class="cart-link icon-btn" data-cart-open aria-label="Open shopping bag" title="Shopping bag">{{icon:shopping-bag}}<span class="cart-count">0</span></a>
+    </div>
+  </div>
+</header>
+<div class="mobile-drawer" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation" aria-hidden="true" inert>
+  <div class="mobile-menu-head"><a href="index.html" class="mobile-brand"><img src="brand-logo-black.png" class="brand-logo" alt="Ball For Life" width="112" height="63"></a><button class="icon-btn" type="button" data-menu-close aria-label="Close menu">{{icon:x}}</button></div>
+  <nav aria-label="Mobile navigation"><a href="shop.html">New Drop</a><a href="shop.html?cat=all">Shop All</a><a href="shop.html?cat=tees">Graphic Tees</a><a href="shop.html?cat=hoodies">Hoodies <small>Coming soon</small></a><a href="shop.html?cat=tracksuits">Tracksuits <small>Coming soon</small></a><a href="about-us.html">Our Story</a></nav>
+  <div class="mobile-menu-foot"><a href="login.html">My account</a><a href="contact.html">Contact us</a><select class="currency-select" data-currency-select aria-label="Menu currency"><option value="GBP">GBP</option><option value="USD">USD</option><option value="EUR">EUR</option></select></div>
+</div>
+<div class="drawer-overlay menu-overlay"></div>
+<dialog class="search-dialog" aria-labelledby="search-title"><form action="shop.html" method="get"><div class="search-head"><h2 id="search-title">Find your next tee.</h2><button class="icon-btn" type="button" data-search-close aria-label="Close search">{{icon:x}}</button></div><label class="search-field">{{icon:search}}<input type="search" name="q" placeholder="Search players, graphics, tees..." aria-label="Search products" required><button class="icon-btn" type="submit" aria-label="Search">{{icon:arrow-right}}</button></label><div class="search-popular"><a href="shop.html?q=kobe">Kobe Bryant</a><a href="shop.html?q=kyrie">Kyrie Irving</a><a href="shop.html?q=curry">Stephen Curry</a></div></form></dialog>

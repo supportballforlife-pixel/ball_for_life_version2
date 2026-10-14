@@ -239,11 +239,25 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- Mobile drawer ---------- */
   const burger = document.querySelector('.burger');
   const drawer = document.querySelector('.mobile-drawer');
-  const overlay = document.querySelector('.drawer-overlay');
-  function closeDrawer(){ drawer?.classList.remove('open'); overlay?.classList.remove('open'); }
+  const overlay = document.querySelector('.menu-overlay');
+  function closeDrawer(){
+    drawer?.classList.remove('open');
+    overlay?.classList.remove('open');
+    drawer?.setAttribute('aria-hidden', 'true');
+    if (drawer) drawer.inert = true;
+    burger?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    burger?.focus();
+  }
   burger?.addEventListener('click', ()=>{
+    if (drawer) drawer.inert = false;
     drawer?.classList.add('open'); overlay?.classList.add('open');
+    drawer?.setAttribute('aria-hidden', 'false');
+    burger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    drawer?.querySelector('[data-menu-close]')?.focus();
   });
+  drawer?.querySelector('[data-menu-close]')?.addEventListener('click', closeDrawer);
   overlay?.addEventListener('click', closeDrawer);
   drawer?.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeDrawer));
 
@@ -262,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let startScrollLeft = 0;
 
       carousel.addEventListener('pointerdown', (event) => {
-        if (event.button !== 0) return;
+        if (event.button !== 0 || event.target.closest('a, button, video')) return;
         isDragging = true;
         didDrag = false;
         startX = event.clientX;
@@ -352,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Cart state ---------- */
   const CART_KEY = '__bfl_cart__';
+  const FREE_SHIPPING_THRESHOLD_GBP = 65;
   try {
     window.__bfl_cart__ = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
   } catch {
@@ -395,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
     countEls.forEach(el=> el.textContent = count);
 
     if(cart.length === 0){
-      itemsEl.innerHTML = '<div class="cart-empty">Your bag is empty.<br>Time to fix that.</div>';
+      itemsEl.innerHTML = '<div class="cart-empty">Your bag is empty.<a class="text-link" href="shop.html">Explore the collection</a></div>';
     } else {
       itemsEl.innerHTML = cart.map((item, idx)=>`
         <div class="cart-item">
@@ -406,18 +421,48 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="nm">${escapeHtml(item.name)}</div>
             <div class="sub">SIZE ${escapeHtml(item.size)} · QTY ${item.qty}</div>
             <div class="sub">${money(item.price)}</div>
-            <a class="rm" data-idx="${idx}">Remove</a>
+            <div class="cart-qty" aria-label="Quantity controls for ${escapeHtml(item.name)}">
+              <button type="button" data-cart-qty="dec" data-idx="${idx}" aria-label="Decrease quantity">−</button>
+              <span>${item.qty}</span>
+              <button type="button" data-cart-qty="inc" data-idx="${idx}" aria-label="Increase quantity">+</button>
+            </div>
+            <button class="rm" type="button" data-idx="${idx}">Remove</button>
           </div>
         </div>
       `).join('');
     }
     const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
     if(subtotalEl) subtotalEl.textContent = money(subtotal);
+    const foot = document.querySelector('.cart-foot');
+    const progress = Math.max(0, Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD_GBP) * 100));
+    const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD_GBP - subtotal);
+    const progressText = subtotal >= FREE_SHIPPING_THRESHOLD_GBP
+      ? 'Free UK shipping unlocked'
+      : `${money(remaining)} away from free UK shipping`;
+    foot?.querySelector('.cart-shipping-progress')?.remove();
+    foot?.insertAdjacentHTML('afterbegin', `
+      <div class="cart-shipping-progress">
+        <div class="cart-progress-copy">${progressText}</div>
+        <div class="cart-progress-track"><span style="width:${progress}%"></span></div>
+        <p class="cart-shipping-note">Before discounts. Final delivery is calculated at checkout.</p>
+      </div>
+    `);
 
     itemsEl.querySelectorAll('.rm').forEach(btn=>{
       btn.addEventListener('click', (e)=>{
         const idx = parseInt(e.target.dataset.idx,10);
         window.__bfl_cart__.splice(idx,1);
+        saveCart();
+        renderCart();
+      });
+    });
+    itemsEl.querySelectorAll('[data-cart-qty]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.idx, 10);
+        const item = window.__bfl_cart__[idx];
+        if (!item) return;
+        const direction = btn.dataset.cartQty === 'inc' ? 1 : -1;
+        item.qty = Math.max(1, Number(item.qty || 1) + direction);
         saveCart();
         renderCart();
       });
@@ -442,8 +487,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const cartDrawer = document.querySelector('.cart-drawer');
   const cartOverlay = document.querySelector('.cart-overlay');
-  function openCart(){ cartDrawer?.classList.add('open'); cartOverlay?.classList.add('open'); }
-  function closeCart(){ cartDrawer?.classList.remove('open'); cartOverlay?.classList.remove('open'); }
+  let cartOpener = null;
+  function openCart(){
+    cartOpener = document.activeElement;
+    if (cartDrawer) cartDrawer.inert = false;
+    cartDrawer?.classList.add('open'); cartOverlay?.classList.add('open');
+    cartDrawer?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    cartDrawer?.querySelector('.cart-close')?.focus();
+  }
+  function closeCart(){
+    cartDrawer?.classList.remove('open'); cartOverlay?.classList.remove('open');
+    cartDrawer?.setAttribute('aria-hidden', 'true');
+    if (cartDrawer) cartDrawer.inert = true;
+    document.body.style.overflow = '';
+    cartOpener?.focus();
+  }
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (cartDrawer?.classList.contains('open')) closeCart();
+    if (drawer?.classList.contains('open')) closeDrawer();
+  });
   document.querySelectorAll('[data-cart-open]').forEach(el=>el.addEventListener('click', (event) => {
     event.preventDefault();
     openCart();
@@ -461,16 +525,40 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-quick-add]').forEach(btn=>{
     btn.addEventListener('click', (e)=>{
       e.preventDefault();
+      e.stopPropagation();
       const cardImage = btn.closest('.pcard')?.querySelector('img')?.getAttribute('src') || '';
-      addToCart({
+      const pending = {
         name: btn.dataset.name,
         price: parseFloat(btn.dataset.price),
         originalPrice: parseFloat(btn.dataset.originalPrice || btn.dataset.price),
-        size: 'M',
+        size: null,
         qty: 1,
         mark: btn.dataset.mark || 'BFL',
         image: cardImage
+      };
+      const dialog = document.createElement('dialog');
+      dialog.className = 'quick-add-dialog';
+      dialog.setAttribute('aria-label', 'Choose a size');
+      dialog.innerHTML = `<div class="quick-add-head"><img src="${escapeHtml(cardImage)}" alt=""><div><h2>${escapeHtml(btn.closest('.pcard')?.querySelector('.p-name')?.textContent || pending.name)}</h2><p>${money(pending.price)} / Black</p></div><button class="icon-btn" type="button" data-quick-close aria-label="Close">&times;</button></div><p>Select your size</p><div class="product-sizes">${['S','M','L','XL','2XL','3XL'].map(size => `<button type="button" class="product-size" data-quick-size="${size}" aria-pressed="false">${size}</button>`).join('')}</div><button type="button" class="product-add" data-quick-confirm disabled>Add to Bag</button><p class="cart-shipping-note">For other colours, <a href="${escapeHtml(btn.closest('.pcard').getAttribute('href'))}">view this tee</a>.</p>`;
+      document.body.appendChild(dialog);
+      dialog.addEventListener('close', () => { dialog.remove(); btn.focus(); });
+      dialog.querySelector('[data-quick-close]').addEventListener('click', () => dialog.close());
+      dialog.querySelectorAll('[data-quick-size]').forEach((sizeButton) => {
+        sizeButton.addEventListener('click', () => {
+          pending.size = sizeButton.dataset.quickSize;
+          dialog.querySelectorAll('[data-quick-size]').forEach((other) => {
+            other.classList.toggle('active', other === sizeButton);
+            other.setAttribute('aria-pressed', String(other === sizeButton));
+          });
+          dialog.querySelector('[data-quick-confirm]').disabled = false;
+        });
       });
+      dialog.querySelector('[data-quick-confirm]').addEventListener('click', () => {
+        if (!pending.size) return;
+        dialog.close();
+        addToCart(pending);
+      });
+      dialog.showModal();
     });
   });
 
@@ -541,16 +629,9 @@ document.addEventListener('DOMContentLoaded', () => {
       'Secure checkout with card, Apple Pay or Klarna',
       '14-day returns on unworn items'
     ];
-  let index = 0;
-  setInterval(() => {
-    announcement.classList.add('is-changing');
-    setTimeout(() => {
-      const currentMessages = messages();
-      index = (index + 1) % currentMessages.length;
-      announcement.textContent = currentMessages[index];
-      announcement.classList.remove('is-changing');
-    }, 180);
-  }, 5000);
+  const refreshAnnouncement = () => { announcement.textContent = messages()[0]; };
+  refreshAnnouncement();
+  document.addEventListener('bfl:sale-change', refreshAnnouncement);
 })();
 
 // TikTok follower celebration popup
@@ -718,12 +799,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // First-visit popup
-  if (document.body.classList.contains('auth-page')) return;
+  if (document.body.classList.contains('auth-page') || document.body.classList.contains('admin-page')) return;
 
   let modal = document.querySelector('[data-signup-modal]');
   if (!modal) {
     document.body.insertAdjacentHTML('beforeend', `
-      <div class="signup-modal" data-signup-modal aria-hidden="true">
+      <div class="signup-modal" data-signup-modal aria-hidden="true" inert>
         <div class="signup-modal-backdrop" data-signup-close></div>
         <section class="signup-modal-panel" role="dialog" aria-modal="true" aria-labelledby="signup-modal-title">
           <div class="signup-modal-image">
@@ -754,14 +835,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const SIGNUP_SEEN_KEY = '__bfl_signup_seen__';
 
   function openModal() {
+    modal.inert = false;
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    modal.querySelector('input')?.focus();
   }
 
   function closeModal() {
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
+    modal.inert = true;
     document.body.style.overflow = '';
   }
 
@@ -847,56 +931,4 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') trackVisitor();
   });
-})();
-
-// Homepage hero automatic slideshow with smooth fade
-(function () {
-  const hero = document.querySelector('#hero');
-
-  if (!hero) return;
-
-  const heroImages = [
-    'hero-basketball-court.jpg',
-    'hero-2.jpg',
-    'hero-4.jpg'
-  ];
-
-  // Create two image layers
-  const layer1 = document.createElement('div');
-  const layer2 = document.createElement('div');
-
-  layer1.className = 'hero-slide active';
-  layer2.className = 'hero-slide';
-
-  hero.prepend(layer1);
-  hero.prepend(layer2);
-
-  const layers = [layer1, layer2];
-
-  let currentImage = 0;
-  let activeLayer = 0;
-
-  // Preload all images
-  heroImages.forEach(src => {
-    const img = new Image();
-    img.src = src;
-  });
-
-  // Show first image
-  layer1.style.backgroundImage = `url("${heroImages[0]}")`;
-
-  setInterval(() => {
-    currentImage = (currentImage + 1) % heroImages.length;
-
-    const nextLayer = activeLayer === 0 ? 1 : 0;
-    const oldLayer = activeLayer;
-
-    layers[nextLayer].style.backgroundImage =
-      `url("${heroImages[currentImage]}")`;
-
-    layers[nextLayer].classList.add('active');
-    layers[oldLayer].classList.remove('active');
-
-    activeLayer = nextLayer;
-  }, 5000);
 })();

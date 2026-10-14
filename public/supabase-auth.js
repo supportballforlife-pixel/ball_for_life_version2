@@ -58,7 +58,7 @@
   function showMode(mode) {
     authForms.forEach((form) => form.hidden = form.dataset.authMode !== mode);
     modeButtons.forEach((button) => button.classList.toggle('active', button.dataset.authTab === mode));
-    setNote(hasConfig ? 'Connected to Supabase Auth.' : 'Add your Supabase URL and anon key in supabase-config.js to activate login.', hasConfig ? 'success' : 'warning');
+    setNote(hasConfig ? 'Log in to view your orders and rewards.' : 'Account access is temporarily unavailable. Please try again later.', hasConfig ? '' : 'warning');
   }
 
   async function refreshSession() {

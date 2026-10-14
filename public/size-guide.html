@@ -7,8 +7,6 @@
   <meta name="description" content="Ball For Life size guide information. Each product has its own size guide on the product page.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1000sale3">
 
   <style>
     .size-guide-page{background:var(--white);color:var(--black);}
@@ -29,7 +27,7 @@
     .size-guide-kicker{
       font-family:'IBM Plex Mono',monospace;
       font-size:11px;
-      letter-spacing:.12em;
+      letter-spacing:0;
       text-transform:uppercase;
       color:var(--grey);
       margin-bottom:18px;
@@ -67,7 +65,7 @@
       display:block;
       font-family:'IBM Plex Mono',monospace;
       font-size:10px;
-      letter-spacing:.08em;
+      letter-spacing:0;
       text-transform:uppercase;
       color:var(--grey);
       margin-bottom:10px;
@@ -103,78 +101,40 @@
     }
   </style>
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+<link rel="stylesheet" href="store-design.css?v=redesign2">
 </head>
 
 <body class="size-guide-page">
 
-<header>
+<div class="announce"><a class="announce-message" href="shipping-returns.html">Free UK shipping on orders over &pound;65</a></div>
+<header class="site-header">
   <div class="wrap nav-grid">
     <div class="nav-left">
-      <div class="burger" aria-label="Open menu"><span></span><span></span><span></span></div>
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-
-        <div class="nav-item">
-          <span>
-            Shop
-            <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M6 9l6 6 6-6"/>
-            </svg>
-          </span>
-
-          <div class="nav-dropdown">
-            <div class="nav-dropdown-inner">
-              <a href="shop.html">New Arrivals</a>
-              <a href="shop.html?cat=hoodies">Hoodies</a>
-              <a href="shop.html?cat=tracksuits">Tracksuits</a>
-              <a href="shop.html?cat=tees">Graphic Tees</a>
-            </div>
-          </div>
-        </div>
-
-        <a href="about-us.html">About Us</a>
+      <button class="burger icon-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg></button>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="shop.html">New Drop</a>
+        <a href="shop.html?cat=all">Shop All</a>
+        <a href="shop.html?cat=tees">Graphic Tees</a>
+        <a href="about-us.html">Our Story</a>
       </nav>
     </div>
-
-    <a href="index.html" class="logo-center">
-      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
-    </a>
-
+    <a href="index.html" class="logo-center" aria-label="Ball For Life home"><img src="assets/ui/brand-logo-black.png" class="brand-logo" alt="Ball For Life" width="112" height="63"></a>
     <div class="nav-right">
-
-      <a href="login.html" class="icon-btn" aria-label="Account">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="12" cy="8" r="4"/>
-          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
-        </svg>
-      </a>
-
-      <select class="currency-select" data-currency-select aria-label="Currency">
-        <option value="GBP">GBP</option>
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-      </select>
-
-      <a href="checkout.html" class="cart-link" data-cart-open aria-label="Cart">
-        My Cart <span class="cart-count">0</span>
-      </a>
+      <select class="currency-select" data-currency-select aria-label="Currency"><option value="GBP">GBP</option><option value="USD">USD</option><option value="EUR">EUR</option></select>
+      <button type="button" class="icon-btn search-open" data-search-open aria-label="Search products" title="Search"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></button>
+      <a href="login.html" class="icon-btn account-link" aria-label="Account" title="Account"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
+      <a href="checkout.html" class="cart-link icon-btn" data-cart-open aria-label="Open shopping bag" title="Shopping bag"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg><span class="cart-count">0</span></a>
     </div>
   </div>
 </header>
-
-<div class="mobile-drawer">
-  <a href="index.html" class="mobile-brand" aria-label="Ball For Life home">
-    <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
-  </a>
-  <a href="index.html">Home</a>
-  <a href="shop.html">Shop</a>
-  <a href="shop.html">New Arrivals</a>
-  <a href="shop.html?cat=hoodies">Hoodies</a>
-  <a href="shop.html?cat=tracksuits">Tracksuits</a>
-  <a href="shop.html?cat=tees">Graphic Tees</a>
-  <a href="about-us.html">About Us</a>
+<div class="mobile-drawer" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation" aria-hidden="true" inert>
+  <div class="mobile-menu-head"><a href="index.html" class="mobile-brand"><img src="assets/ui/brand-logo-black.png" class="brand-logo" alt="Ball For Life" width="112" height="63"></a><button class="icon-btn" type="button" data-menu-close aria-label="Close menu"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+  <nav aria-label="Mobile navigation"><a href="shop.html">New Drop</a><a href="shop.html?cat=all">Shop All</a><a href="shop.html?cat=tees">Graphic Tees</a><a href="shop.html?cat=hoodies">Hoodies <small>Coming soon</small></a><a href="shop.html?cat=tracksuits">Tracksuits <small>Coming soon</small></a><a href="about-us.html">Our Story</a></nav>
+  <div class="mobile-menu-foot"><a href="login.html">My account</a><a href="contact.html">Contact us</a><select class="currency-select" data-currency-select aria-label="Menu currency"><option value="GBP">GBP</option><option value="USD">USD</option><option value="EUR">EUR</option></select></div>
 </div>
-<div class="drawer-overlay"></div>
+<div class="drawer-overlay menu-overlay"></div>
+<dialog class="search-dialog" aria-labelledby="search-title"><form action="shop.html" method="get"><div class="search-head"><h2 id="search-title">Find your next tee.</h2><button class="icon-btn" type="button" data-search-close aria-label="Close search"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div><label class="search-field"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg><input type="search" name="q" placeholder="Search players, graphics, tees..." aria-label="Search products" required><button class="icon-btn" type="submit" aria-label="Search"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></label><div class="search-popular"><a href="shop.html?q=kobe">Kobe Bryant</a><a href="shop.html?q=kyrie">Kyrie Irving</a><a href="shop.html?q=curry">Stephen Curry</a></div></form></dialog>
 
 <main>
   <section class="size-guide-hero">
@@ -206,85 +166,25 @@
   </section>
 </main>
 
-<footer>
+<footer class="site-footer">
   <div class="wrap">
     <div class="footer-top">
-
-      <div class="footer-brand">
-        <div class="logo-center">
-          <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
-        </div>
-
-        <p>Inspired by the fear of being average.</p>
-
-        <div class="footer-social">
-          <a href="https://www.instagram.com/ball_for_life_store/" aria-label="Instagram">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
-          </a>
-
-          <a href="https://www.tiktok.com/@ball_for_life_store" aria-label="TikTok">
-            <svg viewBox="0 0 24 24"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.6 3 2.3 4.6 5 5"/></svg>
-          </a>
-          <a href="https://uk.pinterest.com/ball_for_life_store/" aria-label="Pinterest">
-            <svg viewBox="0 0 24 24"><path d="M12 3.5c-4.2 0-7.2 2.9-7.2 6.8 0 2.4 1.3 4.2 3.2 4.9.3.1.5 0 .6-.3l.3-1.2c.1-.4 0-.5-.2-.8-.6-.7-.9-1.6-.9-2.6 0-2.8 2.1-5.3 5.5-5.3 3 0 4.7 1.8 4.7 4.3 0 3.2-1.4 5.9-3.5 5.9-1.2 0-2-1-1.7-2.2l.8-3.1c.2-.9 0-1.7-.9-1.7-1.1 0-2 1.1-2 2.6 0 .9.3 1.6.3 1.6l-1.3 5.3c-.3 1.2-.2 2.7-.1 3.3.1.2.3.2.4.1.2-.3 1.8-2.3 2.3-3.4l.6-2.2c.5.9 1.7 1.6 3 1.6 3.9 0 6.5-3.5 6.5-8.1 0-3.5-3-6.8-7.5-6.8Z"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <div class="footer-col">
-        <h4>Company</h4>
-        <a href="about-us.html">About Us</a>
-        <a href="contact.html">Contact</a>
-      </div>
-
-      <div class="footer-col">
-        <h4>Support</h4>
-        <a href="faq.html">FAQ</a>
-        <a href="shipping-returns.html">Shipping &amp; Returns</a>
-        <a href="size-guide.html">Size Guide</a>
-        <a href="mailto:supportballforlife@gmail.com">Email Support</a>
-        <a href="https://wa.me/447356218992" target="_blank" rel="noopener">WhatsApp Support</a>
-      </div>
-
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <a href="privacy-policy.html">Privacy Policy</a>
-        <a href="terms-conditions.html">Terms &amp; Conditions</a>
-      </div>
-
-      <div class="footer-col">
-        <h4>Shop</h4>
-        <a href="shop.html?cat=tees">Graphic Tees</a>
-        <a href="shop.html?cat=hoodies">Hoodies</a>
-        <a href="shop.html?cat=tracksuits">Tracksuits</a>
-      </div>
-
+      <div class="footer-brand"><a href="index.html" class="logo-center"><img src="assets/ui/brand-logo.png" class="brand-logo" alt="Ball For Life" width="152" height="85"></a><p>Inspired by the fear<br>of being average.</p><div class="footer-social"><a href="https://www.instagram.com/ball_for_life_store/" aria-label="Instagram" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@ball_for_life_store" aria-label="TikTok" target="_blank" rel="noopener">TikTok</a><a href="https://uk.pinterest.com/ball_for_life_store/" aria-label="Pinterest" target="_blank" rel="noopener">Pinterest</a></div></div>
+      <div class="footer-col"><h4>Shop</h4><a href="shop.html">New Arrivals</a><a href="shop.html?cat=tees">Graphic Tees</a><a href="shop.html?cat=hoodies">Hoodies</a><a href="shop.html?cat=tracksuits">Tracksuits</a></div>
+      <div class="footer-col"><h4>Ball For Life</h4><a href="about-us.html">Our Story</a><a href="contact.html">Contact Us</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms-conditions.html">Terms &amp; Conditions</a></div>
+      <div class="footer-col"><h4>Customer Care</h4><a href="shipping-returns.html">Shipping &amp; Returns</a><a href="size-guide.html">Size Guide</a><a href="faq.html">FAQs</a></div>
+      <div class="footer-col footer-contact"><h4>Let's Talk</h4><a href="mailto:supportballforlife@gmail.com">supportballforlife@gmail.com</a><a href="https://wa.me/447356218992" target="_blank" rel="noopener">WhatsApp +44 7356 218992</a><p>Questions about your order?<br>We're here to help.</p></div>
     </div>
-
-    <div class="footer-bottom">
-      <span>© 2026 Ball For Life. All rights reserved.</span>
-
-      <div class="pay-row" aria-label="Accepted payment methods">
-        <img class="pay-logo" src="visa.svg" alt="Visa">
-        <img class="pay-logo" src="mastercard-alt.svg" alt="Mastercard">
-        <img class="pay-logo" src="maestro.svg" alt="Maestro">
-        <img class="pay-logo" src="apple-pay.svg" alt="Apple Pay">
-        <img class="pay-logo" src="klarna.svg" alt="Klarna">
-        <img class="pay-logo" src="discover.svg" alt="Discover">
-      </div>
-    </div>
-
+    <div class="footer-bottom"><span>&copy; 2026 Ball For Life</span><div class="pay-row" aria-label="Accepted payment methods"><img class="pay-logo" src="visa.svg" alt="Visa"><img class="pay-logo" src="mastercard-alt.svg" alt="Mastercard"><img class="pay-logo" src="apple-pay.svg" alt="Apple Pay"><img class="pay-logo" src="klarna.svg" alt="Klarna"></div><span>Basketball culture. Everyday streetwear.</span></div>
   </div>
 </footer>
 
 <div class="cart-overlay drawer-overlay"></div>
 
-<div class="cart-drawer">
+<div class="cart-drawer" role="dialog" aria-modal="true" aria-label="Shopping bag" aria-hidden="true" inert>
   <div class="cart-head">
     <h3>Your Bag</h3>
-    <svg class="cart-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-      <path d="M4 4l16 16M20 4L4 20"/>
-    </svg>
+    <button class="cart-close icon-btn" type="button" aria-label="Close shopping bag"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
   </div>
 
   <div class="cart-items"></div>
@@ -301,6 +201,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="supabase-core.js"></script>
-<script src="script.js?v=1000sale3"></script>
+<script src="script.js?v=redesign2"></script>
+
+<script src="assets/ui/icons.js?v=redesign2"></script>
+<script src="assets/ui/catalog.js?v=redesign2"></script>
+<script src="store-ui.js?v=redesign2"></script>
 </body>
 </html>

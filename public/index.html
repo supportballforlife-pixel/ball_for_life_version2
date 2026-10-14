@@ -6,144 +6,72 @@
 <title>Ball For Life — Inspired by the Fear of Being Average</title>
 <meta name="description" content="Shop Ball For Life graphic tees and streetwear inspired by the fear of being average. Discover new drops, account rewards and secure checkout.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=1000sale3">
 
-<style id="header-thinner-update">
-/* Header height refinement */
-.nav-grid{height:74px !important;}
-.logo-center img{max-height:42px; width:auto; object-fit:contain;}
-@media (max-width:720px){
-  .nav-grid{height:70px !important;}
-  .logo-center img{max-height:38px;}
-}
-</style>
-
-
-<style id="hero-slideshow-style">
-/* Homepage hero slideshow */
-.hero, .hero-section, .home-hero {
-  background-size: cover !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-}
-</style>
-
-
-<style id="remove-legacy-23-logo">
-.hero-logo, .logo-23, .mark-23, .legacy-logo, [class*="23-logo"], [id*="23-logo"] {
-  display: none !important;
-}
-</style>
-
-
-<style id="newsletter-status-style">
-.newsletter-status,
-.signup-status{
-  min-height:18px;
-  margin-top:10px;
-  font-family:'IBM Plex Mono',monospace;
-  font-size:10px;
-  line-height:1.5;
-}
-.newsletter-status{color:rgba(255,255,255,.75);}
-.signup-status{color:#444;}
-.newsletter-status.is-error{color:#ffd4d4;}
-.signup-status.is-error{color:#a12828;}
-</style>
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
+<link rel="stylesheet" href="store-design.css?v=community4">
 </head>
 <body class="home-page">
 
-<header>
+<div class="announce"><a class="announce-message" href="shipping-returns.html">Free UK shipping on orders over &pound;65</a></div>
+<header class="site-header">
   <div class="wrap nav-grid">
     <div class="nav-left">
-      <div class="burger"><span></span><span></span><span></span></div>
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <div class="nav-item">
-          <span>Shop <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          <div class="nav-dropdown">
-            <div class="nav-dropdown-inner">
-              <a href="shop.html">New Arrivals</a>
-              <a href="shop.html?cat=hoodies">Hoodies</a>
-              <a href="shop.html?cat=tracksuits">Tracksuits</a>
-              <a href="shop.html?cat=tees">Graphic Tees</a>
-            </div>
-          </div>
-        </div>
-        <a href="about-us.html">About Us</a>
+      <button class="burger icon-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg></button>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="shop.html">New Drop</a>
+        <a href="shop.html?cat=all">Shop All</a>
+        <a href="shop.html?cat=tees">Graphic Tees</a>
+        <a href="about-us.html">Our Story</a>
       </nav>
     </div>
-
-    <a href="index.html" class="logo-center">
-      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
-    </a>
-
+    <a href="index.html" class="logo-center" aria-label="Ball For Life home"><img src="assets/ui/brand-logo-black.png" class="brand-logo" alt="Ball For Life" width="112" height="63"></a>
     <div class="nav-right">
-      <a href="login.html" class="icon-btn" aria-label="Account">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-      </a>
-      <select class="currency-select" data-currency-select aria-label="Currency">
-        <option value="GBP">GBP</option>
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-      </select>
-      <a href="checkout.html" class="cart-link" data-cart-open aria-label="Cart">
-        My Cart <span class="cart-count">0</span>
-      </a>
+      <select class="currency-select" data-currency-select aria-label="Currency"><option value="GBP">GBP</option><option value="USD">USD</option><option value="EUR">EUR</option></select>
+      <button type="button" class="icon-btn search-open" data-search-open aria-label="Search products" title="Search"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></button>
+      <a href="login.html" class="icon-btn account-link" aria-label="Account" title="Account"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
+      <a href="checkout.html" class="cart-link icon-btn" data-cart-open aria-label="Open shopping bag" title="Shopping bag"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg><span class="cart-count">0</span></a>
     </div>
   </div>
 </header>
-
-<div class="mobile-drawer">
-  <a href="index.html" class="mobile-brand" aria-label="Ball For Life home"><img src="brand-logo.png" class="brand-logo" alt="Ball For Life"></a>
-  <a href="index.html">Home</a>
-  <a href="shop.html">Shop</a>
-  <a href="shop.html">New Arrivals</a>
-  <a href="shop.html?cat=hoodies">Hoodies</a>
-  <a href="shop.html?cat=tracksuits">Tracksuits</a>
-  <a href="about-us.html">About Us</a>
+<div class="mobile-drawer" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation" aria-hidden="true" inert>
+  <div class="mobile-menu-head"><a href="index.html" class="mobile-brand"><img src="assets/ui/brand-logo-black.png" class="brand-logo" alt="Ball For Life" width="112" height="63"></a><button class="icon-btn" type="button" data-menu-close aria-label="Close menu"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+  <nav aria-label="Mobile navigation"><a href="shop.html">New Drop</a><a href="shop.html?cat=all">Shop All</a><a href="shop.html?cat=tees">Graphic Tees</a><a href="shop.html?cat=hoodies">Hoodies <small>Coming soon</small></a><a href="shop.html?cat=tracksuits">Tracksuits <small>Coming soon</small></a><a href="about-us.html">Our Story</a></nav>
+  <div class="mobile-menu-foot"><a href="login.html">My account</a><a href="contact.html">Contact us</a><select class="currency-select" data-currency-select aria-label="Menu currency"><option value="GBP">GBP</option><option value="USD">USD</option><option value="EUR">EUR</option></select></div>
 </div>
-<div class="drawer-overlay"></div>
+<div class="drawer-overlay menu-overlay"></div>
+<dialog class="search-dialog" aria-labelledby="search-title"><form action="shop.html" method="get"><div class="search-head"><h2 id="search-title">Find your next tee.</h2><button class="icon-btn" type="button" data-search-close aria-label="Close search"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div><label class="search-field"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg><input type="search" name="q" placeholder="Search players, graphics, tees..." aria-label="Search products" required><button class="icon-btn" type="submit" aria-label="Search"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></label><div class="search-popular"><a href="shop.html?q=kobe">Kobe Bryant</a><a href="shop.html?q=kyrie">Kyrie Irving</a><a href="shop.html?q=curry">Stephen Curry</a></div></form></dialog>
 
 <!-- ================= HERO ================= -->
-<section class="hero campaign-panel tone-a" id="hero">
-  <div class="grain"></div>
+<main id="main-content">
+<section class="hero" id="hero">
+  <picture><source media="(max-width:600px)" srcset="assets/ui/campaign-mobile.webp"><img class="hero-image" src="assets/ui/campaign.webp" alt="Ball For Life graphic tee worn on the street" width="1920" height="1080" fetchpriority="high"></picture>
   <div class="wrap">
-    <div class="hero-brand-lockup">
-      <img src="brand-logo.png" alt="Ball For Life">
-    </div>
-
-    <div class="hero-drop">
-      <span>New drop out now</span>
-      <a href="shop.html" class="btn btn-solid-light">Shop All</a>
+    <div class="hero-copy">
+      <h1 class="display">Ball For<br>Life.</h1>
+      <p><strong>Built for the game.</strong>Basketball culture. Everyday streetwear.</p>
+      <a href="shop.html?cat=tees" class="btn btn-solid-light">Shop The Drop <img src="assets/ui/arrow-right.svg" alt="" width="18" height="18"></a>
     </div>
   </div>
-  <div class="hero-dots">
-    
-    
-    
-  </div>
+  <span class="hero-note">Inspired by the fear of being average.</span>
 </section>
 
 <!-- ================= NEW ARRIVALS ================= -->
-<section class="section-pad reveal">
+<section class="section-pad home-arrivals">
   <div class="wrap">
     <div class="section-head">
       <div>
         <h2 class="display">New Arrivals</h2>
       </div>
-      <p>The latest pieces in rotation — engineered for the court, worn on the block.</p>
+      <a class="text-link" href="shop.html">View All <img src="assets/ui/arrow-right.svg" alt="" width="18" height="18"></a>
     </div>
 
     <div class="pgrid reveal-stagger">
 
       <a href="product.html?id=goat-kobe-x-jordan-snow-washed-oversized-cotton-t-shirt" class="pcard">
         <div class="img">
-          <img src="graphic tee/GOAT-Kobe-x-Jordan-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="GOAT Kobe x Jordan Snow Washed Oversized Cotton T-Shirt">
-          <div class="quick" data-quick-add data-name="GOAT Kobe x Jordan Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="GKJ">Quick Add</div>
+          <img loading="lazy" decoding="async" src="assets/product-cards/goat-kobe-x-jordan-snow-washed-oversized-cotton-t-shirt-front.webp" alt="GOAT Kobe x Jordan Snow Washed Oversized Cotton T-Shirt"><img class="card-back" src="assets/product-cards/goat-kobe-x-jordan-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async">
+          <button type="button" class="quick" data-quick-add data-name="GOAT Kobe x Jordan Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="GKJ">Quick Add</button>
         </div>
         <div class="meta-row">
           <div><div class="p-name">GOAT Kobe x Jordan Tee</div><div class="p-tag">Graphic Tees</div></div>
@@ -153,8 +81,8 @@
 
       <a href="product.html?id=lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt" class="pcard">
         <div class="img">
-          <img src="graphic tee/LaMelo-Ball-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="LaMelo Ball Variant 2 Snow Washed Oversized Cotton T-Shirt">
-          <div class="quick" data-quick-add data-name="LaMelo Ball Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="LM2">Quick Add</div>
+          <img loading="lazy" decoding="async" src="assets/product-cards/lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="LaMelo Ball Variant 2 Snow Washed Oversized Cotton T-Shirt"><img class="card-back" src="assets/product-cards/lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async">
+          <button type="button" class="quick" data-quick-add data-name="LaMelo Ball Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="LM2">Quick Add</button>
         </div>
         <div class="meta-row">
           <div><div class="p-name">LaMelo Ball Tee 2</div><div class="p-tag">Graphic Tees</div></div>
@@ -164,8 +92,8 @@
 
       <a href="product.html?id=confidence-snow-washed-oversized-cotton-t-shirt" class="pcard">
         <div class="img">
-          <img src="graphic tee/Confidence-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Confidence Snow Washed Oversized Cotton T-Shirt">
-          <div class="quick" data-quick-add data-name="Confidence Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="CONF">Quick Add</div>
+          <img loading="lazy" decoding="async" src="assets/product-cards/confidence-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Confidence Snow Washed Oversized Cotton T-Shirt"><img class="card-back" src="assets/product-cards/confidence-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async">
+          <button type="button" class="quick" data-quick-add data-name="Confidence Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="CONF">Quick Add</button>
         </div>
         <div class="meta-row">
           <div><div class="p-name">Confidence Tee</div><div class="p-tag">Graphic Tees</div></div>
@@ -175,8 +103,8 @@
 
       <a href="product.html?id=sharife-cooper-variant-4-snow-washed-oversized-cotton-t-shirt" class="pcard">
         <div class="img">
-          <img src="graphic tee/Sharife-Cooper-Variant-4-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Sharife Cooper Variant 4 Snow Washed Oversized Cotton T-Shirt">
-          <div class="quick" data-quick-add data-name="Sharife Cooper Variant 4 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SCO4">Quick Add</div>
+          <img loading="lazy" decoding="async" src="assets/product-cards/sharife-cooper-variant-4-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Sharife Cooper Variant 4 Snow Washed Oversized Cotton T-Shirt"><img class="card-back" src="assets/product-cards/sharife-cooper-variant-4-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async">
+          <button type="button" class="quick" data-quick-add data-name="Sharife Cooper Variant 4 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SCO4">Quick Add</button>
         </div>
         <div class="meta-row">
           <div><div class="p-name">Sharife Cooper Tee 4</div><div class="p-tag">Graphic Tees</div></div>
@@ -186,8 +114,8 @@
 
       <a href="product.html?id=la-snow-washed-oversized-cotton-t-shirt" class="pcard">
         <div class="img">
-          <img src="graphic tee/LA-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="LA Snow Washed Oversized Cotton T-Shirt">
-          <div class="quick" data-quick-add data-name="LA Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="LA">Quick Add</div>
+          <img loading="lazy" decoding="async" src="assets/product-cards/la-snow-washed-oversized-cotton-t-shirt-front.webp" alt="LA Snow Washed Oversized Cotton T-Shirt"><img class="card-back" src="assets/product-cards/la-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async">
+          <button type="button" class="quick" data-quick-add data-name="LA Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="LA">Quick Add</button>
         </div>
         <div class="meta-row">
           <div><div class="p-name">LA Tee</div><div class="p-tag">Graphic Tees</div></div>
@@ -197,8 +125,8 @@
 
       <a href="product.html?id=mask-on-snow-washed-oversized-cotton-t-shirt" class="pcard">
         <div class="img">
-          <img src="graphic tee/Mask-On-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Mask On Snow Washed Oversized Cotton T-Shirt">
-          <div class="quick" data-quick-add data-name="Mask On Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="MO">Quick Add</div>
+          <img loading="lazy" decoding="async" src="assets/product-cards/mask-on-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Mask On Snow Washed Oversized Cotton T-Shirt"><img class="card-back" src="assets/product-cards/mask-on-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async">
+          <button type="button" class="quick" data-quick-add data-name="Mask On Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="MO">Quick Add</button>
         </div>
         <div class="meta-row">
           <div><div class="p-name">Mask On Tee</div><div class="p-tag">Graphic Tees</div></div>
@@ -208,8 +136,8 @@
 
       <a href="product.html?id=kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt" class="pcard">
         <div class="img">
-          <img src="graphic tee/Kobe-Bryant-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Kobe Bryant Variant 2 Snow Washed Oversized Cotton T-Shirt">
-          <div class="quick" data-quick-add data-name="Kobe Bryant Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KB2">Quick Add</div>
+          <img loading="lazy" decoding="async" src="assets/product-cards/kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Kobe Bryant Variant 2 Snow Washed Oversized Cotton T-Shirt"><img class="card-back" src="assets/product-cards/kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async">
+          <button type="button" class="quick" data-quick-add data-name="Kobe Bryant Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KB2">Quick Add</button>
         </div>
         <div class="meta-row">
           <div><div class="p-name">Kobe Bryant Tee 2</div><div class="p-tag">Graphic Tees</div></div>
@@ -219,8 +147,8 @@
 
       <a href="product.html?id=travis-scott-snow-washed-oversized-cotton-t-shirt" class="pcard">
         <div class="img">
-          <img src="graphic tee/Travis-Scott-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Travis Scott Snow Washed Oversized Cotton T-Shirt">
-          <div class="quick" data-quick-add data-name="Travis Scott Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="TS">Quick Add</div>
+          <img loading="lazy" decoding="async" src="assets/product-cards/travis-scott-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Travis Scott Snow Washed Oversized Cotton T-Shirt"><img class="card-back" src="assets/product-cards/travis-scott-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async">
+          <button type="button" class="quick" data-quick-add data-name="Travis Scott Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="TS">Quick Add</button>
         </div>
         <div class="meta-row">
           <div><div class="p-name">Travis Scott Tee</div><div class="p-tag">Graphic Tees</div></div>
@@ -230,70 +158,78 @@
 
     </div>
 
-    <div class="center-text mt-lg">
-      <a href="shop.html" class="btn btn-outline-dark btn-arrow">View All New Arrivals <span class="a">→</span></a>
+  </div>
+</section>
+
+<!-- ================= BRAND STORY ================= -->
+<section class="brand-story-section">
+  <img class="brand-story-image" src="hero-basketball-court.jpg" alt="Ball For Life worn by hoopers off the court" loading="lazy" width="1600" height="900">
+  <div class="wrap">
+    <div class="brand-story-copy">
+      <h2 class="display">More Than<br>Basketball.</h2>
+      <p>Inspired by the fear of being average.</p>
     </div>
+    <a href="about-us.html" class="text-link">Our Story <img src="assets/ui/arrow-right.svg" alt="" width="18" height="18" style="filter:invert(1)"></a>
   </div>
 </section>
 
 <!-- ================= BORN FOR REAL ================= -->
-<section class="community-section born-real-section" aria-label="Customer and creator reviews">
+<section class="community-section" id="community" aria-labelledby="community-title">
   <div class="wrap community-layout">
-    <div class="section-head community-editorial reveal">
-      <div>
-        <div class="eyebrow">Seen On Court</div>
-        <h2 class="display">There's A Reason They Rep Us</h2>
-      </div>
+    <div class="community-heading">
+      <h2 class="display" id="community-title">There's a reason<br>they rep us.</h2>
       <p>From everyday hoopers and pro-level players to your favourite basketball content creators. One brand - Ball For Life.</p>
     </div>
-
-    <div class="community-carousel reveal" data-community-carousel data-community-static>
-      <div class="community-track" data-community-track>
-        <article class="community-card" tabindex="0" data-community-card>
+    <div class="review-navigation" data-review-navigation hidden>
+      <span class="review-position" data-review-position aria-live="polite" aria-atomic="true">1 / 3</span>
+      <div class="review-navigation-actions">
+        <button class="review-auto" type="button" data-review-auto aria-label="Pause automatic reviews" aria-pressed="false"><img src="assets/ui/pause.svg" alt=""></button>
+        <button type="button" data-review-prev aria-label="Previous review" aria-controls="review-track"><img src="assets/ui/arrow-left.svg" alt=""></button>
+        <button type="button" data-review-next aria-label="Next review" aria-controls="review-track"><img src="assets/ui/arrow-right.svg" alt=""></button>
+      </div>
+    </div>
+    <div class="community-carousel" data-review-carousel tabindex="0" role="region" aria-roledescription="carousel" aria-label="Customer reviews">
+      <div class="community-track" id="review-track">
+        <article class="community-card" aria-labelledby="review-rst-name">
           <div class="community-media">
-            <video src="assets/community/rst-reefe-showtime-review-web.mp4" aria-label="RST wearing the Ball For Life Graphic Tee" muted loop autoplay playsinline preload="metadata"></video>
-            <span class="community-play community-stars" aria-hidden="true">★★★★★</span>
+            <video data-src="assets/community/rst-reefe-showtime-review-web.mp4" poster="assets/ui/rst-poster.jpg" aria-label="RST wearing the Ball For Life Graphic Tee" muted loop playsinline preload="none"></video>
           </div>
           <div class="community-copy">
-            <div class="community-meta">
-              <span>RST &middot; Essex</span>
-              <a href="https://www.tiktok.com/@reefe.showtime" target="_blank" rel="noopener" aria-label="RST on TikTok @reefe.showtime">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.6 3 2.3 4.6 5 5"/></svg>
-                @reefe.showtime
-              </a>
-            </div>
-            <strong>Ball For Life Graphic Tee</strong>
-            <p>Creator from Essex with 16.3K followers and over 1.8M likes on TikTok, repping Ball For Life.</p>
-            <a href="product.html?id=ball-for-life-graphic-tee">Buy this tee</a>
+            <div class="review-person"><h3 id="review-rst-name">RST</h3><span>Essex</span></div>
+            <a class="review-social" href="https://www.tiktok.com/@reefe.showtime" target="_blank" rel="noopener" aria-label="Visit RST on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.6 3 2.3 4.6 5 5"/></svg>@reefe.showtime</a>
+            <div class="review-stars" role="img" aria-label="Five stars"><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""></div>
+            <p class="review-feedback">Repping Ball For Life on court.</p>
+            <p class="review-creator-stats">16.3K followers &middot; 1.8M+ likes on TikTok</p>
           </div>
+          <a class="review-product" href="product.html?id=ball-for-life-graphic-tee"><img class="review-product-image" src="assets/product-cards/ball-for-life-graphic-tee-front.webp" alt="Ball For Life Graphic Tee" loading="lazy" width="56" height="70"><span><small>Shop the tee</small><strong>Ball For Life Graphic Tee</strong></span><img class="review-product-arrow" src="assets/ui/arrow-right.svg" alt=""></a>
         </article>
-        <article class="community-card" tabindex="0" data-community-card>
+        <article class="community-card" aria-labelledby="review-tjay-name">
           <div class="community-media">
-            <div class="community-photo-slider" aria-label="T-jay from Reading wearing Ball For Life on court">
-              <img src="assets/community/tjay-reading-fit.jpeg" alt="T-jay from Reading wearing a Ball For Life tee on court" loading="lazy">
-              <img src="assets/community/tjay-reading-sleeve.jpeg" alt="Close up of the Ball For Life sleeve logo on T-jay's tee" loading="lazy">
-              <img src="assets/community/tjay-reading-graphic.jpeg" alt="Close up of the basketball graphic print on T-jay's tee" loading="lazy">
+            <div class="community-photo-slider" aria-label="T-jay's three customer photos">
+              <img src="assets/community/tjay-reading-fit.jpeg" alt="T-jay wearing the Stephen Curry Variant 2 Tee on court" loading="lazy" width="828" height="1106">
+              <img src="assets/community/tjay-reading-sleeve.jpeg" alt="T-jay's Ball For Life sleeve logo close-up" loading="lazy" width="828" height="1106">
+              <img src="assets/community/tjay-reading-graphic.jpeg" alt="The Stephen Curry graphic on T-jay's tee" loading="lazy" width="828" height="1106">
             </div>
-            <span class="community-play community-stars" aria-hidden="true">★★★★★</span>
           </div>
           <div class="community-copy">
-            <span>@tjayhoops1 &middot; Reading</span>
-            <strong>Stephen Curry Variant 2 Tee</strong>
-            <p>"It's a great fit and the design is extremely unique, making it stand out while bringing basketball spirit to the court."</p>
-            <a href="product.html?id=stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt">Shop this tee</a>
+            <div class="review-person"><h3 id="review-tjay-name">T-jay</h3><span>Reading</span></div>
+            <span class="review-social">@tjayhoops1</span>
+            <div class="review-stars" role="img" aria-label="Five stars"><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""></div>
+            <blockquote class="review-feedback">&ldquo;It's a great fit and the design is extremely unique, making it stand out while bringing basketball spirit to the court.&rdquo;</blockquote>
           </div>
+          <a class="review-product" href="product.html?id=stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt"><img class="review-product-image" src="assets/product-cards/stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Stephen Curry Variant 2 Tee" loading="lazy" width="56" height="70"><span><small>Shop the tee</small><strong>Stephen Curry Variant 2 Tee</strong></span><img class="review-product-arrow" src="assets/ui/arrow-right.svg" alt=""></a>
         </article>
-        <article class="community-card" tabindex="0" data-community-card>
+        <article class="community-card" aria-labelledby="review-kaden-name">
           <div class="community-media">
-            <video src="kaden-review.mp4" aria-label="Customer wearing Dennis Rodman Fck What They Think tee" muted loop autoplay playsinline preload="metadata"></video>
-            <span class="community-play community-stars" aria-hidden="true">★★★★★</span>
+            <video data-src="kaden-review.mp4" poster="assets/ui/kaden-poster.jpg" aria-label="KadenBruney wearing the Rodman Fck What They Think Tee" muted loop playsinline preload="none"></video>
           </div>
           <div class="community-copy">
-            <span>@kadenbruney &middot; Preston</span>
-            <strong>Rodman Fck What They Think Tee</strong>
-            <p>"very nice tee shirt, great materials and design. Felt really nice, it doesnt stick to me from the sweat aswell."</p>
-            <a href="product.html?id=dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt">Shop this tee</a>
+            <div class="review-person"><h3 id="review-kaden-name">KadenBruney</h3><span>Preston</span></div>
+            <span class="review-social">@kadenbruney</span>
+            <div class="review-stars" role="img" aria-label="Five stars"><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""><img src="assets/ui/star.svg" alt=""></div>
+            <blockquote class="review-feedback">&ldquo;very nice tee shirt, great materials and design. Felt really nice, it doesnt stick to me from the sweat aswell.&rdquo;</blockquote>
           </div>
+          <a class="review-product" href="product.html?id=dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt"><img class="review-product-image" src="assets/product-cards/dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Rodman Fck What They Think Tee" loading="lazy" width="56" height="70"><span><small>Shop the tee</small><strong>Rodman Fck What They Think Tee</strong></span><img class="review-product-arrow" src="assets/ui/arrow-right.svg" alt=""></a>
         </article>
       </div>
     </div>
@@ -305,15 +241,14 @@
   <div class="wrap">
     <div class="section-head">
       <div>
-        <div class="eyebrow">The Lineup</div>
         <h2 class="display">Shop by Category</h2>
       </div>
       <p>Graphic tees are live now. More Ball For Life pieces are loading up next.</p>
     </div>
 
     <div class="cat-grid">
-      <a href="shop.html?cat=tees" class="cat-card" style="min-height:520px;">
-        <div class="img-zoom" style="position:absolute; inset:0; background:url('hero-2.jpg') center center / cover no-repeat;">
+      <a href="shop.html?cat=tees" class="cat-card">
+        <div class="img-zoom" style="background-image:url('assets/ui/campaign.webp');">
         </div>
         <div class="cat-inner">
           <h3 class="display">Graphic Tees</h3>
@@ -322,28 +257,28 @@
       </a>
 
       <div class="cat-col">
-        <div class="cat-card coming-soon-card" style="min-height:248px;" aria-label="Tracksuits coming soon">
+        <a href="shop.html?cat=tracksuits" class="cat-card coming-soon-card" aria-label="Tracksuits coming soon">
           <div class="img-zoom coming-soon-bg" style="position:absolute; inset:0;">
           </div>
-          <img class="coming-soon-watermark" src="brand-logo.png" alt="">
+          <img class="coming-soon-watermark" src="assets/ui/brand-logo.png" alt="">
           <div class="cat-inner">
             <div>
               <span class="coming-soon-label">Coming Soon</span>
               <h3 class="display">Tracksuits</h3>
             </div>
           </div>
-        </div>
-        <div class="cat-card coming-soon-card" style="min-height:248px;" aria-label="Hoodies coming soon">
+        </a>
+        <a href="shop.html?cat=hoodies" class="cat-card coming-soon-card" aria-label="Hoodies coming soon">
           <div class="img-zoom coming-soon-bg" style="position:absolute; inset:0;">
           </div>
-          <img class="coming-soon-watermark" src="brand-logo.png" alt="">
+          <img class="coming-soon-watermark" src="assets/ui/brand-logo.png" alt="">
           <div class="cat-inner">
             <div>
               <span class="coming-soon-label">Coming Soon</span>
               <h3 class="display">Hoodies</h3>
             </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </div>
@@ -352,77 +287,39 @@
 <!-- ================= NEWSLETTER ================= -->
 <section class="newsletter-sec reveal">
   <div class="wrap">
-    <div class="eyebrow" style="color:rgba(255,255,255,0.55); font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:16px;">Stay in Rotation</div>
-    <h2 class="display">Join the Movement</h2>
-    <p>Be the first to know about new drops, exclusive releases, and everything Ball For Life.</p>
+    <div><h2 class="display">Join the Movement.</h2>
+    <p>Get first access to new drops and exclusive updates.</p></div>
+    <div>
     <form class="newsletter-form" data-newsletter-form>
       <input type="email" name="email" placeholder="your@email.com" aria-label="Email address" required>
       <button type="submit">Subscribe</button>
     </form>
     <p class="newsletter-status" data-newsletter-status aria-live="polite"></p>
+    </div>
   </div>
 </section>
+</main>
 
 <!-- ================= FOOTER ================= -->
-<footer>
+<footer class="site-footer">
   <div class="wrap">
     <div class="footer-top">
-      <div class="footer-brand">
-        <div class="logo-center">
-      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+      <div class="footer-brand"><a href="index.html" class="logo-center"><img src="assets/ui/brand-logo.png" class="brand-logo" alt="Ball For Life" width="152" height="85"></a><p>Inspired by the fear<br>of being average.</p><div class="footer-social"><a href="https://www.instagram.com/ball_for_life_store/" aria-label="Instagram" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@ball_for_life_store" aria-label="TikTok" target="_blank" rel="noopener">TikTok</a><a href="https://uk.pinterest.com/ball_for_life_store/" aria-label="Pinterest" target="_blank" rel="noopener">Pinterest</a></div></div>
+      <div class="footer-col"><h4>Shop</h4><a href="shop.html">New Arrivals</a><a href="shop.html?cat=tees">Graphic Tees</a><a href="shop.html?cat=hoodies">Hoodies</a><a href="shop.html?cat=tracksuits">Tracksuits</a></div>
+      <div class="footer-col"><h4>Ball For Life</h4><a href="about-us.html">Our Story</a><a href="contact.html">Contact Us</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms-conditions.html">Terms &amp; Conditions</a></div>
+      <div class="footer-col"><h4>Customer Care</h4><a href="shipping-returns.html">Shipping &amp; Returns</a><a href="size-guide.html">Size Guide</a><a href="faq.html">FAQs</a></div>
+      <div class="footer-col footer-contact"><h4>Let's Talk</h4><a href="mailto:supportballforlife@gmail.com">supportballforlife@gmail.com</a><a href="https://wa.me/447356218992" target="_blank" rel="noopener">WhatsApp +44 7356 218992</a><p>Questions about your order?<br>We're here to help.</p></div>
     </div>
-        <p>Inspired by the fear of being average.</p>
-        <div class="footer-social">
-          <a href="https://www.instagram.com/ball_for_life_store/" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg></a>
-          <a href="https://www.tiktok.com/@ball_for_life_store" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.6 3 2.3 4.6 5 5"/></svg></a>
-          <a href="https://uk.pinterest.com/ball_for_life_store/" aria-label="Pinterest"><svg viewBox="0 0 24 24"><path d="M12 3.5c-4.2 0-7.2 2.9-7.2 6.8 0 2.4 1.3 4.2 3.2 4.9.3.1.5 0 .6-.3l.3-1.2c.1-.4 0-.5-.2-.8-.6-.7-.9-1.6-.9-2.6 0-2.8 2.1-5.3 5.5-5.3 3 0 4.7 1.8 4.7 4.3 0 3.2-1.4 5.9-3.5 5.9-1.2 0-2-1-1.7-2.2l.8-3.1c.2-.9 0-1.7-.9-1.7-1.1 0-2 1.1-2 2.6 0 .9.3 1.6.3 1.6l-1.3 5.3c-.3 1.2-.2 2.7-.1 3.3.1.2.3.2.4.1.2-.3 1.8-2.3 2.3-3.4l.6-2.2c.5.9 1.7 1.6 3 1.6 3.9 0 6.5-3.5 6.5-8.1 0-3.5-3-6.8-7.5-6.8Z"/></svg></a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <a href="about-us.html">About Us</a>
-        <a href="contact.html">Contact</a>
-      </div>
-      <div class="footer-col">
-        <h4>Support</h4>
-        <a href="faq.html">FAQ</a>
-        <a href="shipping-returns.html">Shipping &amp; Returns</a>
-        <a href="size-guide.html">Size Guide</a>
-        <a href="mailto:supportballforlife@gmail.com">Email Support</a>
-        <a href="https://wa.me/447356218992" target="_blank" rel="noopener">WhatsApp Support</a>
-      </div>
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <a href="privacy-policy.html">Privacy Policy</a>
-        <a href="terms-conditions.html">Terms & Conditions</a>
-      </div>
-      <div class="footer-col">
-        <h4>Shop</h4>
-        <a href="shop.html?cat=tees">Graphic Tees</a>
-        <a href="shop.html?cat=hoodies">Hoodies</a>
-        <a href="shop.html?cat=tracksuits">Tracksuits</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Ball For Life. All rights reserved.</span>
-      <div class="pay-row" aria-label="Accepted payment methods">
-        <img class="pay-logo" src="visa.svg" alt="Visa">
-        <img class="pay-logo" src="mastercard-alt.svg" alt="Mastercard">
-        <img class="pay-logo" src="maestro.svg" alt="Maestro">
-        <img class="pay-logo" src="apple-pay.svg" alt="Apple Pay">
-        <img class="pay-logo" src="klarna.svg" alt="Klarna">
-        <img class="pay-logo" src="discover.svg" alt="Discover">
-      </div>
-    </div>
+    <div class="footer-bottom"><span>&copy; 2026 Ball For Life</span><div class="pay-row" aria-label="Accepted payment methods"><img class="pay-logo" src="visa.svg" alt="Visa"><img class="pay-logo" src="mastercard-alt.svg" alt="Mastercard"><img class="pay-logo" src="apple-pay.svg" alt="Apple Pay"><img class="pay-logo" src="klarna.svg" alt="Klarna"></div><span>Basketball culture. Everyday streetwear.</span></div>
   </div>
 </footer>
 
 <!-- ================= CART DRAWER ================= -->
 <div class="cart-overlay drawer-overlay"></div>
-<div class="cart-drawer">
+<div class="cart-drawer" role="dialog" aria-modal="true" aria-label="Shopping bag" aria-hidden="true" inert>
   <div class="cart-head">
     <h3>Your Bag</h3>
-    <svg class="cart-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l16 16M20 4L4 20"/></svg>
+    <button class="cart-close icon-btn" type="button" aria-label="Close shopping bag"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
   </div>
   <div class="cart-items"></div>
   <div class="cart-foot">
@@ -442,7 +339,7 @@
       <button class="signup-modal-close" type="button" data-signup-close aria-label="Close signup popup">
         <span></span><span></span>
       </button>
-      <img class="signup-modal-logo" src="brand-logo.png" alt="Ball For Life">
+      <img class="signup-modal-logo" src="assets/ui/brand-logo.png" alt="Ball For Life">
       <h2 id="signup-modal-title">Subscribe for the latest Ball For Life drops</h2>
       <form class="signup-modal-form" data-signup-form>
         <input type="email" name="email" placeholder="Join our mailing list" aria-label="Email address" required>
@@ -457,6 +354,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="supabase-core.js"></script>
-<script src="script.js?v=1000sale3"></script>
+<script src="script.js?v=redesign2"></script>
+
+<script src="assets/ui/icons.js?v=redesign2"></script>
+<script src="assets/ui/catalog.js?v=redesign2"></script>
+<script src="store-ui.js?v=community4"></script>
+<script src="community.js?v=community4"></script>
 </body>
 </html>

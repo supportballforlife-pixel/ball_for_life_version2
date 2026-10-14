@@ -1,0 +1,222 @@
+{
+  "graphic tee/GOAT-Kobe-x-Jordan-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "goat-kobe-x-jordan-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/goat-kobe-x-jordan-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/goat-kobe-x-jordan-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Confidence-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "confidence-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/confidence-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/confidence-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/LaMelo-Ball-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Sharife-Cooper-Variant-4-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "sharife-cooper-variant-4-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/sharife-cooper-variant-4-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/sharife-cooper-variant-4-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Travis-Scott-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "travis-scott-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/travis-scott-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/travis-scott-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/GOAT-x-GOD-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "goat-x-god-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/goat-x-god-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/goat-x-god-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/I-See-God-Everywhere-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "i-see-god-everywhere-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/i-see-god-everywhere-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/i-see-god-everywhere-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Ball-For-Life-Graphic-Tee/black/front.png": {
+    "id": "ball-for-life-graphic-tee",
+    "front": "assets/product-cards/ball-for-life-graphic-tee-front.webp",
+    "back": "assets/product-cards/ball-for-life-graphic-tee-back.webp"
+  },
+  "graphic tee/LeBron-James-Oversized-Snowly-Washed-Graphic-Tee/black/front.png": {
+    "id": "lebron-james-oversized-snowly-washed-graphic-tee",
+    "front": "assets/product-cards/lebron-james-oversized-snowly-washed-graphic-tee-front.webp",
+    "back": "assets/product-cards/lebron-james-oversized-snowly-washed-graphic-tee-back.webp"
+  },
+  "graphic tee/LaMelo-Ball-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "lamelo-ball-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/lamelo-ball-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/lamelo-ball-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Kyrie-Irving-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "kyrie-irving-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/kyrie-irving-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/kyrie-irving-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Tyrese-Maxey-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "tyrese-maxey-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/tyrese-maxey-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/tyrese-maxey-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Kobe-Bryant-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "kobe-bryant-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/kobe-bryant-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/kobe-bryant-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Kobe-Bryant-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Mask-On-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "mask-on-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/mask-on-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/mask-on-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/LA-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "la-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/la-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/la-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Allen-Iverson-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "allen-iverson-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/allen-iverson-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/allen-iverson-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Allen-Iverson-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "allen-iverson-variant-2-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/allen-iverson-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/allen-iverson-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Dennis-Rodman-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "dennis-rodman-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/dennis-rodman-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/dennis-rodman-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Dennis-Rodman-Fck-What-They-Think-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Prove-Them-Wrong-Snow-Washed-Oversized-Cotton-T-Shirt/water-blue/front.png": {
+    "id": "prove-them-wrong-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/prove-them-wrong-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/prove-them-wrong-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/No-Wasted-Potential-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "no-wasted-potential-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/no-wasted-potential-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/no-wasted-potential-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Russell-Westbrook-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "russell-westbrook-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/russell-westbrook-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/russell-westbrook-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Russell-Westbrook-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "russell-westbrook-variant-2-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/russell-westbrook-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/russell-westbrook-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Ja-Morant-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "ja-morant-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/ja-morant-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/ja-morant-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/SGA-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "sga-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/sga-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/sga-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/J-Dub-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "j-dub-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/j-dub-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/j-dub-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Anthony-Edwards-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "anthony-edwards-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/anthony-edwards-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/anthony-edwards-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Austin-Reaves-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "austin-reaves-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/austin-reaves-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/austin-reaves-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Jalen-Brunson-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "jalen-brunson-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/jalen-brunson-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/jalen-brunson-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Face-Of-The-League-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "face-of-the-league-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/face-of-the-league-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/face-of-the-league-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Derrick-Rose-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "derrick-rose-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/derrick-rose-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/derrick-rose-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Jared-McCain-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "jared-mccain-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/jared-mccain-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/jared-mccain-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Jared-McCain-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Jared-McCain-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Stephen-Curry-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "stephen-curry-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/stephen-curry-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/stephen-curry-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Stephen-Curry-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Kyrie-Irving-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "kyrie-irving-variant-2-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/kyrie-irving-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/kyrie-irving-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Kyrie-Irving-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "kyrie-irving-variant-3-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/kyrie-irving-variant-3-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/kyrie-irving-variant-3-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Kyrie-Irving-Variant-4-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "kyrie-irving-variant-4-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/kyrie-irving-variant-4-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/kyrie-irving-variant-4-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Kyrie-Irving-Variant-5-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Sharife-Cooper-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "sharife-cooper-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/sharife-cooper-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/sharife-cooper-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Sharife-Cooper-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "sharife-cooper-variant-2-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/sharife-cooper-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/sharife-cooper-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp"
+  },
+  "graphic tee/Sharife-Cooper-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png": {
+    "id": "sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt",
+    "front": "assets/product-cards/sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt-front.webp",
+    "back": "assets/product-cards/sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt-back.webp"
+  }
+}

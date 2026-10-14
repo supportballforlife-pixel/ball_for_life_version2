@@ -311,16 +311,17 @@
     const state = {
       color: item.colors[0],
       side: 'front',
-      size: 'M',
+      size: null,
       qty: 1,
     };
 
     document.title = `${item.name} - Ball For Life`;
     app.innerHTML = `
+      <div class="product-breadcrumb wrap breadcrumb"><a href="index.html">Home</a> / <a href="shop.html?cat=tees">Graphic Tees</a> / ${escapeHtml(item.name.replace(/ Snow Washed Oversized Cotton T-Shirt| Oversized Snowly Washed Graphic Tee/g, ' Tee'))}</div>
       <section class="product-hero">
         <aside class="product-info-panel">
           <div class="product-kicker">${item.category}</div>
-          <h1>${escapeHtml(item.name)}</h1>
+          <h1>${escapeHtml(item.name.replace(/ Snow Washed Oversized Cotton T-Shirt| Oversized Snowly Washed Graphic Tee/g, ' Tee'))}</h1>
           <div class="product-price" data-product-price>${priceMarkup(item)}</div>
           <div class="product-fabric-line">Heavyweight 250 GSM &bull; 100% cotton</div>
           <div class="product-accordion">
@@ -369,7 +370,7 @@
             </details>
             <details>
               <summary>Shipping Info</summary>
-              <p>Free shipping on orders over <span data-money-gbp="65">${money(65)}</span>. Standard delivery and return options are available at checkout.</p>
+              <p>Free UK shipping on orders over <span data-money-gbp="65">${money(65)}</span> after discount. International delivery is calculated at checkout. <a href="shipping-returns.html">Delivery information</a></p>
             </details>
             <details>
               <summary>Returns & Exchange</summary>
@@ -379,9 +380,9 @@
         </aside>
 
         <section class="product-media-panel">
-          <button class="product-side-nav product-side-prev" type="button" aria-label="Previous image">&lt;</button>
+          <button class="product-side-nav product-side-prev" type="button" aria-label="Previous image"><img src="assets/ui/chevron-left.svg" alt="" width="20" height="20"></button>
           <img class="product-main-image" alt="${escapeHtml(item.name)}">
-          <button class="product-side-nav product-side-next" type="button" aria-label="Next image">&gt;</button>
+          <button class="product-side-nav product-side-next" type="button" aria-label="Next image"><img src="assets/ui/chevron-right.svg" alt="" width="20" height="20"></button>
           <div class="product-side-label">Front</div>
         </section>
 
@@ -405,25 +406,27 @@
 
           <div class="product-option-head product-size-head">
             <span>Size</span>
+            <button type="button" class="size-guide-link" data-size-guide-link>Size Guide</button>
           </div>
           <div class="product-sizes">
             ${SIZES.map((size) => `<button class="product-size ${size === state.size ? 'active' : ''}" type="button" data-size="${size}">${size}</button>`).join('')}
           </div>
 
           <div class="product-qty">
-            <button class="product-qty-minus" type="button" aria-label="Decrease quantity">-</button>
+            <button class="product-qty-minus" type="button" aria-label="Decrease quantity"><img src="assets/ui/minus.svg" alt="" width="14" height="14"></button>
             <span class="product-qty-value">1</span>
-            <button class="product-qty-plus" type="button" aria-label="Increase quantity">+</button>
+            <button class="product-qty-plus" type="button" aria-label="Increase quantity"><img src="assets/ui/plus.svg" alt="" width="14" height="14"></button>
           </div>
 
-          <button class="product-add" type="button" data-product-add>Add to Cart - ${money(item.price)}</button>
+          <button class="product-add" type="button" data-product-add>Select a size</button>
+          <p class="product-selection-message" role="status" data-selection-message></p>
           <div class="product-delivery-note">
             <span>Estimated delivery <strong data-delivery-estimate>5-9 days</strong></span>
             <span>14-day returns</span>
             <span class="product-delivery-countdown" data-delivery-countdown>Order today to keep this estimate</span>
           </div>
           <div class="product-fabric-proof">
-            <img src="fabric-close-up.png" alt="Close-up of heavyweight cotton fabric">
+            <img src="assets/ui/fabric.webp" alt="Close-up of heavyweight cotton fabric" loading="lazy">
             <div>
               <strong>Heavyweight 250 GSM &bull; 100% cotton</strong>
               <span>Dense snow-washed cotton with a structured oversized fit.</span>
@@ -439,22 +442,74 @@
 
         <div class="product-mobile-buy" data-product-mobile-buy>
           <div>
-            <span data-mobile-buy-size>${state.size} / ${titleFromColor(state.color)}</span>
+            <span data-mobile-buy-size>Select a size / ${titleFromColor(state.color)}</span>
             <strong data-mobile-buy-price>${money(item.price)}</strong>
           </div>
-          <button type="button" data-product-mobile-add>Add to Cart</button>
+          <button type="button" data-product-mobile-add>Select a size</button>
         </div>
       </section>
     `;
 
+    const hero = app.querySelector('.product-hero');
+    const info = app.querySelector('.product-info-panel');
+    const buy = app.querySelector('.product-buy-panel');
+    const accordion = app.querySelector('.product-accordion');
+    const purchase = document.createElement('div');
+    purchase.className = 'product-purchase';
+    const gallery = document.createElement('div');
+    gallery.className = 'product-gallery';
+    gallery.appendChild(app.querySelector('.product-media-panel'));
+    gallery.insertAdjacentHTML('beforeend', `<div class="product-thumbs">${['front', 'back'].map(side => `<button type="button" class="product-thumb" data-product-side="${side}" aria-label="View ${side}"><img alt="${side} view" loading="lazy"></button>`).join('')}</div>`);
+    hero.prepend(gallery);
+    purchase.append(info, buy, accordion);
+    hero.append(purchase);
+    const browse = document.createElement('details');
+    browse.className = 'product-browse';
+    browse.innerHTML = '<summary>Browse other tees</summary>';
+    browse.append(app.querySelector('.product-picker-label'), app.querySelector('.product-picker'));
+    purchase.append(browse);
+    const sizeGuide = [...accordion.querySelectorAll('details')].find(detail => detail.querySelector('summary').textContent === 'Size Guide');
+    sizeGuide.querySelector('p').textContent = 'Measurements in centimetres. 1-3 cm sizing differences may occur.';
+    app.querySelector('[data-size-guide-link]').addEventListener('click', () => {
+      sizeGuide.open = true;
+      sizeGuide.scrollIntoView({ block: 'center', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+      sizeGuide.querySelector('summary').focus();
+    });
     const image = app.querySelector('.product-main-image');
+    const zoomButton = document.createElement('button');
+    zoomButton.className = 'product-zoom-trigger icon-btn';
+    zoomButton.type = 'button';
+    zoomButton.setAttribute('aria-label', 'Zoom product image');
+    zoomButton.innerHTML = '<img src="assets/ui/zoom-in.svg" alt="" width="20" height="20">';
+    app.querySelector('.product-media-panel').append(zoomButton);
+    const zoom = document.createElement('dialog');
+    zoom.className = 'product-zoom';
+    zoom.setAttribute('aria-label', 'Product image zoom');
+    zoom.innerHTML = '<button class="icon-btn" type="button" aria-label="Close zoom"><img src="assets/ui/x.svg" alt="" width="20" height="20"></button><img data-zoom-image alt="">';
+    app.append(zoom);
+    const openZoom = () => { zoom.querySelector('[data-zoom-image]').src = image.src; zoom.querySelector('[data-zoom-image]').alt = image.alt; zoom.showModal(); };
+    image.addEventListener('click', openZoom);
+    zoomButton.addEventListener('click', openZoom);
+    zoom.querySelector('button').addEventListener('click', () => zoom.close());
+    app.querySelectorAll('[data-product-side]').forEach(button => button.addEventListener('click', () => { state.side = button.dataset.productSide; updateImage(); }));
+    let touchStart = null;
+    const media = app.querySelector('.product-media-panel');
+    media.addEventListener('touchstart', event => { touchStart = event.changedTouches[0]; }, { passive: true });
+    media.addEventListener('touchend', event => {
+      if (!touchStart) return;
+      const end = event.changedTouches[0];
+      const dx = end.clientX - touchStart.clientX;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(end.clientY - touchStart.clientY)) { state.side = state.side === 'front' ? 'back' : 'front'; updateImage(); }
+      touchStart = null;
+    }, { passive: true });
     const sideLabel = app.querySelector('.product-side-label');
     const selectedColor = app.querySelector('.selected-color');
     const qtyValue = app.querySelector('.product-qty-value');
 
     function updatePriceText() {
       app.querySelector('[data-product-price]').innerHTML = priceMarkup(item);
-      app.querySelector('[data-product-add]').textContent = `Add to Cart - ${money(item.price)}`;
+      app.querySelector('[data-product-add]').textContent = state.size ? `Add to Bag - ${money(item.price)}` : 'Select a size';
+      app.querySelector('[data-product-mobile-add]').textContent = state.size ? 'Add to Bag' : 'Select a size';
       app.querySelector('[data-mobile-buy-price]').textContent = money(item.price);
       app.querySelectorAll('[data-money-gbp]').forEach((el) => {
         const value = parseFloat(el.dataset.moneyGbp);
@@ -467,15 +522,31 @@
       image.alt = `${item.name} ${titleFromColor(state.color)} ${state.side}`;
       sideLabel.textContent = state.side === 'front' ? 'Front' : 'Back';
       selectedColor.textContent = titleFromColor(state.color);
-      app.querySelectorAll('.product-swatch').forEach((button) => button.classList.toggle('active', button.dataset.color === state.color));
-      app.querySelectorAll('.product-size').forEach((button) => button.classList.toggle('active', button.dataset.size === state.size));
+      app.querySelectorAll('.product-swatch').forEach((button) => { button.classList.toggle('active', button.dataset.color === state.color); button.setAttribute('aria-pressed', String(button.dataset.color === state.color)); });
+      app.querySelectorAll('.product-size').forEach((button) => { button.classList.toggle('active', button.dataset.size === state.size); button.setAttribute('aria-pressed', String(button.dataset.size === state.size)); });
+      app.querySelectorAll('[data-product-side]').forEach(button => { button.classList.toggle('active', button.dataset.productSide === state.side); button.setAttribute('aria-pressed', String(button.dataset.productSide === state.side)); button.querySelector('img').src = imagePath(item, state.color, button.dataset.productSide); });
       qtyValue.textContent = state.qty;
-      app.querySelector('[data-mobile-buy-size]').textContent = `${state.size} / ${titleFromColor(state.color)}`;
+      app.querySelector('[data-mobile-buy-size]').textContent = `${state.size || 'Select a size'} / ${titleFromColor(state.color)}`;
       updatePriceText();
     }
 
     function addSelectedToCart() {
+      if (!state.size) {
+        app.querySelector('[data-selection-message]').textContent = 'Choose your size to add this tee to your bag.';
+        app.querySelector('.product-sizes').scrollIntoView({ block: 'center' });
+        app.querySelector('.product-size').focus();
+        return;
+      }
       if (typeof window.__bfl_addToCart === 'function') {
+        const addButton = app.querySelector('[data-product-add]');
+        const mobileButton = app.querySelector('[data-product-mobile-add]');
+        const defaultText = addButton?.textContent || 'Add to Cart';
+        if (addButton) addButton.textContent = 'Added to Bag';
+        if (mobileButton) mobileButton.textContent = 'Added';
+        window.setTimeout(() => {
+          if (addButton) addButton.textContent = defaultText;
+          if (mobileButton) mobileButton.textContent = 'Add to Bag';
+        }, 1200);
         window.__bfl_addToCart({
           name: `${item.name} - ${titleFromColor(state.color)}`,
           price: item.price,
@@ -503,6 +574,7 @@
     app.querySelectorAll('.product-size').forEach((button) => {
       button.addEventListener('click', () => {
         state.size = button.dataset.size;
+        app.querySelector('[data-selection-message]').textContent = '';
         updateImage();
       });
     });
@@ -541,6 +613,8 @@
       "'": '&#039;',
     }[char]));
   }
+
+  window.__bfl_catalog = PRODUCTS.map(item => ({ id: item.id, name: item.name, colorCount: item.colors.length, colors: item.colors.slice(0, 4).map(color => ({ name: color, label: titleFromColor(color), swatch: SWATCHES[color] || '#ddd' })) }));
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', render);

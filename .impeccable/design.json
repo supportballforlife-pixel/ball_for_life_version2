@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-13T00:00:00Z",
+  "title": "Design System: Ball For Life",
+  "extensions": {
+    "colorMeta": {
+      "black": { "role": "primary", "displayName": "Brand Black" },
+      "white": { "role": "neutral", "displayName": "Shopping White" },
+      "paper": { "role": "neutral", "displayName": "Newsletter Paper" },
+      "surface": { "role": "neutral", "displayName": "Product Surface" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Condensed Display", "purpose": "Brand and campaign headings." },
+      "body": { "displayName": "Store Body", "purpose": "Readable information and shopping controls." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(.22,1,.36,1)", "purpose": "Drawers and the one-time story reveal." },
+      { "name": "control", "value": "200ms", "purpose": "Control state and image transitions." },
+      { "name": "drawer", "value": "300ms", "purpose": "Shopping bag and mobile menu." },
+      { "name": "story-reveal", "value": "700ms", "purpose": "A single 20px story entrance; disabled for reduced motion." }
+    ],
+    "breakpoints": [
+      { "name": "phone", "value": "600px" },
+      { "name": "compact-navigation", "value": "900px" },
+      { "name": "laptop", "value": "1100px" },
+      { "name": "four-column-collection", "value": "1101px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The store's main purchase or form action.",
+      "html": "<button class=\"ds-primary\">Add to Bag</button>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:14px 28px;background:var(--black,#111);color:var(--white,#fff);border:1px solid transparent;border-radius:0;font:600 12px/1.4 var(--body,Inter,sans-serif);letter-spacing:0;text-transform:uppercase;cursor:pointer;transition:background .2s}.ds-primary:hover{background:#333}.ds-primary:focus-visible{outline:2px solid var(--black,#111);outline-offset:4px}.ds-primary:disabled{opacity:.5;cursor:not-allowed}"
+    },
+    {
+      "name": "Email Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "A clear labelled field with visible focus and a sharp border.",
+      "html": "<label class=\"ds-label\">Email<input class=\"ds-input\" type=\"email\" autocomplete=\"email\" placeholder=\"you@example.com\"></label>",
+      "css": ".ds-label{display:grid;gap:7px;font:11px var(--body,Inter,sans-serif);color:var(--grey-dark,#515151)}.ds-input{min-height:48px;width:100%;padding:12px 14px;border:1px solid var(--line-light,#dededb);border-radius:0;background:var(--white,#fff);color:var(--black,#111);font:14px var(--body,Inter,sans-serif)}.ds-input:hover{border-color:var(--grey,#686868)}.ds-input:focus-visible{outline:2px solid var(--black,#111);outline-offset:4px}.ds-input::placeholder{color:var(--grey,#686868)}"
+    },
+    {
+      "name": "Size Button",
+      "kind": "button",
+      "description": "An explicit required clothing option with visible selection.",
+      "html": "<button class=\"ds-size\" aria-pressed=\"true\">M</button>",
+      "css": ".ds-size{min-width:44px;min-height:44px;padding:8px;border:1px solid var(--line-light,#dededb);border-radius:0;background:var(--white,#fff);color:var(--black,#111);font:11px var(--body,Inter,sans-serif);cursor:pointer}.ds-size:hover{border-color:var(--black,#111)}.ds-size[aria-pressed=true]{background:var(--black,#111);color:var(--white,#fff);border-color:var(--black,#111)}.ds-size:focus-visible{outline:2px solid var(--black,#111);outline-offset:4px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Editorial basketball streetwear",
+    "overview": "The store is bold, minimal, confident and athletic, with the visual discipline of the user's Nike and Represent references. Real clothing and real people carry the identity. Condensed headlines give the brand presence; restrained controls keep shopping easy to scan.",
+    "keyCharacteristics": [
+      "Bold condensed headings with quiet shopping controls.",
+      "Authentic campaign, product and customer photography.",
+      "White shopping surfaces and full-width black brand sections.",
+      "Sharp corners, restrained rules and consistent spacing.",
+      "Mobile layouts that keep products and required options clear."
+    ],
+    "rules": [
+      { "name": "The Content Rule", "body": "Product imagery, real colour swatches and customer media supply colour; the store interface stays restrained.", "section": "colors" },
+      { "name": "The Hierarchy Rule", "body": "Hero type belongs in a hero. Product controls, panels and admin screens use a smaller, functional scale.", "section": "typography" }
+    ],
+    "dos": [
+      "Do reuse the BFL identity, real catalogue and authentic photography.",
+      "Do keep the garment clear of headline and control overlays.",
+      "Do use stable image proportions and responsive grid tracks.",
+      "Do expose the order total before the final payment action.",
+      "Do preserve keyboard focus, selected states and reduced-motion behaviour."
+    ],
+    "donts": [
+      "Don't invent reviews, stock levels, discounts or delivery claims.",
+      "Don't add decorative gradients, excessive shadows or oversized rounded containers.",
+      "Don't load old campaign slides or videos before they are needed.",
+      "Don't expose backend implementation details in customer status messages.",
+      "Don't add new styles to the retired legacy stylesheet."
+    ]
+  }
+}

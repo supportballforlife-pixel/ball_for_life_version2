@@ -6,74 +6,41 @@
 <title>Shop — Ball For Life</title>
 <meta name="description" content="Shop Ball For Life graphic tees, new arrivals and upcoming streetwear drops. Browse oversized cotton tees with secure checkout.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=1000sale3">
 
-<style id="header-thinner-update">
-/* Header height refinement */
-.nav-grid{height:74px !important;}
-.logo-center img{max-height:42px; width:auto; object-fit:contain;}
-@media (max-width:720px){
-  .nav-grid{height:70px !important;}
-  .logo-center img{max-height:38px;}
-}
-</style>
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
+<link rel="stylesheet" href="store-design.css?v=redesign2">
 </head>
 <body>
 
-<div class="announce" aria-live="polite"><a class="announce-message tiktok-announce" href="https://www.tiktok.com/@ball_for_life_store" target="_blank" rel="noopener"><strong>1000 followers on TikTok</strong><span>Every tee is £19.95 for one week</span></a></div>
-
-<header>
+<div class="announce"><a class="announce-message" href="shipping-returns.html">Free UK shipping on orders over &pound;65</a></div>
+<header class="site-header">
   <div class="wrap nav-grid">
     <div class="nav-left">
-      <div class="burger"><span></span><span></span><span></span></div>
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <div class="nav-item">
-          <span>Shop <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          <div class="nav-dropdown">
-            <div class="nav-dropdown-inner">
-              <a href="shop.html">New Arrivals</a>
-              <a href="shop.html?cat=hoodies">Hoodies</a>
-              <a href="shop.html?cat=tracksuits">Tracksuits</a>
-              <a href="shop.html?cat=tees">Graphic Tees</a>
-            </div>
-          </div>
-        </div>
-        <a href="about-us.html">About Us</a>
+      <button class="burger icon-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg></button>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="shop.html">New Drop</a>
+        <a href="shop.html?cat=all">Shop All</a>
+        <a href="shop.html?cat=tees">Graphic Tees</a>
+        <a href="about-us.html">Our Story</a>
       </nav>
     </div>
-    <a href="index.html" class="logo-center">
-      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
-    </a>
+    <a href="index.html" class="logo-center" aria-label="Ball For Life home"><img src="assets/ui/brand-logo-black.png" class="brand-logo" alt="Ball For Life" width="112" height="63"></a>
     <div class="nav-right">
-      <a href="login.html" class="icon-btn" aria-label="Account">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-      </a>
-      <select class="currency-select" data-currency-select aria-label="Currency">
-        <option value="GBP">GBP</option>
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-      </select>
-      <a href="checkout.html" class="cart-link" data-cart-open aria-label="Cart">
-        My Cart <span class="cart-count">0</span>
-      </a>
+      <select class="currency-select" data-currency-select aria-label="Currency"><option value="GBP">GBP</option><option value="USD">USD</option><option value="EUR">EUR</option></select>
+      <button type="button" class="icon-btn search-open" data-search-open aria-label="Search products" title="Search"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></button>
+      <a href="login.html" class="icon-btn account-link" aria-label="Account" title="Account"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
+      <a href="checkout.html" class="cart-link icon-btn" data-cart-open aria-label="Open shopping bag" title="Shopping bag"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg><span class="cart-count">0</span></a>
     </div>
   </div>
 </header>
-
-<div class="mobile-drawer">
-  <a href="index.html" class="mobile-brand" aria-label="Ball For Life home"><img src="brand-logo.png" class="brand-logo" alt="Ball For Life"></a>
-  <a href="index.html">Home</a>
-  <a href="shop.html">Shop</a>
-  <a href="shop.html?cat=tees">Graphic Tees</a>
-  <a href="shop.html?cat=hoodies">Hoodies</a>
-  <a href="shop.html?cat=tracksuits">Tracksuits</a>
-  <a href="about-us.html">About Us</a>
+<div class="mobile-drawer" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation" aria-hidden="true" inert>
+  <div class="mobile-menu-head"><a href="index.html" class="mobile-brand"><img src="assets/ui/brand-logo-black.png" class="brand-logo" alt="Ball For Life" width="112" height="63"></a><button class="icon-btn" type="button" data-menu-close aria-label="Close menu"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+  <nav aria-label="Mobile navigation"><a href="shop.html">New Drop</a><a href="shop.html?cat=all">Shop All</a><a href="shop.html?cat=tees">Graphic Tees</a><a href="shop.html?cat=hoodies">Hoodies <small>Coming soon</small></a><a href="shop.html?cat=tracksuits">Tracksuits <small>Coming soon</small></a><a href="about-us.html">Our Story</a></nav>
+  <div class="mobile-menu-foot"><a href="login.html">My account</a><a href="contact.html">Contact us</a><select class="currency-select" data-currency-select aria-label="Menu currency"><option value="GBP">GBP</option><option value="USD">USD</option><option value="EUR">EUR</option></select></div>
 </div>
-<div class="drawer-overlay"></div>
+<div class="drawer-overlay menu-overlay"></div>
+<dialog class="search-dialog" aria-labelledby="search-title"><form action="shop.html" method="get"><div class="search-head"><h2 id="search-title">Find your next tee.</h2><button class="icon-btn" type="button" data-search-close aria-label="Close search"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div><label class="search-field"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg><input type="search" name="q" placeholder="Search players, graphics, tees..." aria-label="Search products" required><button class="icon-btn" type="submit" aria-label="Search"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button></label><div class="search-popular"><a href="shop.html?q=kobe">Kobe Bryant</a><a href="shop.html?q=kyrie">Kyrie Irving</a><a href="shop.html?q=curry">Stephen Curry</a></div></form></dialog>
 
 <div class="page-head wrap">
   <div class="breadcrumb"><a href="index.html">Home</a> / Shop</div>
@@ -96,189 +63,200 @@
   </aside>
 
   <div>
+    <div class="collection-toolbar">
+      <p><strong data-product-count>0</strong> products</p>
+      <label>
+        Sort
+        <select data-shop-sort aria-label="Sort products">
+          <option value="latest">Latest added</option>
+          <option value="price-low">Price low to high</option>
+          <option value="price-high">Price high to low</option>
+        </select>
+      </label>
+    </div>
     <div class="pgrid reveal-stagger in" data-shop-grid>
 
       <a href="product.html?id=goat-kobe-x-jordan-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/GOAT-Kobe-x-Jordan-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="GOAT Kobe x Jordan Graphic Tee"><div class="quick" data-quick-add data-name="GOAT Kobe x Jordan Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="GKJ">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/goat-kobe-x-jordan-snow-washed-oversized-cotton-t-shirt-front.webp" alt="GOAT Kobe x Jordan Graphic Tee"><img class="card-back" src="assets/product-cards/goat-kobe-x-jordan-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="GOAT Kobe x Jordan Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="GKJ">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">GOAT Kobe x Jordan Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=confidence-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Confidence-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Confidence Graphic Tee"><div class="quick" data-quick-add data-name="Confidence Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="CONF">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/confidence-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Confidence Graphic Tee"><img class="card-back" src="assets/product-cards/confidence-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Confidence Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="CONF">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Confidence Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/LaMelo-Ball-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="LaMelo Ball Variant 2 Graphic Tee"><div class="quick" data-quick-add data-name="LaMelo Ball Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="LM2">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="LaMelo Ball Variant 2 Graphic Tee"><img class="card-back" src="assets/product-cards/lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="LaMelo Ball Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="LM2">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">LaMelo Ball Tee 2</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=sharife-cooper-variant-4-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Sharife-Cooper-Variant-4-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Sharife Cooper Variant 4 Graphic Tee"><div class="quick" data-quick-add data-name="Sharife Cooper Variant 4 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SCO4">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/sharife-cooper-variant-4-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Sharife Cooper Variant 4 Graphic Tee"><img class="card-back" src="assets/product-cards/sharife-cooper-variant-4-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Sharife Cooper Variant 4 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SCO4">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Sharife Cooper Tee 4</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=travis-scott-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Travis-Scott-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Travis Scott Graphic Tee"><div class="quick" data-quick-add data-name="Travis Scott Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="TS">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/travis-scott-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Travis Scott Graphic Tee"><img class="card-back" src="assets/product-cards/travis-scott-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Travis Scott Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="TS">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Travis Scott Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=goat-x-god-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/GOAT-x-GOD-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="G.O.A.T x GOD Graphic Tee"><div class="quick" data-quick-add data-name="G.O.A.T x GOD Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="GXG">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/goat-x-god-snow-washed-oversized-cotton-t-shirt-front.webp" alt="G.O.A.T x GOD Graphic Tee"><img class="card-back" src="assets/product-cards/goat-x-god-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="G.O.A.T x GOD Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="GXG">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">G.O.A.T x GOD Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="29.99">£29.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=i-see-god-everywhere-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/I-See-God-Everywhere-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="I See God Everywhere Graphic Tee"><div class="quick" data-quick-add data-name="I See God Everywhere Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="ISG">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/i-see-god-everywhere-snow-washed-oversized-cotton-t-shirt-front.webp" alt="I See God Everywhere Graphic Tee"><img class="card-back" src="assets/product-cards/i-see-god-everywhere-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="I See God Everywhere Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="ISG">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">I See God Everywhere Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="29.99">£29.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=ball-for-life-graphic-tee" class="pcard">
-        <div class="img"><img src="graphic tee/Ball-For-Life-Graphic-Tee/black/front.png" alt="Ball For Life Graphic Tee"><div class="quick" data-quick-add data-name="Ball For Life Graphic Tee" data-price="19.95" data-mark="BFL">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/ball-for-life-graphic-tee-front.webp" alt="Ball For Life Graphic Tee"><img class="card-back" src="assets/product-cards/ball-for-life-graphic-tee-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Ball For Life Graphic Tee" data-price="19.95" data-mark="BFL">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Ball For Life Graphic Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="34.99">£34.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=lebron-james-oversized-snowly-washed-graphic-tee" class="pcard">
-        <div class="img"><img src="graphic tee/LeBron-James-Oversized-Snowly-Washed-Graphic-Tee/black/front.png" alt="LeBron James Graphic Tee"><div class="quick" data-quick-add data-name="LeBron James Oversized Snowly Washed Graphic Tee" data-price="19.95" data-mark="LBJ">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/lebron-james-oversized-snowly-washed-graphic-tee-front.webp" alt="LeBron James Graphic Tee"><img class="card-back" src="assets/product-cards/lebron-james-oversized-snowly-washed-graphic-tee-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="LeBron James Oversized Snowly Washed Graphic Tee" data-price="19.95" data-mark="LBJ">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">LeBron James Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=lamelo-ball-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/LaMelo-Ball-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="LaMelo Ball Graphic Tee"><div class="quick" data-quick-add data-name="LaMelo Ball Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="LM">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/lamelo-ball-snow-washed-oversized-cotton-t-shirt-front.webp" alt="LaMelo Ball Graphic Tee"><img class="card-back" src="assets/product-cards/lamelo-ball-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="LaMelo Ball Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="LM">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">LaMelo Ball Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=kyrie-irving-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Kyrie-Irving-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Kyrie Irving Graphic Tee"><div class="quick" data-quick-add data-name="Kyrie Irving Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KI">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/kyrie-irving-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Kyrie Irving Graphic Tee"><img class="card-back" src="assets/product-cards/kyrie-irving-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Kyrie Irving Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KI">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Kyrie Irving Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=tyrese-maxey-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Tyrese-Maxey-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Tyrese Maxey Graphic Tee"><div class="quick" data-quick-add data-name="Tyrese Maxey Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="TM">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/tyrese-maxey-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Tyrese Maxey Graphic Tee"><img class="card-back" src="assets/product-cards/tyrese-maxey-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Tyrese Maxey Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="TM">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Tyrese Maxey Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=kobe-bryant-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Kobe-Bryant-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Kobe Bryant Graphic Tee"><div class="quick" data-quick-add data-name="Kobe Bryant Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KB">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/kobe-bryant-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Kobe Bryant Graphic Tee"><img class="card-back" src="assets/product-cards/kobe-bryant-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Kobe Bryant Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KB">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Kobe Bryant Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Kobe-Bryant-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Kobe Bryant Variant 2 Graphic Tee"><div class="quick" data-quick-add data-name="Kobe Bryant Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KB2">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Kobe Bryant Variant 2 Graphic Tee"><img class="card-back" src="assets/product-cards/kobe-bryant-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Kobe Bryant Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KB2">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Kobe Bryant Tee 2</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=mask-on-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Mask-On-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Mask On Graphic Tee"><div class="quick" data-quick-add data-name="Mask On Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="MO">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/mask-on-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Mask On Graphic Tee"><img class="card-back" src="assets/product-cards/mask-on-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Mask On Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="MO">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Mask On Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=la-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/LA-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="LA Graphic Tee"><div class="quick" data-quick-add data-name="LA Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="LA">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/la-snow-washed-oversized-cotton-t-shirt-front.webp" alt="LA Graphic Tee"><img class="card-back" src="assets/product-cards/la-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="LA Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="LA">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">LA Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=allen-iverson-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Allen-Iverson-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Allen Iverson Graphic Tee"><div class="quick" data-quick-add data-name="Allen Iverson Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="AI">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/allen-iverson-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Allen Iverson Graphic Tee"><img class="card-back" src="assets/product-cards/allen-iverson-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Allen Iverson Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="AI">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Allen Iverson Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=allen-iverson-variant-2-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Allen-Iverson-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Allen Iverson Variant 2 Graphic Tee"><div class="quick" data-quick-add data-name="Allen Iverson Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="AI2">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/allen-iverson-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Allen Iverson Variant 2 Graphic Tee"><img class="card-back" src="assets/product-cards/allen-iverson-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Allen Iverson Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="AI2">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Allen Iverson Tee 2</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=dennis-rodman-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Dennis-Rodman-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Dennis Rodman Graphic Tee"><div class="quick" data-quick-add data-name="Dennis Rodman Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="DR">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/dennis-rodman-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Dennis Rodman Graphic Tee"><img class="card-back" src="assets/product-cards/dennis-rodman-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Dennis Rodman Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="DR">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Dennis Rodman Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Dennis-Rodman-Fck-What-They-Think-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Dennis Rodman Fck What They Think Graphic Tee"><div class="quick" data-quick-add data-name="Dennis Rodman Fck What They Think Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="DR2">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Dennis Rodman Fck What They Think Graphic Tee"><img class="card-back" src="assets/product-cards/dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Dennis Rodman Fck What They Think Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="DR2">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Rodman Fck What They Think Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=prove-them-wrong-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Prove-Them-Wrong-Snow-Washed-Oversized-Cotton-T-Shirt/water-blue/front.png" alt="Prove Them Wrong Graphic Tee"><div class="quick" data-quick-add data-name="Prove Them Wrong Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="PTW">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/prove-them-wrong-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Prove Them Wrong Graphic Tee"><img class="card-back" src="assets/product-cards/prove-them-wrong-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Prove Them Wrong Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="PTW">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Prove Them Wrong Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=no-wasted-potential-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/No-Wasted-Potential-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="No Wasted Potential Graphic Tee"><div class="quick" data-quick-add data-name="No Wasted Potential Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="NWP">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/no-wasted-potential-snow-washed-oversized-cotton-t-shirt-front.webp" alt="No Wasted Potential Graphic Tee"><img class="card-back" src="assets/product-cards/no-wasted-potential-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="No Wasted Potential Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="NWP">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">No Wasted Potential Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=russell-westbrook-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Russell-Westbrook-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Russell Westbrook Graphic Tee"><div class="quick" data-quick-add data-name="Russell Westbrook Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="RW">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/russell-westbrook-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Russell Westbrook Graphic Tee"><img class="card-back" src="assets/product-cards/russell-westbrook-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Russell Westbrook Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="RW">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Russell Westbrook Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=russell-westbrook-variant-2-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Russell-Westbrook-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Russell Westbrook Variant 2 Graphic Tee"><div class="quick" data-quick-add data-name="Russell Westbrook Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="RW2">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/russell-westbrook-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Russell Westbrook Variant 2 Graphic Tee"><img class="card-back" src="assets/product-cards/russell-westbrook-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Russell Westbrook Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="RW2">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Russell Westbrook Tee 2</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=ja-morant-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Ja-Morant-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Ja Morant Graphic Tee"><div class="quick" data-quick-add data-name="Ja Morant Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JM">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/ja-morant-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Ja Morant Graphic Tee"><img class="card-back" src="assets/product-cards/ja-morant-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Ja Morant Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JM">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Ja Morant Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=sga-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/SGA-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="SGA Graphic Tee"><div class="quick" data-quick-add data-name="SGA Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SGA">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/sga-snow-washed-oversized-cotton-t-shirt-front.webp" alt="SGA Graphic Tee"><img class="card-back" src="assets/product-cards/sga-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="SGA Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SGA">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">SGA Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=j-dub-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/J-Dub-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="J-Dub Graphic Tee"><div class="quick" data-quick-add data-name="J-Dub Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JD">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/j-dub-snow-washed-oversized-cotton-t-shirt-front.webp" alt="J-Dub Graphic Tee"><img class="card-back" src="assets/product-cards/j-dub-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="J-Dub Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JD">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">J-Dub Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=anthony-edwards-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Anthony-Edwards-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Anthony Edwards Graphic Tee"><div class="quick" data-quick-add data-name="Anthony Edwards Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="AE">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/anthony-edwards-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Anthony Edwards Graphic Tee"><img class="card-back" src="assets/product-cards/anthony-edwards-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Anthony Edwards Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="AE">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Anthony Edwards Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=austin-reaves-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Austin-Reaves-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Austin Reaves Graphic Tee"><div class="quick" data-quick-add data-name="Austin Reaves Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="AR">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/austin-reaves-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Austin Reaves Graphic Tee"><img class="card-back" src="assets/product-cards/austin-reaves-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Austin Reaves Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="AR">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Austin Reaves Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=jalen-brunson-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Jalen-Brunson-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Jalen Brunson Graphic Tee"><div class="quick" data-quick-add data-name="Jalen Brunson Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JB">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/jalen-brunson-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Jalen Brunson Graphic Tee"><img class="card-back" src="assets/product-cards/jalen-brunson-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Jalen Brunson Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JB">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Jalen Brunson Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=face-of-the-league-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Face-Of-The-League-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Face Of The League Graphic Tee"><div class="quick" data-quick-add data-name="Face Of The League Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="FOTL">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/face-of-the-league-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Face Of The League Graphic Tee"><img class="card-back" src="assets/product-cards/face-of-the-league-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Face Of The League Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="FOTL">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Face Of The League Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=derrick-rose-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Derrick-Rose-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Derrick Rose Graphic Tee"><div class="quick" data-quick-add data-name="Derrick Rose Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="DR">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/derrick-rose-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Derrick Rose Graphic Tee"><img class="card-back" src="assets/product-cards/derrick-rose-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Derrick Rose Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="DR">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Derrick Rose Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=jared-mccain-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Jared-McCain-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Jared McCain Graphic Tee"><div class="quick" data-quick-add data-name="Jared McCain Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JMC">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/jared-mccain-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Jared McCain Graphic Tee"><img class="card-back" src="assets/product-cards/jared-mccain-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Jared McCain Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JMC">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Jared McCain Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Jared-McCain-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Jared McCain Variant 2 Graphic Tee"><div class="quick" data-quick-add data-name="Jared McCain Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JMC2">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Jared McCain Variant 2 Graphic Tee"><img class="card-back" src="assets/product-cards/jared-mccain-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Jared McCain Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JMC2">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Jared McCain Tee 2</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Jared-McCain-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Jared McCain Variant 3 Graphic Tee"><div class="quick" data-quick-add data-name="Jared McCain Variant 3 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JMC3">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Jared McCain Variant 3 Graphic Tee"><img class="card-back" src="assets/product-cards/jared-mccain-variant-3-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Jared McCain Variant 3 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="JMC3">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Jared McCain Tee 3</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=stephen-curry-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Stephen-Curry-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Stephen Curry Graphic Tee"><div class="quick" data-quick-add data-name="Stephen Curry Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SC">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/stephen-curry-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Stephen Curry Graphic Tee"><img class="card-back" src="assets/product-cards/stephen-curry-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Stephen Curry Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SC">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Stephen Curry Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Stephen-Curry-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Stephen Curry Variant 2 Graphic Tee"><div class="quick" data-quick-add data-name="Stephen Curry Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SC2">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Stephen Curry Variant 2 Graphic Tee"><img class="card-back" src="assets/product-cards/stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Stephen Curry Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SC2">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Stephen Curry Tee 2</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=kyrie-irving-variant-2-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Kyrie-Irving-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Kyrie Irving Variant 2 Graphic Tee"><div class="quick" data-quick-add data-name="Kyrie Irving Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KI2">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/kyrie-irving-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Kyrie Irving Variant 2 Graphic Tee"><img class="card-back" src="assets/product-cards/kyrie-irving-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Kyrie Irving Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KI2">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Kyrie Irving Tee 2</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=kyrie-irving-variant-3-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Kyrie-Irving-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Kyrie Irving Variant 3 Graphic Tee"><div class="quick" data-quick-add data-name="Kyrie Irving Variant 3 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KI3">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/kyrie-irving-variant-3-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Kyrie Irving Variant 3 Graphic Tee"><img class="card-back" src="assets/product-cards/kyrie-irving-variant-3-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Kyrie Irving Variant 3 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KI3">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Kyrie Irving Tee 3</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=kyrie-irving-variant-4-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Kyrie-Irving-Variant-4-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Kyrie Irving Variant 4 Graphic Tee"><div class="quick" data-quick-add data-name="Kyrie Irving Variant 4 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KI4">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/kyrie-irving-variant-4-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Kyrie Irving Variant 4 Graphic Tee"><img class="card-back" src="assets/product-cards/kyrie-irving-variant-4-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Kyrie Irving Variant 4 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KI4">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Kyrie Irving Tee 4</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Kyrie-Irving-Variant-5-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Kyrie Irving Variant 5 Graphic Tee"><div class="quick" data-quick-add data-name="Kyrie Irving Variant 5 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KI5">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Kyrie Irving Variant 5 Graphic Tee"><img class="card-back" src="assets/product-cards/kyrie-irving-variant-5-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Kyrie Irving Variant 5 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="KI5">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Kyrie Irving Tee 5</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=sharife-cooper-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Sharife-Cooper-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Sharife Cooper Graphic Tee"><div class="quick" data-quick-add data-name="Sharife Cooper Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SCO">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/sharife-cooper-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Sharife Cooper Graphic Tee"><img class="card-back" src="assets/product-cards/sharife-cooper-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Sharife Cooper Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SCO">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Sharife Cooper Tee</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=sharife-cooper-variant-2-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Sharife-Cooper-Variant-2-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Sharife Cooper Variant 2 Graphic Tee"><div class="quick" data-quick-add data-name="Sharife Cooper Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SCO2">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/sharife-cooper-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Sharife Cooper Variant 2 Graphic Tee"><img class="card-back" src="assets/product-cards/sharife-cooper-variant-2-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Sharife Cooper Variant 2 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SCO2">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Sharife Cooper Tee 2</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
       <a href="product.html?id=sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt" class="pcard">
-        <div class="img"><img src="graphic tee/Sharife-Cooper-Variant-3-Snow-Washed-Oversized-Cotton-T-Shirt/black/front.png" alt="Sharife Cooper Variant 3 Graphic Tee"><div class="quick" data-quick-add data-name="Sharife Cooper Variant 3 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SCO3">Quick Add</div></div>
+        <div class="img"><img loading="lazy" decoding="async" src="assets/product-cards/sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Sharife Cooper Variant 3 Graphic Tee"><img class="card-back" src="assets/product-cards/sharife-cooper-variant-3-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async"><button type="button" class="quick" data-quick-add data-name="Sharife Cooper Variant 3 Snow Washed Oversized Cotton T-Shirt" data-price="19.95" data-mark="SCO3">Quick Add</button></div>
         <div class="meta-row"><div><div class="p-name">Sharife Cooper Tee 3</div><div class="p-tag">Graphic Tees</div></div><div class="p-price sale-price-pair"><s data-money-gbp="27.99">£27.99</s><b data-money-gbp="19.95">£19.95</b></div></div>
       </a>
 
     </div>
     <section class="shop-coming-soon" data-coming-soon hidden>
       <div class="coming-soon-bg"></div>
-      <img class="coming-soon-watermark" src="brand-logo.png" alt="">
+      <img class="coming-soon-watermark" src="assets/ui/brand-logo.png" alt="">
       <span class="coming-soon-label">Coming Soon</span>
       <h2 class="display" data-coming-title>Coming Soon</h2>
       <p data-coming-copy>More Ball For Life pieces are loading up. Graphic tees are live while this category is being built.</p>
@@ -287,49 +265,22 @@
   </div>
 </div>
 
-<footer>
+<footer class="site-footer">
   <div class="wrap">
     <div class="footer-top">
-      <div class="footer-brand">
-        <div class="logo-center">
-      <img src="brand-logo.png" class="brand-logo" alt="Ball For Life">
+      <div class="footer-brand"><a href="index.html" class="logo-center"><img src="assets/ui/brand-logo.png" class="brand-logo" alt="Ball For Life" width="152" height="85"></a><p>Inspired by the fear<br>of being average.</p><div class="footer-social"><a href="https://www.instagram.com/ball_for_life_store/" aria-label="Instagram" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@ball_for_life_store" aria-label="TikTok" target="_blank" rel="noopener">TikTok</a><a href="https://uk.pinterest.com/ball_for_life_store/" aria-label="Pinterest" target="_blank" rel="noopener">Pinterest</a></div></div>
+      <div class="footer-col"><h4>Shop</h4><a href="shop.html">New Arrivals</a><a href="shop.html?cat=tees">Graphic Tees</a><a href="shop.html?cat=hoodies">Hoodies</a><a href="shop.html?cat=tracksuits">Tracksuits</a></div>
+      <div class="footer-col"><h4>Ball For Life</h4><a href="about-us.html">Our Story</a><a href="contact.html">Contact Us</a><a href="privacy-policy.html">Privacy Policy</a><a href="terms-conditions.html">Terms &amp; Conditions</a></div>
+      <div class="footer-col"><h4>Customer Care</h4><a href="shipping-returns.html">Shipping &amp; Returns</a><a href="size-guide.html">Size Guide</a><a href="faq.html">FAQs</a></div>
+      <div class="footer-col footer-contact"><h4>Let's Talk</h4><a href="mailto:supportballforlife@gmail.com">supportballforlife@gmail.com</a><a href="https://wa.me/447356218992" target="_blank" rel="noopener">WhatsApp +44 7356 218992</a><p>Questions about your order?<br>We're here to help.</p></div>
     </div>
-        <p>Inspired by the fear of being average.</p>
-        <div class="footer-social">
-          <a href="https://www.instagram.com/ball_for_life_store/" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg></a>
-          <a href="https://www.tiktok.com/@ball_for_life_store" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.6 3 2.3 4.6 5 5"/></svg></a>
-          <a href="https://uk.pinterest.com/ball_for_life_store/" aria-label="Pinterest"><svg viewBox="0 0 24 24"><path d="M12 3.5c-4.2 0-7.2 2.9-7.2 6.8 0 2.4 1.3 4.2 3.2 4.9.3.1.5 0 .6-.3l.3-1.2c.1-.4 0-.5-.2-.8-.6-.7-.9-1.6-.9-2.6 0-2.8 2.1-5.3 5.5-5.3 3 0 4.7 1.8 4.7 4.3 0 3.2-1.4 5.9-3.5 5.9-1.2 0-2-1-1.7-2.2l.8-3.1c.2-.9 0-1.7-.9-1.7-1.1 0-2 1.1-2 2.6 0 .9.3 1.6.3 1.6l-1.3 5.3c-.3 1.2-.2 2.7-.1 3.3.1.2.3.2.4.1.2-.3 1.8-2.3 2.3-3.4l.6-2.2c.5.9 1.7 1.6 3 1.6 3.9 0 6.5-3.5 6.5-8.1 0-3.5-3-6.8-7.5-6.8Z"/></svg></a>
-        </div>
-      </div>
-      <div class="footer-col"><h4>Company</h4><a href="about-us.html">About Us</a><a href="contact.html">Contact</a></div>
-      <div class="footer-col">
-        <h4>Support</h4>
-        <a href="faq.html">FAQ</a>
-        <a href="shipping-returns.html">Shipping &amp; Returns</a>
-        <a href="size-guide.html">Size Guide</a>
-        <a href="mailto:supportballforlife@gmail.com">Email Support</a>
-        <a href="https://wa.me/447356218992" target="_blank" rel="noopener">WhatsApp Support</a>
-      </div>
-      <div class="footer-col"><h4>Legal</h4><a href="privacy-policy.html">Privacy Policy</a><a href="terms-conditions.html">Terms & Conditions</a></div>
-      <div class="footer-col"><h4>Shop</h4><a href="shop.html?cat=tees">Graphic Tees</a><a href="shop.html?cat=hoodies">Hoodies</a><a href="shop.html?cat=tracksuits">Tracksuits</a></div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Ball For Life. All rights reserved.</span>
-      <div class="pay-row" aria-label="Accepted payment methods">
-        <img class="pay-logo" src="visa.svg" alt="Visa">
-        <img class="pay-logo" src="mastercard-alt.svg" alt="Mastercard">
-        <img class="pay-logo" src="maestro.svg" alt="Maestro">
-        <img class="pay-logo" src="apple-pay.svg" alt="Apple Pay">
-        <img class="pay-logo" src="klarna.svg" alt="Klarna">
-        <img class="pay-logo" src="discover.svg" alt="Discover">
-      </div>
-    </div>
+    <div class="footer-bottom"><span>&copy; 2026 Ball For Life</span><div class="pay-row" aria-label="Accepted payment methods"><img class="pay-logo" src="visa.svg" alt="Visa"><img class="pay-logo" src="mastercard-alt.svg" alt="Mastercard"><img class="pay-logo" src="apple-pay.svg" alt="Apple Pay"><img class="pay-logo" src="klarna.svg" alt="Klarna"></div><span>Basketball culture. Everyday streetwear.</span></div>
   </div>
 </footer>
 
 <div class="cart-overlay drawer-overlay"></div>
-<div class="cart-drawer">
-  <div class="cart-head"><h3>Your Bag</h3><svg class="cart-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4l16 16M20 4L4 20"/></svg></div>
+<div class="cart-drawer" role="dialog" aria-modal="true" aria-label="Shopping bag" aria-hidden="true" inert>
+  <div class="cart-head"><h3>Your Bag</h3><button class="cart-close icon-btn" type="button" aria-label="Close shopping bag"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
   <div class="cart-items"></div>
   <div class="cart-foot">
     <div class="cart-subtotal"><span>Subtotal</span><span class="val">£0.00</span></div>
@@ -359,6 +310,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const pageTitle = document.querySelector('[data-shop-title]');
   const panelTitle = document.querySelector('[data-coming-title]');
   const panelCopy = document.querySelector('[data-coming-copy]');
+  const productCount = document.querySelector('[data-product-count]');
+  const sortSelect = document.querySelector('[data-shop-sort]');
   const latestProductOrder = [
     'goat-kobe-x-jordan-snow-washed-oversized-cotton-t-shirt',
     'lamelo-ball-variant-2-snow-washed-oversized-cotton-t-shirt',
@@ -413,10 +366,26 @@ document.addEventListener('DOMContentLoaded', () => {
       return '';
     }
   };
+  const getCardPrice = (card) => {
+    const quick = card.querySelector('[data-quick-add]');
+    const visible = card.querySelector('.p-price b[data-money-gbp], .p-price [data-money-gbp]');
+    return Number(quick?.dataset.price || visible?.dataset.moneyGbp || 0);
+  };
   const sortGraphicTeesLatestFirst = () => {
     if (!grid) return;
     Array.from(grid.querySelectorAll('.pcard'))
       .sort((a, b) => (productOrderMap.get(getCardProductId(a)) ?? 999) - (productOrderMap.get(getCardProductId(b)) ?? 999))
+      .forEach((card) => grid.appendChild(card));
+  };
+  const sortProducts = () => {
+    if (!grid) return;
+    const value = sortSelect?.value || 'latest';
+    if (value === 'latest') {
+      sortGraphicTeesLatestFirst();
+      return;
+    }
+    Array.from(grid.querySelectorAll('.pcard'))
+      .sort((a, b) => value === 'price-low' ? getCardPrice(a) - getCardPrice(b) : getCardPrice(b) - getCardPrice(a))
       .forEach((card) => grid.appendChild(card));
   };
   document.querySelectorAll('[data-shop-filter]').forEach((link) => {
@@ -429,15 +398,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (panelCopy) panelCopy.textContent = comingSoon[category].copy;
     if (grid) grid.hidden = true;
     if (panel) panel.hidden = false;
+    if (productCount) productCount.textContent = '0';
     return;
   }
 
   if (pageTitle) pageTitle.textContent = category === 'tees' ? 'Graphic Tees' : 'New Arrivals';
-  sortGraphicTeesLatestFirst();
+  sortProducts();
+  if (productCount && grid) productCount.textContent = String(grid.querySelectorAll('.pcard').length);
   if (grid) grid.hidden = false;
   if (panel) panel.hidden = true;
+  sortSelect?.addEventListener('change', sortProducts);
 });
 </script>
-<script src="script.js?v=1000sale3"></script>
+<script src="script.js?v=redesign2"></script>
+
+<script src="assets/ui/icons.js?v=redesign2"></script>
+<script src="assets/ui/catalog.js?v=redesign2"></script>
+<script src="store-ui.js?v=redesign2"></script>
 </body>
 </html>
