@@ -5,6 +5,7 @@ const publicDir = path.resolve(__dirname, '../public');
 for (const file of fs.readdirSync(publicDir).filter(name => name.endsWith('.html'))) {
   const target = path.join(publicDir, file);
   const html = fs.readFileSync(target, 'utf8');
-  const updated = html.replace(/((?:store-design\.css|privacy-controls\.js|script\.js)\?v=)[^"\s]+/g, '$1welcome2');
+  const updated = html.replace(/((?:privacy-controls\.js|script\.js)\?v=)[^"\s]+/g, '$1welcome2')
+    .replace(/(store-design\.css\?v=)[^"\s]+/g, '$1hero3');
   if (html !== updated) fs.writeFileSync(target, updated);
 }

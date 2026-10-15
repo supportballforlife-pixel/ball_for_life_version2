@@ -81,12 +81,14 @@ create table if not exists public.site_visitors (
   last_seen_at timestamptz not null default now()
 );
 
+-- For existing legacy newsletter tables, run supabase/newsletter_subscribers.sql after this file.
 create table if not exists public.newsletter_subscribers (
   id uuid primary key default gen_random_uuid(),
   email text not null unique,
-  source text,
-  subscribed boolean not null default true,
-  created_at timestamptz not null default now(),
+  first_source text not null default 'unknown',
+  last_source text not null default 'unknown',
+  is_subscribed boolean not null default true,
+  subscribed_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
@@ -144,11 +146,18 @@ create index if not exists site_visitors_session_id_idx on public.site_visitors(
 create index if not exists site_visitors_last_seen_idx on public.site_visitors(last_seen_at desc);
 create index if not exists site_visitors_first_seen_idx on public.site_visitors(first_seen_at desc);
 create index if not exists newsletter_subscribers_email_idx on public.newsletter_subscribers(lower(email));
-create index if not exists newsletter_subscribers_created_idx on public.newsletter_subscribers(created_at desc);
+do $$
+begin
+  if exists(select 1 from information_schema.columns where table_schema='public' and table_name='newsletter_subscribers' and column_name='subscribed_at') then
+    create index if not exists newsletter_subscribers_subscribed_at_idx on public.newsletter_subscribers(subscribed_at desc);
+  elsif exists(select 1 from information_schema.columns where table_schema='public' and table_name='newsletter_subscribers' and column_name='created_at') then
+    create index if not exists newsletter_subscribers_created_idx on public.newsletter_subscribers(created_at desc);
+  end if;
+end $$;
 
 grant insert, update on public.site_visitors to anon, authenticated;
 grant select on public.site_visitors to authenticated;
-grant insert, update on public.newsletter_subscribers to anon, authenticated;
+revoke insert, update on public.newsletter_subscribers from public, anon, authenticated;
 grant select on public.newsletter_subscribers to authenticated;
 
 create or replace function public.record_site_visit(
@@ -423,19 +432,8 @@ using (
 );
 
 drop policy if exists "Visitors can subscribe to newsletter" on public.newsletter_subscribers;
-create policy "Visitors can subscribe to newsletter"
-on public.newsletter_subscribers
-for insert
-to anon, authenticated
-with check (true);
-
 drop policy if exists "Visitors can update newsletter subscription" on public.newsletter_subscribers;
-create policy "Visitors can update newsletter subscription"
-on public.newsletter_subscribers
-for update
-to anon, authenticated
-using (true)
-with check (true);
+-- Only the newsletter-signup Edge Function writes subscriptions using its server-side key.
 
 drop policy if exists "Admins can read newsletter subscribers" on public.newsletter_subscribers;
 create policy "Admins can read newsletter subscribers"

@@ -7,6 +7,7 @@ const iconMarkup = (name) => fs.readFileSync(path.join(publicDir, 'assets/ui', n
 const header = fs.readFileSync(path.join(root, 'partials/header.html'), 'utf8').replace(/\{\{icon:([\w-]+)\}\}/g, (_, name) => iconMarkup(name));
 const footer = fs.readFileSync(path.join(root, 'partials/footer.html'), 'utf8');
 fs.copyFileSync(path.join(root, 'supabase/store-analytics.sql'), path.join(publicDir, 'store-analytics.sql'));
+fs.copyFileSync(path.join(root, 'supabase/newsletter_subscribers.sql'), path.join(publicDir, 'newsletter-setup.sql'));
 const cardImages = JSON.parse(fs.readFileSync(path.join(publicDir, 'assets/ui/card-images.json'), 'utf8'));
 const iconNames = ['x', 'search', 'plus', 'play', 'pause', 'volume-2', 'volume-x'];
 fs.writeFileSync(path.join(publicDir, 'assets/ui/icons.js'), 'window.BFL_ICONS = ' + JSON.stringify(Object.fromEntries(iconNames.map(name => [name, iconMarkup(name)]))) + ';');
@@ -26,10 +27,11 @@ for (const file of fs.readdirSync(publicDir).filter((file) => file.endsWith('.ht
   if (/<footer[\s>]/.test(html)) html = html.replace(/<footer[\s\S]*?<\/footer>/, footer);
   html = html.replace(/<link[^>]+fonts\.googleapis\.com\/css2[^>]*>/g, '');
   html = html.replace(/<link rel="stylesheet" href="(?:style|store-design)\.css[^\"]*">/g, '');
-  html = html.replace('</head>', '<link rel="stylesheet" href="store-design.css?v=welcome2">\n</head>');
+  html = html.replace('</head>', '<link rel="stylesheet" href="store-design.css?v=hero3">\n</head>');
   html = html.replace(/<script src="privacy-controls\.js[^\"]*"><\/script>\s*/g, '');
   html = html.replace(/<script src="script\.js[^\"]*"><\/script>/, '<script src="privacy-controls.js?v=welcome2"></script>\n<script src="script.js?v=welcome2"></script>');
-  html = html.replace(/(src="(?:checkout|supabase-admin)\.js)(?:\?[^\"]*)?/g, '$1?v=privacy1');
+  html = html.replace(/(src="checkout\.js)(?:\?[^\"]*)?/g, '$1?v=privacy1');
+  html = html.replace(/(src="supabase-admin\.js)(?:\?[^\"]*)?/g, '$1?v=newsletter2');
   html = html.replace(/<script src="(?:store-ui\.js|assets\/ui\/(?:icons|catalog)\.js)[^\"]*"><\/script>/g, '');
   html = html.replace('</body>', '<script src="assets/ui/icons.js?v=redesign2"></script>\n<script src="assets/ui/catalog.js?v=fashion1"></script>\n<script src="store-ui.js?v=fashion1"></script>\n</body>');
   html = html.replace(/<svg class="cart-close"[\s\S]*?<\/svg>/g, `<button class="cart-close icon-btn" type="button" aria-label="Close shopping bag">${iconMarkup('x')}</button>`);

@@ -29,6 +29,7 @@
   let saleAlertAudioContext = null;
   let latestOrders = [];
   let latestNewsletterRows = [];
+  let newsletterRequest = 0;
   let latestAccountRows = [];
   const TAPSTITCH_SHIPPING_RATES_GBP = Object.freeze({
     'United Kingdom': { first: 3.02, additional: 1.22 },
@@ -486,19 +487,19 @@
     if (!newsletterListEl) return;
     const query = normalise(listSearchInput?.value);
     const filtered = rows.filter((row) => {
-      const haystack = [row.email, row.source, row.created_at, row.updated_at].join(' ').toLowerCase();
+      const haystack = [row.email, row.source, row.created_at, row.updated_at, row.is_subscribed ? 'subscribed' : 'unsubscribed'].join(' ').toLowerCase();
       return !query || haystack.includes(query);
     });
-    setCount(newsletterCountEls, rows.length);
+    setCount(newsletterCountEls, rows.filter(row => row.is_subscribed).length);
     if (!filtered.length) {
-      newsletterListEl.innerHTML = `<div class="auth-empty">No subscribers${query ? ' match your search.' : ' yet.'}</div>`;
+      newsletterListEl.innerHTML = `<div class="auth-empty">No contacts${query ? ' match your search.' : ' yet.'}</div>`;
       return;
     }
     newsletterListEl.innerHTML = filtered.map((row) => `
       <article class="admin-list-row">
         <div>
           <strong>${escapeHtml(row.email || 'Unknown email')}</strong>
-          <span>${escapeHtml(row.source || 'Unknown source')}</span>
+          <span>${escapeHtml(row.source || 'Unknown source')} / ${row.is_subscribed ? 'Subscribed' : 'Unsubscribed'}</span>
         </div>
         <small>${formatDate(row.created_at || row.updated_at)}</small>
       </article>
@@ -507,28 +508,39 @@
 
   async function loadNewsletter() {
     if (!client || !newsletterListEl) return;
+    const request = ++newsletterRequest;
     setMessage('Loading newsletter subscribers...', '');
-    const tableNames = ['newsletter_subscribers', 'marketing_subscribers', 'subscribers'];
-
-    for (const tableName of tableNames) {
-      const { data, error } = await client
-        .from(tableName)
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (!error) {
-        latestNewsletterRows = data || [];
-        renderNewsletterRows(latestNewsletterRows);
-        setMessage(`${latestNewsletterRows.length} subscriber${latestNewsletterRows.length === 1 ? '' : 's'} found.`, 'success');
-        return;
+    try {
+      const rows = [];
+      const pageSize = 1000;
+      for (let offset = 0; ; offset += pageSize) {
+        const { data, error } = await client.from('newsletter_subscribers')
+          .select('*').order('email', { ascending: true }).range(offset, offset + pageSize - 1);
+        if (request !== newsletterRequest) return;
+        if (error) throw error;
+        rows.push(...(data || []));
+        if (!data || data.length < pageSize) break;
       }
+      // The signup function uses subscribed_at/first_source; retain compatibility with old rows.
+      latestNewsletterRows = rows.map(row => ({
+        ...row,
+        source: row.first_source || row.source || row.last_source || '',
+        created_at: row.subscribed_at || row.created_at || row.updated_at,
+        is_subscribed: typeof row.is_subscribed === 'boolean' ? row.is_subscribed : row.subscribed !== false,
+      })).sort((a, b) => (Date.parse(b.created_at) || 0) - (Date.parse(a.created_at) || 0));
+      renderNewsletterRows(latestNewsletterRows);
+      const active = latestNewsletterRows.filter(row => row.is_subscribed).length;
+      setMessage(`${latestNewsletterRows.length} contact${latestNewsletterRows.length === 1 ? '' : 's'} found (${active} subscribed).`, 'success');
+    } catch (error) {
+      if (request !== newsletterRequest) return;
+      latestNewsletterRows = [];
+      newsletterCountEls.forEach(el => { el.textContent = '-'; });
+      const setupNeeded = ['PGRST205', '42P01', '42703', '42501'].includes(error?.code);
+      newsletterListEl.innerHTML = setupNeeded
+        ? '<div class="auth-empty">Newsletter access needs setup. Run <a href="newsletter-setup.sql" download>newsletter-setup.sql</a> in Supabase SQL Editor, then refresh. Existing subscribers are preserved.</div>'
+        : '<div class="auth-empty">Could not load newsletter contacts. Check your connection, then select Refresh.</div>';
+      setMessage(setupNeeded ? 'Newsletter schema or admin read permission needs updating.' : 'Newsletter contacts are temporarily unavailable.', 'warning');
     }
-
-    newsletterListEl.innerHTML = `
-      <div class="auth-empty">
-        Newsletter subscribers need a Supabase table. Run the updated newsletter section in supabase-schema.sql, or connect this page to the table your Edge Function uses.
-      </div>
-    `;
-    setMessage('Newsletter table was not found yet.', 'warning');
   }
 
   function renderAccountRows(rows, note) {
