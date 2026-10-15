@@ -17,6 +17,14 @@
   let consent = read(localStorage, CONSENT_KEY);
   if (!validConsent(consent)) consent = null;
   let returnFocus = null;
+  let invitationPending = false;
+  let newsletterInitialised = false;
+  try {
+    invitationPending = document.body.classList.contains('home-page')
+      && !!document.querySelector('[data-signup-modal]')
+      && !sessionStorage.getItem('__bfl_signup_visit__')
+      && !localStorage.getItem('__bfl_newsletter_joined__');
+  } catch {}
 
   document.body.insertAdjacentHTML('beforeend', `
     <aside class="cookie-banner" data-cookie-banner aria-label="Cookie choices" hidden>
@@ -47,6 +55,16 @@
     dialog.showModal();
   }
   function closeSettings() { dialog.close(); returnFocus?.focus(); }
+  function holdNewsletter() {
+    newsletterInitialised = true;
+    invitationPending = true;
+    banner.hidden = true;
+  }
+  function releaseNewsletter() {
+    newsletterInitialised = true;
+    invitationPending = false;
+    banner.hidden = isAdmin || !!consent;
+  }
   function applyChoice(analytics) {
     consent = { version: VERSION, analytics, savedAt: Date.now() };
     write(localStorage, CONSENT_KEY, consent);
@@ -57,6 +75,8 @@
   }
   window.BFLPrivacy = {
     openSettings,
+    holdNewsletter,
+    releaseNewsletter,
     get analyticsAllowed() { return consent?.analytics === true && validConsent(consent); },
     get needsDecision() { return !validConsent(consent); },
     get isOpen() { return dialog.open || !banner.hidden; }
@@ -69,7 +89,9 @@
     else applyChoice(button.hasAttribute('data-cookie-save') ? toggle.checked : button.dataset.cookieChoice === 'true');
   });
   dialog.addEventListener('cancel', () => { setTimeout(() => returnFocus?.focus(), 0); });
-  banner.hidden = isAdmin || !!consent;
+  banner.hidden = isAdmin || !!consent || invitationPending;
+  // If the invitation cannot initialise, privacy choices must still remain reachable.
+  setTimeout(() => { if (invitationPending && !newsletterInitialised) releaseNewsletter(); }, 3000);
 
   const TYPES = new Set(['page_view', 'product_view', 'add_to_cart', 'remove_from_cart', 'checkout_start', 'payment_start', 'newsletter_signup']);
   const safeId = value => typeof value === 'string' && /^[a-z0-9][a-z0-9-]{0,119}$/.test(value) ? value : null;
@@ -142,7 +164,7 @@
       if (route === 'checkout') track('checkout_start');
     }
     heartbeat = setInterval(() => {
-      if (!validConsent(consent)) { consent = null; banner.hidden = false; updateCollection(); return; }
+      if (!validConsent(consent)) { consent = null; banner.hidden = invitationPending; updateCollection(); return; }
       if (document.visibilityState === 'visible') flush();
     }, 25000);
   }
@@ -151,7 +173,7 @@
     if (event.key !== CONSENT_KEY) return;
     consent = read(localStorage, CONSENT_KEY);
     if (!validConsent(consent)) consent = null;
-    banner.hidden = isAdmin || !!consent;
+    banner.hidden = isAdmin || !!consent || invitationPending;
     if (dialog.open) toggle.checked = consent?.analytics === true;
     updateCollection();
   });

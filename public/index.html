@@ -9,7 +9,7 @@
 
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
-<link rel="stylesheet" href="store-design.css?v=privacy1">
+<link rel="stylesheet" href="store-design.css?v=welcome2">
 </head>
 <body class="home-page">
 
@@ -323,25 +323,28 @@
   </div>
 </div>
 
-<!-- ================= FIRST VISIT POPUP ================= -->
+<!-- ================= NEWSLETTER INVITATION ================= -->
 <div class="signup-modal" data-signup-modal aria-hidden="true" inert>
   <div class="signup-modal-backdrop" data-signup-close></div>
-  <section class="signup-modal-panel" role="dialog" aria-modal="true" aria-labelledby="signup-modal-title">
+  <section class="signup-modal-panel" role="dialog" aria-modal="true" aria-labelledby="signup-modal-title" aria-describedby="signup-modal-description">
     <div class="signup-modal-image">
-      <img src="IMG_5580.JPG" alt="Ball For Life latest drop">
+      <picture><source media="(max-width:600px)" srcset="assets/ui/campaign-mobile.webp"><img src="assets/ui/street-campaign-mobile.webp" alt="Ball For Life tee worn on the street" width="960" height="540" decoding="async"></picture>
     </div>
     <div class="signup-modal-content">
       <button class="signup-modal-close" type="button" data-signup-close aria-label="Close signup popup">
-        <span></span><span></span>
+        <img src="assets/ui/x.svg" alt="" width="20" height="20">
       </button>
-      <img class="signup-modal-logo" src="assets/ui/brand-logo.png" alt="Ball For Life">
-      <h2 id="signup-modal-title">New drops. Member discounts. First to know.</h2>
+      <img class="signup-modal-logo" src="assets/ui/brand-logo-black.png" alt="Ball For Life" width="112" height="63">
+      <h2 id="signup-modal-title">Stay in the loop.</h2>
+      <p id="signup-modal-description" class="signup-modal-description">New drops, member discounts and Ball For Life updates. Straight to your inbox.</p>
       <form class="signup-modal-form" data-signup-form>
-        <input type="email" name="email" placeholder="Join our mailing list" aria-label="Email address" required>
-        <button type="submit">Sign up</button>
+        <label for="signup-email">Email address</label>
+        <input id="signup-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" inputmode="email" required>
+        <button type="submit">Join the list <img src="assets/ui/arrow-right.svg" alt="" width="18" height="18"></button>
       </form>
       <p class="signup-status" data-signup-status aria-live="polite"></p>
-      <p>*By signing up you're joining the Ball For Life mailing list and can unsubscribe at any time.</p>
+      <button class="signup-continue" type="button" data-signup-close>Continue shopping</button>
+      <p class="signup-modal-terms">By joining, you agree to receive marketing emails. Unsubscribe any time. <a href="privacy-policy.html#marketing">Privacy policy</a></p>
     </div>
   </section>
 </div>
@@ -349,8 +352,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="supabase-core.js"></script>
-<script src="privacy-controls.js?v=privacy1"></script>
-<script src="script.js?v=privacy1"></script>
+<script src="privacy-controls.js?v=welcome2"></script>
+<script src="script.js?v=welcome2"></script>
 
 <script src="community.js?v=community4"></script>
 

@@ -26,9 +26,9 @@ for (const file of fs.readdirSync(publicDir).filter((file) => file.endsWith('.ht
   if (/<footer[\s>]/.test(html)) html = html.replace(/<footer[\s\S]*?<\/footer>/, footer);
   html = html.replace(/<link[^>]+fonts\.googleapis\.com\/css2[^>]*>/g, '');
   html = html.replace(/<link rel="stylesheet" href="(?:style|store-design)\.css[^\"]*">/g, '');
-  html = html.replace('</head>', '<link rel="stylesheet" href="store-design.css?v=privacy1">\n</head>');
+  html = html.replace('</head>', '<link rel="stylesheet" href="store-design.css?v=welcome2">\n</head>');
   html = html.replace(/<script src="privacy-controls\.js[^\"]*"><\/script>\s*/g, '');
-  html = html.replace(/<script src="script\.js[^\"]*"><\/script>/, '<script src="privacy-controls.js?v=privacy1"></script>\n<script src="script.js?v=privacy1"></script>');
+  html = html.replace(/<script src="script\.js[^\"]*"><\/script>/, '<script src="privacy-controls.js?v=welcome2"></script>\n<script src="script.js?v=welcome2"></script>');
   html = html.replace(/(src="(?:checkout|supabase-admin)\.js)(?:\?[^\"]*)?/g, '$1?v=privacy1');
   html = html.replace(/<script src="(?:store-ui\.js|assets\/ui\/(?:icons|catalog)\.js)[^\"]*"><\/script>/g, '');
   html = html.replace('</body>', '<script src="assets/ui/icons.js?v=redesign2"></script>\n<script src="assets/ui/catalog.js?v=fashion1"></script>\n<script src="store-ui.js?v=fashion1"></script>\n</body>');

@@ -14,7 +14,7 @@ The downloadable `public/store-analytics.sql` is a generated copy of the canonic
 ## Test the Published Store
 
 - Open the homepage in a private browser window. Before a cookie choice, no optional analytics request or browser identifier should be created.
-- Choose Reject analytics. The store should work normally and the newsletter invitation should appear after about eight seconds, when no other dialog or form interaction is active.
+- On the homepage, the newsletter invitation is the first automatic prompt, once per browser-tab visit unless subscribed. Close it to reveal cookie choices. Choose Reject analytics: the store should work normally and collection should remain off.
 - Close the invitation and refresh: it should not reappear during that browser-tab visit. A successful signup on this browser suppresses future automatic invitations, including the footer signup form. Existing subscribers on another device cannot be recognised until they submit their email there.
 - Open Cookie settings in the footer, enable Store analytics and save. Browse a product, add it to the bag and visit checkout. Within 30 seconds those events should appear in admin.
 - Reject analytics again in Cookie settings. The analytics browser and visit identifiers should be removed and further events should stop.

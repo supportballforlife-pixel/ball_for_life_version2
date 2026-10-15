@@ -759,7 +759,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const originalText = button.textContent;
+    const originalMarkup = button.innerHTML;
     button.disabled = true;
     button.textContent = 'Joining...';
 
@@ -786,12 +786,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       setTimeout(() => {
         button.disabled = false;
-        button.textContent = originalText;
+        button.innerHTML = originalMarkup;
       }, 1800);
     } catch (error) {
       console.error('Newsletter signup failed:', error);
       button.disabled = false;
-      button.textContent = originalText;
+      button.innerHTML = originalMarkup;
 
       if (statusEl) {
         statusEl.textContent = 'Could not sign you up right now. Please try again.';
@@ -810,58 +810,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // First-visit popup
+  // The homepage invitation is the first prompt; privacy choices follow dismissal.
   if (!document.body.classList.contains('home-page')) return;
-
-  let modal = document.querySelector('[data-signup-modal]');
-  if (!modal) {
-    document.body.insertAdjacentHTML('beforeend', `
-      <div class="signup-modal" data-signup-modal aria-hidden="true" inert>
-        <div class="signup-modal-backdrop" data-signup-close></div>
-        <section class="signup-modal-panel" role="dialog" aria-modal="true" aria-labelledby="signup-modal-title">
-          <div class="signup-modal-image">
-            <img src="IMG_5580.JPG" alt="Ball For Life latest drop">
-          </div>
-          <div class="signup-modal-content">
-            <button class="signup-modal-close" type="button" data-signup-close aria-label="Close signup popup">
-              <span></span><span></span>
-            </button>
-            <img class="signup-modal-logo" src="brand-logo.png" alt="Ball For Life">
-            <h2 id="signup-modal-title">New drops. Member discounts. First to know.</h2>
-            <form class="signup-modal-form" data-signup-form>
-              <input type="email" name="email" placeholder="Join our mailing list" aria-label="Email address" required>
-              <button type="submit">Sign up</button>
-            </form>
-            <p class="signup-status" data-signup-status aria-live="polite"></p>
-            <p>*By signing up you're joining the Ball For Life mailing list and can unsubscribe at any time.</p>
-          </div>
-        </section>
-      </div>
-    `);
-    modal = document.querySelector('[data-signup-modal]');
-  }
+  const modal = document.querySelector('[data-signup-modal]');
+  if (!modal) { window.BFLPrivacy?.releaseNewsletter(); return; }
 
   const closeButtons = modal.querySelectorAll('[data-signup-close]');
   const popupForm = modal.querySelector('[data-signup-form]');
   const popupStatus = modal.querySelector('[data-signup-status]');
   let previousFocus = null;
+  let scrollPosition = 0;
+  let releaseTimer;
 
   function openModal() {
+    window.BFLPrivacy?.holdNewsletter();
     storageSet(sessionStorage, SIGNUP_SEEN_KEY);
     previousFocus = document.activeElement;
+    clearTimeout(releaseTimer);
+    scrollPosition = window.scrollY;
     modal.inert = false;
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    modal.querySelector('input')?.focus();
+    document.body.style.setProperty('--signup-scroll-top', `${-scrollPosition}px`);
+    document.body.classList.add('newsletter-open');
+    const focusTarget = window.matchMedia('(pointer: coarse)').matches
+      ? modal.querySelector('.signup-modal-close') : modal.querySelector('input');
+    requestAnimationFrame(() => focusTarget?.focus({ preventScroll: true }));
   }
 
   function closeModal() {
+    if (!modal.classList.contains('open')) return;
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
     modal.inert = true;
-    document.body.style.overflow = '';
-    previousFocus?.focus();
+    document.body.classList.remove('newsletter-open');
+    document.body.style.removeProperty('--signup-scroll-top');
+    window.scrollTo({ top: scrollPosition, behavior: 'instant' });
+    previousFocus?.focus({ preventScroll: true });
+    releaseTimer = setTimeout(() => window.BFLPrivacy?.releaseNewsletter(), 300);
   }
 
   closeButtons.forEach((button) => button.addEventListener('click', closeModal));
@@ -880,14 +866,18 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   });
 
-  // One invitation per browser visit, after privacy choices and other dialogs are settled.
+  // One invitation per browser visit; subscribed browsers skip it completely.
   if (!storageGet(sessionStorage, SIGNUP_SEEN_KEY) && !storageGet(localStorage, SIGNUP_JOINED_KEY)) {
-    const readyAt = Date.now() + 8000;
-    const timer = setInterval(() => {
-      if (storageGet(localStorage, SIGNUP_JOINED_KEY) || storageGet(sessionStorage, SIGNUP_SEEN_KEY)) { clearInterval(timer); return; }
-      if (Date.now() < readyAt || window.BFLPrivacy?.isOpen || document.visibilityState !== 'visible' || document.activeElement?.matches('input,textarea,select') || document.querySelector('dialog[open],.cart-drawer.open,.mobile-drawer.open')) return;
+    window.BFLPrivacy?.holdNewsletter();
+    let timer;
+    const invite = () => {
+      if (modal.classList.contains('open')) { clearInterval(timer); window.BFLPrivacy?.holdNewsletter(); return; }
+      if (storageGet(localStorage, SIGNUP_JOINED_KEY) || storageGet(sessionStorage, SIGNUP_SEEN_KEY)) { clearInterval(timer); window.BFLPrivacy?.releaseNewsletter(); return; }
+      if (document.visibilityState !== 'visible' || document.activeElement?.matches('input,textarea,select') || document.querySelector('dialog[open],.cart-drawer.open,.mobile-drawer.open')) return;
       clearInterval(timer); openModal();
-    }, 1000);
-    window.addEventListener('pagehide', () => clearInterval(timer), { once: true });
-  }
+    };
+    timer = setInterval(invite, 250);
+    window.addEventListener('pagehide', () => { clearInterval(timer); clearTimeout(releaseTimer); }, { once: true });
+    window.addEventListener('pageshow', event => { if (event.persisted) invite(); });
+  } else window.BFLPrivacy?.releaseNewsletter();
 })();

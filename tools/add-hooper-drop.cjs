@@ -36,7 +36,7 @@ async function run() {
   for (const file of fs.readdirSync(publicDir).filter(name => name.endsWith('.html'))) {
     const target = path.join(publicDir, file);
     const original = fs.readFileSync(target, 'utf8');
-    const updated = original.replace(/((?:store-design\.css|store-ui\.js|script\.js|product\.js|checkout\.js|supabase-admin\.js|assets\/ui\/catalog\.js)\?v=)[^"\s]+/g, '$1privacy1');
+    const updated = original.replace(/((?:store-design\.css|store-ui\.js|script\.js|product\.js|checkout\.js|supabase-admin\.js|assets\/ui\/catalog\.js)\?v=)[^"\s]+/g, '$1welcome2');
     if (updated !== original) fs.writeFileSync(target, updated);
   }
   console.log('Added the three Hooper products, matched front/back photos, regenerated the catalogue and refreshed versions.');
