@@ -1,0 +1,26 @@
+/* A continuous row of supplied community photos, with their original framing. */
+.customer-photos{--photo-height:330px;--photo-gap:14px;padding:0 0 48px;background:var(--white);color:var(--black);}
+.customer-photos-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:88px;margin-bottom:18px;border-top:1px solid var(--black);border-bottom:1px solid var(--black);}
+.customer-photos-heading h2{font:600 clamp(26px,2.35vw,38px)/1 var(--body);letter-spacing:-.025em;text-transform:uppercase;}
+.customer-photos-controls{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.customer-photos-controls button{display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--black);border-radius:50%;transition:background .18s,color .18s;}
+.customer-photos-controls button:hover{background:var(--black);}
+.customer-photos-controls img{width:16px;height:16px;transition:filter .18s;}
+.customer-photos-controls button:hover img{filter:invert(1);}
+.customer-photos-viewport{max-width:1536px;margin-inline:auto;padding:0 var(--gutter);overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;overflow-anchor:none;}
+.customer-photos-viewport::-webkit-scrollbar{display:none;}
+.customer-photos-viewport:focus-visible{outline-offset:-3px;}
+.customer-photos-track{display:flex;width:max-content;}
+.customer-photos-group{display:flex;flex-shrink:0;gap:var(--photo-gap);padding-right:var(--photo-gap);margin:0;list-style:none;}
+.customer-photos-group>li{flex:0 0 auto;}
+.customer-photo{display:block;width:max-content;background:var(--surface);}
+.customer-photo img{display:block;width:auto;max-width:none;height:var(--photo-height);object-fit:contain;background:var(--surface);}
+.customer-photo:focus-visible{outline-offset:2px;}
+@media(max-width:600px){
+  .customer-photos{--photo-height:270px;--photo-gap:10px;padding-bottom:34px;}
+  .customer-photos-heading{min-height:68px;gap:12px;margin-bottom:14px;}
+  .customer-photos-heading h2{font-size:24px;}
+  .customer-photos-controls{gap:6px;}
+  .customer-photos-controls button{width:34px;height:34px;}
+}
+@media(prefers-reduced-motion:reduce){.customer-photos-controls button{transition:none;}}
