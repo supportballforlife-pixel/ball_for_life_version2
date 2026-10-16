@@ -146,6 +146,12 @@ Use contained front imagery, real colour samples, title, current price and conci
 
 Colour swatches and size buttons show selected state visually and through `aria-pressed`. The main Add to Bag action is the strongest control. Keep delivery estimates and returns information directly nearby. Provide front/back thumbnails, touch swiping, image zoom and accessible details accordions. Mobile uses the existing fixed purchase bar.
 
+On phones, show five colour swatches with a disclosure for the remainder. Keep the selected colour visible when that disclosure closes, and use 44px touch targets. The compact square phone gallery contains the whole garment. Where genuine customer photos exist, include them only with their matching product, identify the photographed colour, and keep browsing media independent of the colour/size sent to the bag. Use small image derivatives for thumbnails.
+
+### Checkout Summary
+
+The native order-details disclosure starts closed on phones and open on larger screens. Keep the grand total, any applied discount, delivery estimate and returns visible outside it. Contact fields follow the compact phone summary; the payment action remains after the form. Show the payment-method row once beside the checkout heading. Empty checkout offers a direct shopping action without an inactive delivery form.
+
 ### Fields and Buttons
 
 Primary actions use the black button; over a photograph use the light button. Fields use a light border and a white background. Focus indicators are visible, disabled controls reduce opacity, and status messages explain a relevant customer action or recovery. Phone form text is 16px to avoid unwanted input zoom.
@@ -157,6 +163,8 @@ Keep thumbnails, chosen options, quantity and remove controls visible. Subtotal 
 ### Customer Media
 
 Use the same white background as shopping sections, with fine divider rules rather than framed cards. Keep attribution, genuine feedback and the correct product link with each photo or video. Show all three reviews on desktop and an accessible horizontal carousel on smaller screens. Customer photos have manual slide controls. Videos have visible playback and sound controls, use real frame posters and attach their sources when entering the viewport. Do not invent ratings or testimonials.
+
+Review cards use natural content tracks, not equal-height filler above their product links. Supplied feedback and creator clips are not automatically five-star ratings; omit rating decoration when no actual score was supplied.
 
 ### Motion
 

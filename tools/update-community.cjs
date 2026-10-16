@@ -12,9 +12,9 @@ for (const file of ['index.html', 'reviews.html']) {
   } else {
     html = html.replace(/<main>[\s\S]*?<\/main>/, `<main>${community.replace('<h2 ', '<h1 ').replace('</h2>', '</h1>')}</main>`);
   }
-  html = html.replace(/(store-design\.css|store-ui\.js)\?v=[^\"]+/g, '$1?v=welcome2');
+  html = html.replace(/store-design\.css\?v=[^\"]+/g, 'store-design.css?v=purchase1');
   html = html.replace(/<script src="community\.js[^\"]*"><\/script>\s*/g, '');
-  html = html.replace('</body>', '<script src="community.js?v=community4"></script>\n</body>');
+  html = html.replace('</body>', '<script src="community.js?v=community5"></script>\n</body>');
   fs.writeFileSync(target, html);
 }
 console.log('Updated the shared community section on homepage and reviews page.');

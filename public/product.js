@@ -346,9 +346,18 @@
     const isTee = item.category === 'Graphic Tees';
     const isSet = item.kind === 'set';
     const sizes = item.sizes || SIZES;
+    const galleryViews = [
+      { side: 'front', label: 'Front' },
+      { side: 'back', label: 'Back' },
+      ...(item.id === 'stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt' ? [
+        { src: 'assets/community/tjay-reading-fit.webp', thumb: 'assets/community/tjay-reading-fit-thumb.webp', label: 'Customer fit', alt: 'T-jay from Reading wearing the black Stephen Curry Variant 2 Tee on court' },
+        { src: 'assets/community/tjay-reading-sleeve.webp', thumb: 'assets/community/tjay-reading-sleeve-thumb.webp', label: 'Sleeve detail', alt: 'The BFL sleeve logo on T-jay\'s black Stephen Curry Variant 2 Tee' },
+        { src: 'assets/community/tjay-reading-graphic.webp', thumb: 'assets/community/tjay-reading-graphic-thumb.webp', label: 'Print detail', alt: 'A close-up of the Stephen Curry graphic on T-jay\'s black tee' },
+      ] : []),
+    ];
     const state = {
       color: item.colors[0],
-      side: 'front',
+      view: 0,
       size: null,
       hoodieSize: null,
       bottomsSize: null,
@@ -433,12 +442,13 @@
             <span>Colour</span>
             <strong class="selected-color">${titleFromColor(state.color)}</strong>
           </div>
-          <div class="product-swatches">
+          <div class="product-swatches" id="product-colours">
             ${item.colors.map((color) => `
               <button class="product-swatch ${color === state.color ? 'active' : ''}" type="button" data-color="${color}" aria-label="${titleFromColor(color)}" title="${titleFromColor(color)}">
                 <span style="background:${SWATCHES[color] || '#ddd'}"></span>
               </button>
             `).join('')}
+            ${item.colors.length > 5 ? `<button class="product-colours-toggle" type="button" aria-expanded="false" aria-controls="product-colours" aria-label="Show all ${item.colors.length} colours" title="Show all colours"><span>+${item.colors.length - 5}</span><img src="assets/ui/minus.svg" alt="" hidden></button>` : ''}
           </div>
 
           <div class="product-option-head product-size-head">
@@ -498,15 +508,16 @@
     const gallery = document.createElement('div');
     gallery.className = 'product-gallery';
     gallery.appendChild(app.querySelector('.product-media-panel'));
-    gallery.insertAdjacentHTML('beforeend', `<div class="product-thumbs">${['front', 'back'].map(side => `<button type="button" class="product-thumb ${isSet ? 'is-set' : ''}" data-product-side="${side}" aria-label="View ${side}"><img alt="${side} view" loading="lazy">${isSet ? '<img data-secondary-thumb alt="" loading="lazy">' : ''}</button>`).join('')}</div>`);
+    gallery.insertAdjacentHTML('beforeend', `<div class="product-thumbs" role="group" aria-label="Product images">${galleryViews.map((view, index) => `<button type="button" class="product-thumb ${isSet ? 'is-set' : ''} ${view.src ? 'is-customer-photo' : ''}" data-gallery-index="${index}" ${view.side ? `data-product-side="${view.side}"` : ''} aria-label="View ${view.label.toLowerCase()}${view.src ? ' - T-jay wearing Black' : ''}"><img alt="" loading="lazy">${isSet ? '<img data-secondary-thumb alt="" loading="lazy">' : ''}</button>`).join('')}</div>`);
     const wornBy = {
       'ball-for-life-graphic-tee': ['RST', 'Essex', 'assets/ui/rst-poster.jpg', 'review-rst-name'],
-      'stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt': ['T-jay', 'Reading', 'assets/community/tjay-reading-fit.jpeg', 'review-tjay-name'],
+      'stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt': ['T-jay', 'Reading', 'assets/community/tjay-reading-fit-thumb.webp', 'review-tjay-name'],
       'dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt': ['KadenBruney', 'Preston', 'assets/ui/kaden-poster.jpg', 'review-kaden-name'],
     }[item.id];
-    if (wornBy) gallery.insertAdjacentHTML('beforeend', `<a class="product-worn-link" href="index.html#${wornBy[3]}"><img src="${wornBy[2]}" alt="" width="42" height="52" loading="lazy"><span>Worn by ${wornBy[0]}<small>${wornBy[1]} &middot; See it on court</small></span><img class="worn-arrow" src="assets/ui/arrow-right.svg" alt="" width="18" height="18"></a>`);
     hero.prepend(gallery);
-    purchase.append(info, buy, accordion);
+    purchase.append(info, buy);
+    if (wornBy) purchase.insertAdjacentHTML('beforeend', `<a class="product-worn-link" href="index.html#${wornBy[3]}"><img src="${wornBy[2]}" alt="" width="42" height="52" loading="lazy"><span>Worn by ${wornBy[0]}<small>${wornBy[1]} &middot; See it on court</small></span><img class="worn-arrow" src="assets/ui/arrow-right.svg" alt="" width="18" height="18"></a>`);
+    purchase.append(accordion);
     hero.append(purchase);
     const browse = document.createElement('details');
     browse.className = 'product-browse';
@@ -537,7 +548,7 @@
     app.querySelector('.product-secondary-image')?.addEventListener('click', openZoom);
     zoomButton.addEventListener('click', openZoom);
     zoom.querySelector('button').addEventListener('click', () => zoom.close());
-    app.querySelectorAll('[data-product-side]').forEach(button => button.addEventListener('click', () => { state.side = button.dataset.productSide; updateImage(); }));
+    app.querySelectorAll('[data-gallery-index]').forEach(button => button.addEventListener('click', () => { state.view = Number(button.dataset.galleryIndex); updateImage(); }));
     let touchStart = null;
     const media = app.querySelector('.product-media-panel');
     media.addEventListener('touchstart', event => { touchStart = event.changedTouches[0]; }, { passive: true });
@@ -545,7 +556,10 @@
       if (!touchStart) return;
       const end = event.changedTouches[0];
       const dx = end.clientX - touchStart.clientX;
-      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(end.clientY - touchStart.clientY)) { state.side = state.side === 'front' ? 'back' : 'front'; updateImage(); }
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(end.clientY - touchStart.clientY)) {
+        state.view = (state.view + (dx < 0 ? 1 : -1) + galleryViews.length) % galleryViews.length;
+        updateImage();
+      }
       touchStart = null;
     }, { passive: true });
     const sideLabel = app.querySelector('.product-side-label');
@@ -564,14 +578,30 @@
     }
 
     function updateImage() {
-      image.src = imagePath(item, state.color, state.side);
-      if (isSet) app.querySelector('.product-secondary-image').src = `${item.secondaryImageBase}/${state.side}.webp`;
-      image.alt = `${item.name} ${titleFromColor(state.color)} ${state.side}`;
-      sideLabel.textContent = state.side === 'front' ? 'Front' : 'Back';
+      const view = galleryViews[state.view];
+      image.src = view.src || imagePath(item, state.color, view.side);
+      image.classList.toggle('is-customer-photo', Boolean(view.src));
+      media.classList.toggle('is-customer-photo', Boolean(view.src));
+      if (isSet) app.querySelector('.product-secondary-image').src = `${item.secondaryImageBase}/${view.side}.webp`;
+      image.alt = view.alt || `${item.name} ${titleFromColor(state.color)} ${view.side}`;
+      sideLabel.textContent = view.src ? `${view.label} - T-jay, Black` : view.label;
       selectedColor.textContent = titleFromColor(state.color);
-      app.querySelectorAll('.product-swatch').forEach((button) => { button.classList.toggle('active', button.dataset.color === state.color); button.setAttribute('aria-pressed', String(button.dataset.color === state.color)); });
+      const visibleColours = item.colors.slice(0, 5);
+      if (!visibleColours.includes(state.color)) visibleColours[4] = state.color;
+      app.querySelectorAll('.product-swatch').forEach((button) => {
+        button.classList.toggle('active', button.dataset.color === state.color);
+        button.classList.toggle('is-secondary', !visibleColours.includes(button.dataset.color));
+        button.setAttribute('aria-pressed', String(button.dataset.color === state.color));
+      });
       app.querySelectorAll('.product-size').forEach((button) => { const chosen = isSet ? state[`${button.dataset.sizePart}Size`] : state.size; button.classList.toggle('active', button.dataset.size === chosen); button.setAttribute('aria-pressed', String(button.dataset.size === chosen)); });
-      app.querySelectorAll('[data-product-side]').forEach(button => { button.classList.toggle('active', button.dataset.productSide === state.side); button.setAttribute('aria-pressed', String(button.dataset.productSide === state.side)); button.querySelector('img').src = imagePath(item, state.color, button.dataset.productSide); if (isSet) button.querySelector('[data-secondary-thumb]').src = `${item.secondaryImageBase}/${button.dataset.productSide}.webp`; });
+      app.querySelectorAll('[data-gallery-index]').forEach(button => {
+        const index = Number(button.dataset.galleryIndex);
+        const thumbnail = galleryViews[index];
+        button.classList.toggle('active', index === state.view);
+        button.setAttribute('aria-pressed', String(index === state.view));
+        button.querySelector('img').src = thumbnail.thumb || thumbnail.src || imagePath(item, state.color, thumbnail.side);
+        if (isSet) button.querySelector('[data-secondary-thumb]').src = `${item.secondaryImageBase}/${thumbnail.side}.webp`;
+      });
       qtyValue.textContent = state.qty;
       app.querySelector('[data-mobile-buy-size]').textContent = isSet ? `Hoodie ${state.hoodieSize || '-'} / Bottoms ${state.bottomsSize || '-'}` : `${state.size || 'Select a size'} / ${titleFromColor(state.color)}`;
       updatePriceText();
@@ -618,9 +648,19 @@
     app.querySelectorAll('.product-swatch').forEach((button) => {
       button.addEventListener('click', () => {
         state.color = button.dataset.color;
-        state.side = 'front';
+        state.view = 0;
         updateImage();
       });
+    });
+
+    app.querySelector('.product-colours-toggle')?.addEventListener('click', event => {
+      const button = event.currentTarget;
+      const expanded = app.querySelector('.product-swatches').classList.toggle('is-expanded');
+      button.setAttribute('aria-expanded', String(expanded));
+      button.setAttribute('aria-label', expanded ? 'Show fewer colours' : `Show all ${item.colors.length} colours`);
+      button.title = expanded ? 'Show fewer colours' : 'Show all colours';
+      button.querySelector('span').hidden = expanded;
+      button.querySelector('img').hidden = !expanded;
     });
 
     app.querySelectorAll('.product-size').forEach((button) => {
@@ -636,7 +676,8 @@
 
     app.querySelectorAll('.product-side-nav').forEach((button) => {
       button.addEventListener('click', () => {
-        state.side = state.side === 'front' ? 'back' : 'front';
+        const direction = button.classList.contains('product-side-next') ? 1 : -1;
+        state.view = (state.view + direction + galleryViews.length) % galleryViews.length;
         updateImage();
       });
     });

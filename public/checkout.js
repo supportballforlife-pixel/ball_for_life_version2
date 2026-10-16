@@ -6,6 +6,21 @@
   const form = document.querySelector('[data-checkout-form]');
   const message = document.querySelector('[data-checkout-message]');
   const itemsEl = document.querySelector('[data-checkout-items]');
+  const layout = document.querySelector('.checkout-layout');
+  const emptyState = document.querySelector('[data-checkout-empty]');
+  const breakdown = document.querySelector('[data-checkout-breakdown]');
+  const compactSummary = window.matchMedia('(max-width: 600px)');
+  const updateSummaryLabel = () => {
+    const label = document.querySelector('[data-summary-toggle]');
+    if (label && breakdown) label.textContent = breakdown.open ? 'Hide details' : 'View details';
+  };
+  const updateSummaryLayout = () => {
+    if (breakdown) breakdown.open = !compactSummary.matches;
+    updateSummaryLabel();
+  };
+  breakdown?.addEventListener('toggle', updateSummaryLabel);
+  compactSummary.addEventListener('change', updateSummaryLayout);
+  updateSummaryLayout();
   const subtotalEl = document.querySelector('[data-checkout-subtotal]');
   const shippingEl = document.querySelector('[data-checkout-shipping]');
   const totalEl = document.querySelector('[data-checkout-total]');
@@ -99,6 +114,11 @@
 
   function renderSummary() {
     if (!itemsEl || !totalEl) return;
+    if (layout) layout.hidden = !cart.length;
+    if (emptyState) emptyState.hidden = Boolean(cart.length);
+    const itemCount = document.querySelector('[data-checkout-item-count]');
+    const quantity = cart.reduce((sum, item) => sum + Number(item.qty || 1), 0);
+    if (itemCount) itemCount.textContent = `${quantity} ${quantity === 1 ? 'item' : 'items'}`;
     if (!cart.length) {
       itemsEl.innerHTML = '<div class="auth-empty">Your bag is empty.</div>';
       if (subtotalEl) subtotalEl.textContent = money(0);

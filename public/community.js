@@ -10,6 +10,7 @@
     const position = section.querySelector('[data-review-position]');
     const auto = section.querySelector('[data-review-auto]');
     let current = 0;
+    let destination = null;
     let visible = false;
     let userPaused = motion.matches;
     let hovered = false;
@@ -24,6 +25,10 @@
     function updatePosition() {
       const values = offsets();
       current = values.reduce((best, offset, i) => Math.abs(offset - scroller.scrollLeft) < Math.abs(values[best] - scroller.scrollLeft) ? i : best, 0);
+      if (destination !== null) {
+        const targetLeft = Math.min(values[destination], scroller.scrollWidth - scroller.clientWidth);
+        if (Math.abs(targetLeft - scroller.scrollLeft) < 2) destination = null;
+      }
       position.textContent = `${current + 1} / ${cards.length}`;
       navigation.hidden = !overflowing();
       auto.hidden = motion.matches;
@@ -43,17 +48,19 @@
     function goTo(index, manual = true) {
       if (manual) pause();
       const target = (index + cards.length) % cards.length;
+      destination = target;
       const left = Math.min(offsets()[target], scroller.scrollWidth - scroller.clientWidth);
       scroller.scrollTo({ left, behavior: motion.matches ? 'instant' : 'smooth' });
       current = target;
       position.textContent = `${target + 1} / ${cards.length}`;
     }
-    section.querySelector('[data-review-prev]').addEventListener('click', () => goTo(current - 1));
-    section.querySelector('[data-review-next]').addEventListener('click', () => goTo(current + 1));
+    section.querySelector('[data-review-prev]').addEventListener('click', () => goTo((destination ?? current) - 1));
+    section.querySelector('[data-review-next]').addEventListener('click', () => goTo((destination ?? current) + 1));
     auto.addEventListener('click', () => { userPaused = !userPaused; updateAuto(); schedule(); });
     section.addEventListener('bfl:review-engaged', pause);
     scroller.addEventListener('pointerdown', event => {
       pause();
+      destination = null;
       if (event.pointerType !== 'mouse' || event.button !== 0 || !overflowing() || event.target.closest('a,button,video')) return;
       drag = { x: event.clientX, scroll: scroller.scrollLeft, id: event.pointerId };
       dragged = false;
@@ -76,7 +83,7 @@
     scroller.addEventListener('focusout', event => { if (!scroller.contains(event.relatedTarget)) { focused = false; schedule(); } });
     scroller.addEventListener('keydown', event => {
       if (event.target !== scroller) return;
-      if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); goTo(current + (event.key === 'ArrowRight' ? 1 : -1)); }
+      if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); goTo((destination ?? current) + (event.key === 'ArrowRight' ? 1 : -1)); }
     });
     scroller.addEventListener('scroll', () => {
       cancelAnimationFrame(scrollFrame);
@@ -92,9 +99,37 @@
   }
 
   function initMedia(section) {
+    const playback = [];
     section.querySelectorAll('video').forEach(video => {
       let userPaused = false;
+      let userPlaying = false;
+      let visible = false;
+      let pending = false;
+      video.defaultMuted = true;
+      video.muted = true;
+      video.playsInline = true;
+      // Lazy sources prevent the autoplay previews competing with the hero image.
+      video.autoplay = false;
       const activate = () => { if (!video.getAttribute('src')) video.src = video.dataset.src; };
+      const shouldPlay = () => visible && !userPaused && (!motion.matches || userPlaying)
+        && document.visibilityState === 'visible'
+        && !document.querySelector('dialog[open], .signup-modal.open, .cart-drawer.open, .mobile-drawer.open');
+      const start = () => {
+        if (pending || !video.paused) return;
+        activate();
+        pending = true;
+        video.play().catch(() => {}).finally(() => {
+          pending = false;
+          if (!shouldPlay()) video.pause();
+        });
+      };
+      const sync = () => {
+        if (!shouldPlay()) {
+          video.pause();
+          if (!visible) { userPlaying = false; video.muted = true; }
+        } else start();
+      };
+      playback.push(sync);
       const tools = document.createElement('div');
       tools.className = 'review-media-tools';
       video.closest('.community-card').querySelector('.community-copy').append(tools);
@@ -104,7 +139,8 @@
       play.addEventListener('click', () => {
         engage(video);
         userPaused = !video.paused;
-        if (video.paused) { activate(); video.play().catch(() => {}); } else video.pause();
+        userPlaying = !userPaused;
+        sync();
       });
       video.addEventListener('play', updatePlay); video.addEventListener('pause', updatePlay);
       tools.append(play); updatePlay();
@@ -112,13 +148,33 @@
       sound.type = 'button'; sound.className = 'video-sound icon-btn';
       const updateSound = () => { sound.innerHTML = icon(video.muted ? 'volume-x' : 'volume-2'); sound.setAttribute('aria-label', video.muted ? 'Unmute customer video' : 'Mute customer video'); sound.setAttribute('aria-pressed', String(!video.muted)); };
       sound.addEventListener('click', () => { engage(video); video.muted = !video.muted; updateSound(); });
+      video.addEventListener('volumechange', updateSound);
       tools.append(sound); updateSound();
-      if ('IntersectionObserver' in window) new IntersectionObserver(entries => {
-        if (entries[0].intersectionRatio >= .4 && !userPaused && !motion.matches && document.visibilityState === 'visible' && !document.querySelector('.review-lightbox[open]')) { activate(); video.play().catch(() => {}); } else video.pause();
-      }, { threshold: .4 }).observe(video);
-      document.addEventListener('visibilitychange', () => { if (document.visibilityState !== 'visible') video.pause(); });
-      motion.addEventListener('change', () => { if (motion.matches) video.pause(); });
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(entries => {
+          visible = entries[0].isIntersecting && entries[0].intersectionRatio >= .4;
+          sync();
+        }, { threshold: [0, .4] }).observe(video);
+      } else {
+        // Browsers without visibility observation retain explicit playback controls.
+        visible = true;
+        userPaused = true;
+      }
+      document.addEventListener('visibilitychange', sync);
+      window.addEventListener('pagehide', () => video.pause());
+      window.addEventListener('pageshow', sync);
+      motion.addEventListener('change', () => { userPlaying = false; sync(); });
     });
+
+    // Dialogs/drawers can obscure previews without changing their intersection.
+    const syncPlayback = () => playback.forEach(sync => sync());
+    document.querySelectorAll('.signup-modal, .cart-drawer, .mobile-drawer').forEach(overlay => {
+      new MutationObserver(syncPlayback).observe(overlay, { attributes: true, attributeFilter: ['open', 'class'] });
+    });
+    new MutationObserver(records => {
+      if (records.some(record => record.target.matches('dialog'))) syncPlayback();
+    }).observe(document.body, { attributes: true, attributeFilter: ['open'], subtree: true });
+    section.addEventListener('bfl:viewer-change', syncPlayback);
 
     section.querySelectorAll('.community-photo-slider').forEach(slider => {
       const photos = [...slider.querySelectorAll('img')];
@@ -183,7 +239,10 @@
       if (photoNav.hidden || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
       event.preventDefault(); index = (index + (event.key === 'ArrowRight' ? 1 : -1) + photos.length) % photos.length; show();
     });
-    dialog.addEventListener('close', () => { content.querySelector('video')?.pause(); content.replaceChildren(); });
+    dialog.addEventListener('close', () => {
+      content.querySelector('video')?.pause(); content.replaceChildren();
+      section.dispatchEvent(new Event('bfl:viewer-change'));
+    });
     section.querySelectorAll('.community-card').forEach(card => {
       const media = card.querySelector('.community-media');
       const expand = document.createElement('button');
@@ -208,7 +267,7 @@
           content.append(document.createElement('img')); show(); dialog.showModal();
         }
       });
-      media.append(expand);
+      card.querySelector('.review-media-tools').append(expand);
     });
   }
 

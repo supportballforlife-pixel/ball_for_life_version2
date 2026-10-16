@@ -6,6 +6,7 @@ for (const file of fs.readdirSync(publicDir).filter(name => name.endsWith('.html
   const target = path.join(publicDir, file);
   const html = fs.readFileSync(target, 'utf8');
   const updated = html.replace(/((?:privacy-controls\.js|script\.js)\?v=)[^"\s]+/g, '$1welcome2')
-    .replace(/(store-design\.css\?v=)[^"\s]+/g, '$1hero3');
+    .replace(/(store-design\.css\?v=)[^"\s]+/g, '$1purchase1')
+    .replace(/((?:product|checkout)\.js\?v=)[^"\s]+/g, '$1purchase1');
   if (html !== updated) fs.writeFileSync(target, updated);
 }
