@@ -23,13 +23,20 @@ create table if not exists public.store_analytics_events (
   product_id text,
   quantity smallint not null default 1 check (quantity between 1 and 99)
 );
+-- One aggregate row per UK calendar day. It intentionally contains no visitor,
+-- session, device, referrer, route, or timestamp information.
+create table if not exists public.store_visit_totals (
+  day date primary key,
+  visits integer not null default 0 check (visits >= 0)
+);
 create index if not exists store_analytics_sessions_seen on public.store_analytics_sessions(last_seen_at);
 create index if not exists store_analytics_sessions_first on public.store_analytics_sessions(first_seen_at);
 create index if not exists store_analytics_events_created on public.store_analytics_events(created_at);
 create index if not exists store_analytics_events_session on public.store_analytics_events(session_id, created_at);
 alter table public.store_analytics_sessions enable row level security;
 alter table public.store_analytics_events enable row level security;
-revoke all on public.store_analytics_sessions, public.store_analytics_events from public, anon, authenticated;
+alter table public.store_visit_totals enable row level security;
+revoke all on public.store_analytics_sessions, public.store_analytics_events, public.store_visit_totals from public, anon, authenticated;
 
 -- Turn off the old collector and its unrestricted write grants. Retain historical rows.
 do $$
@@ -97,6 +104,19 @@ end $$;
 revoke all on function public.record_store_activity(uuid,uuid,boolean,text,text,text,jsonb) from public;
 grant execute on function public.record_store_activity(uuid,uuid,boolean,text,text,text,jsonb) to anon, authenticated;
 
+create or replace function public.record_store_visit()
+returns void language plpgsql security definer set search_path = ''
+as $$
+declare
+  v_day date := (now() at time zone 'Europe/London')::date;
+begin
+  insert into public.store_visit_totals(day, visits) values (v_day, 1)
+  on conflict (day) do update set visits = public.store_visit_totals.visits + 1;
+  delete from public.store_visit_totals where day < v_day - 365;
+end $$;
+revoke all on function public.record_store_visit() from public;
+grant execute on function public.record_store_visit() to anon, authenticated;
+
 create or replace function public.get_store_analytics(p_days integer default 1)
 returns jsonb language plpgsql security definer set search_path = ''
 as $$
@@ -119,6 +139,7 @@ begin
   )
   select jsonb_build_object(
     'period_start', v_start,
+    'total_visits', (select coalesce(sum(visits), 0) from public.store_visit_totals where day >= v_start::date),
     'live', (select count(distinct visitor_id) from public.store_analytics_sessions where last_seen_at >= now() - interval '60 seconds'),
     'visitors', (select count(distinct visitor_id) from events),
     'page_views', (select count(*) from events where event_type = 'page_view'),

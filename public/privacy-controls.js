@@ -28,7 +28,7 @@
 
   document.body.insertAdjacentHTML('beforeend', `
     <aside class="cookie-banner" data-cookie-banner aria-label="Cookie choices" hidden>
-      <div><h2>Your privacy, your choice.</h2><p>We use essential storage to keep your bag and account working. With your permission, analytics helps us understand how the store is used. <a href="privacy-policy.html#cookies">Privacy policy</a></p></div>
+      <div><h2>Your privacy, your choice.</h2><p>We use essential storage to keep your bag and account working. We also keep an anonymous total visit count. With your permission, analytics helps us understand how the store is used. <a href="privacy-policy.html#cookies">Privacy policy</a></p></div>
       <div class="cookie-actions"><button type="button" data-cookie-choice="true">Accept analytics</button><button type="button" data-cookie-choice="false">Reject analytics</button><button type="button" class="cookie-settings-link" data-cookie-settings>Manage settings</button></div>
     </aside>
     <dialog class="cookie-dialog" aria-labelledby="cookie-title" aria-describedby="cookie-description">
@@ -36,7 +36,7 @@
       <h2 id="cookie-title">Cookie settings</h2>
       <p id="cookie-description">You can shop with optional analytics turned off. Change your choice here at any time.</p>
       <div class="cookie-option"><div><h3>Essential storage</h3><p>Your shopping bag, account security and saved privacy choices.</p></div><span>Always on</span></div>
-      <label class="cookie-option"><div><h3>Store analytics</h3><p>Page and product views, bag activity and checkout starts. No form entries or payment details.</p></div><input type="checkbox" role="switch" data-cookie-analytics aria-label="Allow store analytics"></label>
+      <label class="cookie-option"><div><h3>Store analytics</h3><p>Page and product views, bag activity and checkout starts. No form entries or payment details. An anonymous total visit count stays on either choice.</p></div><input type="checkbox" role="switch" data-cookie-analytics aria-label="Allow store analytics"></label>
       <p class="cookie-detail">Your choice is remembered for 6 months. <a href="privacy-policy.html#cookies">Read our privacy policy</a></p>
       <div class="cookie-actions"><button type="button" data-cookie-save>Save preferences</button><button type="button" data-cookie-choice="false">Reject analytics</button></div>
     </dialog>`);
@@ -102,6 +102,16 @@
   const product = route === 'product' ? safeId(new URLSearchParams(location.search).get('id')) : null;
   let browserId = null, visitId = null, queue = [], flushTimer = null, heartbeat = null, pending = null, pageRecorded = false;
   function allowed() { return !isAdmin && !!page && window.BFLPrivacy.analyticsAllowed; }
+  function recordAnonymousVisit() {
+    // Deliberately sends no browser, session, device, referrer, page, or event data.
+    // This is an aggregate page-load counter, not behavioural analytics.
+    const config = window.BFL_SUPABASE;
+    if (isAdmin || !page || !config?.url || !config.anonKey) return;
+    fetch(config.url + '/rest/v1/rpc/record_store_visit', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', apikey: config.anonKey },
+      body: '{}', keepalive: true
+    }).catch(() => {});
+  }
   function getIds() {
     const now = Date.now();
     const uuid = value => typeof value === 'string' && /^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(value);
@@ -180,5 +190,6 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && queue.length) flush(); });
   window.addEventListener('pagehide', () => { if (queue.length) flush(); clearInterval(heartbeat); clearTimeout(flushTimer); });
   window.addEventListener('pageshow', event => { if (event.persisted) updateCollection(); });
+  recordAnonymousVisit();
   updateCollection();
 })();

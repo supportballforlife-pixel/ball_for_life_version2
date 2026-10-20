@@ -75,11 +75,12 @@
     </nav>
 
     <section class="store-insights" aria-labelledby="insights-title">
-      <div class="insights-heading"><div><h2 id="insights-title">Store activity</h2><p>Visitor activity includes analytics opt-ins only. Paid orders and revenue include all paid orders.</p></div><label>Period<select data-analytics-period><option value="1">Today</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select></label></div>
+      <div class="insights-heading"><div><h2 id="insights-title">Store activity</h2><p>Total visits are anonymous page-load counts. Engagement detail is collected only after an analytics opt-in. Paid orders and revenue include all paid orders.</p></div><label>Period<select data-analytics-period><option value="1">Today</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select></label></div>
       <p class="insights-status" data-analytics-status role="status">Loading store activity...</p>
       <div class="admin-analytics">
         <article class="admin-stat"><span>Live visitors</span><strong data-analytics-metric="live">-</strong><small>Active in the last minute</small></article>
-        <article class="admin-stat"><span>Visitors</span><strong data-analytics-metric="visitors">-</strong><small>Unique opted-in browsers</small></article>
+        <article class="admin-stat"><span>Total visits</span><strong data-analytics-metric="total_visits">-</strong><small>Anonymous page-load count</small></article>
+        <article class="admin-stat"><span>Opted-in visitors</span><strong data-analytics-metric="visitors">-</strong><small>Unique opted-in browsers</small></article>
         <article class="admin-stat"><span>Page views</span><strong data-analytics-metric="page_views">-</strong><small>Not heartbeat requests</small></article>
         <article class="admin-stat"><span>Adds to bag</span><strong data-analytics-metric="add_to_cart">-</strong><small>Add-to-bag actions</small></article>
         <article class="admin-stat"><span>Checkout visits</span><strong data-analytics-metric="checkouts">-</strong><small>Checkout page views</small></article>
@@ -94,7 +95,7 @@
         <section><h3>Devices</h3><div class="insights-list" data-analytics-list="devices"></div></section>
       </div>
       <details class="insights-recent"><summary>Recent activity</summary><div data-analytics-recent></div></details>
-      <p class="insights-note">Dates use UK time. Browser counts are estimates, not identified people. Ad blockers and declined analytics reduce the activity shown. No form contents are recorded.</p>
+      <p class="insights-note">Dates use UK time. Total visits contain no browser or journey data. Opted-in browser counts are estimates, not identified people. Ad blockers can reduce the activity shown. No form contents are recorded.</p>
     </section>
     <section class="admin-creators" aria-label="Creator code performance">
       <div class="admin-section-head">
@@ -142,7 +143,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="supabase-core.js"></script>
-<script src="privacy-controls.js?v=welcome2"></script>
+<script src="privacy-controls.js?v=privacy3"></script>
 <script src="script.js?v=welcome2"></script>
 <script src="supabase-admin.js?v=newsletter2"></script>
 
