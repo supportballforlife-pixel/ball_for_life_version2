@@ -6,12 +6,19 @@
 (function () {
   const SALE_PRICE_GBP = 19.95;
   const SALE_END_DATE = new Date('2026-10-11T00:00:00+01:00');
+  const PRODUCT_SALES = Object.freeze({
+    'dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt': 25.19,
+  });
   const isSaleActive = (now = new Date()) => now.getTime() < SALE_END_DATE.getTime();
   window.__bfl_sale = {
     price: SALE_PRICE_GBP,
     endsAt: SALE_END_DATE.toISOString(),
     isActive: isSaleActive,
-    priceFor: (normalPrice) => isSaleActive() ? Math.min(SALE_PRICE_GBP, Number(normalPrice || 0)) : Number(normalPrice || 0),
+    priceFor: (normalPrice, productId) => {
+      const productSale = PRODUCT_SALES[productId];
+      if (Number.isFinite(productSale)) return Math.min(productSale, Number(normalPrice || 0));
+      return isSaleActive() ? Math.min(SALE_PRICE_GBP, Number(normalPrice || 0)) : Number(normalPrice || 0);
+    },
   };
   window.__bfl_getSalePrice = window.__bfl_sale.priceFor;
 })();
@@ -20,13 +27,18 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- Sale pricing ---------- */
   const SALE_PRICE_GBP = 19.95;
   const SALE_END_DATE = new Date('2026-10-11T00:00:00+01:00');
+  const PRODUCT_SALES = Object.freeze({
+    'dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt': 25.19,
+  });
 
   function isSaleActive(now = new Date()) {
     return now.getTime() < SALE_END_DATE.getTime();
   }
 
-  function currentSalePrice(normalPrice) {
+  function currentSalePrice(normalPrice, productId = '') {
     const price = Number(normalPrice || 0);
+    const productSale = Number(PRODUCT_SALES[productId]);
+    if (Number.isFinite(productSale) && productSale > 0) return Math.min(productSale, price);
     return isSaleActive() ? Math.min(SALE_PRICE_GBP, price) : price;
   }
 
@@ -169,14 +181,15 @@ document.addEventListener('DOMContentLoaded', () => {
       );
       if (!originalPrice) return;
 
-      const activePrice = card.dataset.saleEligible === 'false' ? originalPrice : currentSalePrice(originalPrice);
+      const productId = new URL(card.href, location.href).searchParams.get('id') || '';
+      const activePrice = card.dataset.saleEligible === 'false' ? originalPrice : currentSalePrice(originalPrice, productId);
       if (quickAdd) {
         quickAdd.dataset.originalPrice = String(originalPrice);
         quickAdd.dataset.price = String(activePrice);
       }
 
       if (!priceBox) return;
-      if (isSaleActive() && activePrice < originalPrice) {
+      if (activePrice < originalPrice) {
         priceBox.classList.add('sale-price-pair');
         priceBox.innerHTML = `<s data-money-gbp="${originalPrice.toFixed(2)}">${money(originalPrice)}</s><b data-money-gbp="${activePrice.toFixed(2)}">${money(activePrice)}</b>`;
       } else {
@@ -378,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let changed = false;
     window.__bfl_cart__ = window.__bfl_cart__.map((item) => {
       const originalPrice = normalPriceForCartItem(item);
-      const price = item.saleEligible === false ? originalPrice : currentSalePrice(originalPrice);
+      const price = item.saleEligible === false ? originalPrice : currentSalePrice(originalPrice, item.productId);
       if (Number(item.price || 0) !== price || Number(item.originalPrice || 0) !== originalPrice) changed = true;
       return { ...item, price, originalPrice };
     });

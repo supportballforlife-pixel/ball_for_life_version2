@@ -134,9 +134,9 @@
     'light-pink', 'red', 'yellow', 'lake-blue'
   ];
 
-  function currentProductPrice(normalPrice, saleEligible = true) {
+  function currentProductPrice(normalPrice, saleEligible = true, productId = '') {
     if (!saleEligible) return normalPrice;
-    if (window.__bfl_getSalePrice) return window.__bfl_getSalePrice(normalPrice);
+    if (window.__bfl_getSalePrice) return window.__bfl_getSalePrice(normalPrice, productId);
     return normalPrice;
   }
 
@@ -340,7 +340,7 @@
 
     const item = getCurrentProduct();
     const normalPrice = item.normalPrice || item.originalPrice || item.price;
-    item.price = currentProductPrice(normalPrice, item.saleEligible !== false);
+    item.price = currentProductPrice(normalPrice, item.saleEligible !== false, item.id);
     item.originalPrice = item.price < normalPrice ? normalPrice : null;
     item.normalPrice = normalPrice;
     const isTee = item.category === 'Graphic Tees';
