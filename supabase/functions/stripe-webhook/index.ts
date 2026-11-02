@@ -397,6 +397,26 @@ Deno.serve(async (req) => {
       });
     }
 
+    // The database function is idempotent by order ID. Keep a missing draw table
+    // from affecting payment confirmation while the campaign is being configured.
+    let christmasDrawBonusAdded = false;
+    if (order.shipping_email) {
+      try {
+        const bonusResult = await fetchJson(`${supabaseUrl}/rest/v1/rpc/add_christmas_draw_purchase_entries`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: secretKey,
+            Authorization: `Bearer ${secretKey}`,
+          },
+          body: JSON.stringify({ p_order_id: order.id, p_email: order.shipping_email }),
+        });
+        christmasDrawBonusAdded = bonusResult === true;
+      } catch (drawError) {
+        console.error('Christmas draw bonus entry was not recorded', drawError);
+      }
+    }
+
     const accountUserId = userId || order.user_id;
     const generated = accountUserId
       ? await generateEarnedRewards(supabaseUrl, secretKey, accountUserId)
@@ -409,7 +429,7 @@ Deno.serve(async (req) => {
       }));
     }
 
-    return json({ received: true, order_id: order.id, generated_rewards: generated });
+    return json({ received: true, order_id: order.id, generated_rewards: generated, christmas_draw_bonus_added: christmasDrawBonusAdded });
   } catch (error) {
     return json({ error: error.message }, 400);
   }

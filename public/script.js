@@ -4,20 +4,16 @@
 // ============================================================
 
 (function () {
-  const SALE_PRICE_GBP = 19.95;
-  const SALE_END_DATE = new Date('2026-10-11T00:00:00+01:00');
-  const PRODUCT_SALES = Object.freeze({
-    'dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt': 25.19,
-  });
+  const SALE_DISCOUNT_PERCENT = 10;
+  const SALE_END_DATE = new Date('2026-12-24T23:59:59+00:00');
   const isSaleActive = (now = new Date()) => now.getTime() < SALE_END_DATE.getTime();
   window.__bfl_sale = {
-    price: SALE_PRICE_GBP,
+    discountPercent: SALE_DISCOUNT_PERCENT,
     endsAt: SALE_END_DATE.toISOString(),
     isActive: isSaleActive,
-    priceFor: (normalPrice, productId) => {
-      const productSale = PRODUCT_SALES[productId];
-      if (Number.isFinite(productSale)) return Math.min(productSale, Number(normalPrice || 0));
-      return isSaleActive() ? Math.min(SALE_PRICE_GBP, Number(normalPrice || 0)) : Number(normalPrice || 0);
+    priceFor: (normalPrice) => {
+      const price = Number(normalPrice || 0);
+      return isSaleActive() ? Number((price * (1 - SALE_DISCOUNT_PERCENT / 100)).toFixed(2)) : price;
     },
   };
   window.__bfl_getSalePrice = window.__bfl_sale.priceFor;
@@ -25,21 +21,16 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   /* ---------- Sale pricing ---------- */
-  const SALE_PRICE_GBP = 19.95;
-  const SALE_END_DATE = new Date('2026-10-11T00:00:00+01:00');
-  const PRODUCT_SALES = Object.freeze({
-    'dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt': 25.19,
-  });
+  const SALE_DISCOUNT_PERCENT = 10;
+  const SALE_END_DATE = new Date('2026-12-24T23:59:59+00:00');
 
   function isSaleActive(now = new Date()) {
     return now.getTime() < SALE_END_DATE.getTime();
   }
 
-  function currentSalePrice(normalPrice, productId = '') {
+  function currentSalePrice(normalPrice) {
     const price = Number(normalPrice || 0);
-    const productSale = Number(PRODUCT_SALES[productId]);
-    if (Number.isFinite(productSale) && productSale > 0) return Math.min(productSale, price);
-    return isSaleActive() ? Math.min(SALE_PRICE_GBP, price) : price;
+    return isSaleActive() ? Number((price * (1 - SALE_DISCOUNT_PERCENT / 100)).toFixed(2)) : price;
   }
 
   function normalPriceForCartItem(item) {
@@ -49,11 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (name.includes('ball for life graphic tee')) return 34.99;
     if (name.includes('g.o.a.t x god') || name.includes('goat x god') || name.includes('i see god')) return 29.99;
     const currentPrice = Number(item?.price || 0);
-    return Math.abs(currentPrice - SALE_PRICE_GBP) < 0.01 ? 27.99 : currentPrice;
+    return currentPrice;
   }
 
   window.__bfl_sale = {
-    price: SALE_PRICE_GBP,
+    discountPercent: SALE_DISCOUNT_PERCENT,
     endsAt: SALE_END_DATE.toISOString(),
     isActive: isSaleActive,
     priceFor: currentSalePrice,
@@ -105,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.querySelectorAll('[data-free-shipping]').forEach((el) => {
       el.textContent = isSaleActive()
-        ? `1000 followers on TikTok - every tee ${money(SALE_PRICE_GBP)} for one week`
+        ? 'Christmas sale — 10% off everything until 24 December'
         : 'Free UK shipping when you spend over £65';
     });
   }
@@ -182,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!originalPrice) return;
 
       const productId = new URL(card.href, location.href).searchParams.get('id') || '';
-      const activePrice = card.dataset.saleEligible === 'false' ? originalPrice : currentSalePrice(originalPrice, productId);
+      const activePrice = currentSalePrice(originalPrice, productId);
       if (quickAdd) {
         quickAdd.dataset.originalPrice = String(originalPrice);
         quickAdd.dataset.price = String(activePrice);
@@ -190,9 +181,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!priceBox) return;
       if (activePrice < originalPrice) {
+        if (!card.querySelector('.christmas-sale-badge')) {
+          const badge = document.createElement('span');
+          badge.className = 'sale-badge christmas-sale-badge';
+          badge.textContent = 'Christmas sale · 10% off';
+          card.querySelector('.img')?.prepend(badge);
+        }
         priceBox.classList.add('sale-price-pair');
         priceBox.innerHTML = `<s data-money-gbp="${originalPrice.toFixed(2)}">${money(originalPrice)}</s><b data-money-gbp="${activePrice.toFixed(2)}">${money(activePrice)}</b>`;
       } else {
+        card.querySelector('.christmas-sale-badge')?.remove();
         priceBox.classList.remove('sale-price-pair');
         priceBox.innerHTML = `<b data-money-gbp="${originalPrice.toFixed(2)}">${money(originalPrice)}</b>`;
       }
@@ -201,13 +199,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function scheduleSaleExpiryRefresh() {
     const msUntilExpiry = SALE_END_DATE.getTime() - Date.now();
-    if (msUntilExpiry <= 0 || msUntilExpiry > 2147483647) return;
+    if (msUntilExpiry <= 0) return;
     window.setTimeout(() => {
+      if (Date.now() < SALE_END_DATE.getTime()) { scheduleSaleExpiryRefresh(); return; }
       updateSaleProductCards();
       updateMoneyLabels();
       renderCart();
       document.dispatchEvent(new CustomEvent('bfl:sale-change'));
-    }, msUntilExpiry + 1000);
+    }, Math.min(msUntilExpiry + 1000, 2147483647));
   }
 
   document.querySelectorAll('[data-currency-select]').forEach((select) => {
@@ -391,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let changed = false;
     window.__bfl_cart__ = window.__bfl_cart__.map((item) => {
       const originalPrice = normalPriceForCartItem(item);
-      const price = item.saleEligible === false ? originalPrice : currentSalePrice(originalPrice, item.productId);
+      const price = currentSalePrice(originalPrice, item.productId);
       if (Number(item.price || 0) !== price || Number(item.originalPrice || 0) !== originalPrice) changed = true;
       return { ...item, price, originalPrice };
     });
@@ -650,12 +649,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const announcement = document.querySelector('.announce-message');
   if (!announcement) return;
   const sale = window.__bfl_sale;
-  const salePrice = sale?.price || 19.95;
+  const saleDiscount = sale?.discountPercent || 10;
   const messages = () => sale?.isActive?.()
     ? [
-      `1000 followers on TikTok - every tee ${window.__bfl_money ? window.__bfl_money(salePrice) : '£19.95'} for one week`,
-      `Old prices swiped - tees now ${window.__bfl_money ? window.__bfl_money(salePrice) : '£19.95'}`,
-      'Tap to follow us on TikTok'
+      `Christmas sale — ${saleDiscount}% off everything. Ends 24 December.`,
+      'Three tees to win — enter the Christmas Draw.',
+      'A paid order adds three bonus Christmas Draw entries.'
     ]
     : [
       'Free UK shipping when you spend over £65',
@@ -667,75 +666,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('bfl:sale-change', refreshAnnouncement);
 })();
 
-// TikTok follower celebration popup
-(function () {
-  if (document.body.classList.contains('auth-page') || document.body.classList.contains('admin-page')) return;
-
-  const PROMO_SESSION_KEY = '__bfl_tiktok_1000_seen__';
-  const TIKTOK_URL = 'https://www.tiktok.com/@ball_for_life_store';
-  const sale = window.__bfl_sale;
-  const SALE_END_DATE = new Date(sale?.endsAt || '2026-10-11T00:00:00+01:00');
-  if (!sale?.isActive?.()) return;
-  if (sessionStorage.getItem(PROMO_SESSION_KEY)) return;
-
-  document.body.insertAdjacentHTML('beforeend', `
-    <aside class="promo-pop tiktok-pop" data-promo-pop aria-live="polite" aria-label="TikTok follower celebration">
-      <div class="promo-pop-inner">
-        <button class="promo-pop-close" type="button" data-promo-close aria-label="Close promotion">×</button>
-        <p class="promo-pop-kicker">1000 TikTok followers</p>
-        <h3>Big flash sale all week</h3>
-        <p class="promo-pop-copy">To celebrate hitting 1000 followers on TikTok, every graphic tee is <strong>£19.95</strong> for one week.</p>
-        <div class="promo-countdown" data-sale-countdown aria-label="Flash sale countdown">
-          <div><strong data-countdown-days>07</strong><span>Days</span></div>
-          <div><strong data-countdown-hours>00</strong><span>Hours</span></div>
-          <div><strong data-countdown-minutes>00</strong><span>Mins</span></div>
-          <div><strong data-countdown-seconds>00</strong><span>Secs</span></div>
-        </div>
-        <div class="promo-code-row">
-          <strong>£19.95 tees</strong>
-          <a href="${TIKTOK_URL}" target="_blank" rel="noopener">Follow TikTok</a>
-        </div>
-        <div class="promo-pop-actions">
-          <a href="shop.html?cat=tees">Shop graphic tees</a>
-          <span class="promo-pop-note">One week only.</span>
-        </div>
-      </div>
-    </aside>
-  `);
-
-  const promo = document.querySelector('[data-promo-pop]');
-  const close = promo?.querySelector('[data-promo-close]');
-  if (!promo) return;
-
-  function closePromo() {
-    promo.classList.remove('open');
-    sessionStorage.setItem(PROMO_SESSION_KEY, 'true');
-  }
-
-  close?.addEventListener('click', closePromo);
-
-  function updateCountdown() {
-    const remaining = Math.max(0, SALE_END_DATE.getTime() - Date.now());
-    const totalSeconds = Math.floor(remaining / 1000);
-    const days = Math.floor(totalSeconds / 86400);
-    const hours = Math.floor((totalSeconds % 86400) / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    const pad = (value) => String(value).padStart(2, '0');
-
-    promo.querySelector('[data-countdown-days]').textContent = pad(days);
-    promo.querySelector('[data-countdown-hours]').textContent = pad(hours);
-    promo.querySelector('[data-countdown-minutes]').textContent = pad(minutes);
-    promo.querySelector('[data-countdown-seconds]').textContent = pad(seconds);
-  }
-
-  updateCountdown();
-  const countdownInterval = setInterval(updateCountdown, 1000);
-  window.addEventListener('pagehide', () => clearInterval(countdownInterval), { once: true });
-
-  setTimeout(() => promo.classList.add('open'), 1200);
-})();
-
 // Email marketing signup — popup + homepage newsletter
 (function () {
   const NEWSLETTER_FUNCTION_URL =
@@ -745,11 +675,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const storageGet = (storage, key) => { try { return storage.getItem(key); } catch { return null; } };
   const storageSet = (storage, key) => { try { storage.setItem(key, 'true'); } catch {} };
 
-  async function saveMarketingEmail(email, source) {
+  async function saveMarketingEmail(email, source, options = {}) {
     const response = await fetch(NEWSLETTER_FUNCTION_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, source })
+      body: JSON.stringify({ email, source, ...options })
     });
 
     const data = await response.json().catch(() => ({}));
@@ -782,17 +712,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const result = await saveMarketingEmail(email, source);
-      storageSet(localStorage, SIGNUP_JOINED_KEY);
-      window.BFLAnalytics?.track('newsletter_signup');
+      const isDrawEntry = form.dataset.campaign === 'christmas_2026';
+      const drawTerms = form.querySelector('input[name="draw_terms"]');
+      const marketingOptIn = form.querySelector('input[name="marketing_opt_in"]');
+      if (isDrawEntry && !drawTerms?.checked) {
+        drawTerms?.reportValidity();
+        button.disabled = false;
+        button.innerHTML = originalMarkup;
+        return;
+      }
+      const result = await saveMarketingEmail(email, source, isDrawEntry
+        ? { campaign: 'christmas_2026', accepted_draw_terms: true, marketing_opt_in: Boolean(marketingOptIn?.checked) }
+        : { marketing_opt_in: true });
+      if (isDrawEntry || marketingOptIn?.checked || !marketingOptIn) storageSet(localStorage, SIGNUP_JOINED_KEY);
+      window.BFLAnalytics?.track(isDrawEntry ? 'christmas_draw_entry' : 'newsletter_signup');
 
       button.textContent = 'Joined ✓';
       input.value = '';
 
       if (statusEl) {
-        statusEl.textContent = result.already_subscribed
-          ? 'You’re already on the list.'
-          : 'You’re in. Welcome to Ball For Life.';
+        statusEl.textContent = isDrawEntry
+          ? (result.draw_entry_created ? 'You’re in the draw. Good luck.' : 'You already have an entry in the draw.')
+          : (result.already_subscribed ? 'You’re already on the list.' : 'You’re in. Welcome to Ball For Life.');
       }
 
       if (typeof onSuccess === 'function') onSuccess(result);
@@ -873,7 +814,7 @@ document.addEventListener('DOMContentLoaded', () => {
     event.preventDefault();
     submitSignupForm(
       popupForm,
-      'first_visit_popup',
+      'christmas_2026_popup',
       popupStatus,
       () => setTimeout(closeModal, 900)
     );

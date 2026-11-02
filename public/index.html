@@ -9,7 +9,7 @@
 
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
-<link rel="stylesheet" href="store-design.css?v=rodman-sale2">
+<link rel="stylesheet" href="store-design.css?v=christmas30">
 <link rel="stylesheet" href="customer-gallery.css?v=stories1">
 </head>
 <body class="home-page">
@@ -79,7 +79,6 @@
     <div class="pgrid reveal-stagger">
       <a href="product.html?id=dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt" class="pcard">
         <div class="img">
-          <span class="sale-badge">Sale · 10% off</span>
           <img loading="lazy" decoding="async" src="assets/product-cards/dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Dennis Rodman Fck What They Think Tee"><img class="card-back" src="assets/product-cards/dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt-back.webp" alt="" loading="lazy" decoding="async">
           <button type="button" class="quick" data-quick-add data-name="Dennis Rodman Fck What They Think Snow Washed Oversized Cotton T-Shirt" data-price="25.19" data-original-price="27.99" data-mark="DRFWT">Quick Add</button>
         </div>
@@ -217,14 +216,15 @@
           </div>
           <a class="review-product" href="product.html?id=stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt"><img class="review-product-image" src="assets/product-cards/stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Stephen Curry Variant 2 Tee" loading="lazy" width="56" height="70"><span><small>Shop the tee</small><strong>Stephen Curry Variant 2 Tee</strong></span><img class="review-product-arrow" src="assets/ui/arrow-right.svg" alt=""></a>
         </article>
-        <article class="community-card" aria-labelledby="review-kaden-name">
+        <article class="community-card" aria-labelledby="review-nao-name">
           <div class="community-media">
-            <video data-src="kaden-review.mp4" poster="assets/ui/kaden-poster.jpg" aria-label="KadenBruney wearing the Rodman Fck What They Think Tee" muted loop playsinline preload="none"></video>
+            <video data-src="assets/community/nao-naoo-pl-review.mp4" aria-label="Nao wearing the Rodman Fck What They Think Tee" muted loop playsinline preload="none"></video>
           </div>
           <div class="community-copy">
-            <div class="review-person"><h3 id="review-kaden-name">KadenBruney</h3><span>Preston</span></div>
-            <span class="review-social">@kadenbruney</span>
-            <blockquote class="review-feedback">&ldquo;very nice tee shirt, great materials and design. Felt really nice, it doesnt stick to me from the sweat aswell.&rdquo;</blockquote>
+            <div class="review-person"><h3 id="review-nao-name">Nao</h3><span>TikTok creator</span></div>
+            <a class="review-social" href="https://www.tiktok.com/@naoo.pl" target="_blank" rel="noopener" aria-label="Visit Nao on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"/><path d="M14 3c.6 3 2.3 4.6 5 5"/></svg>@naoo.pl</a>
+            <p class="review-feedback">Wearing the Rodman Fck What They Think Tee.</p>
+            <p class="review-creator-stats">27.2K followers &middot; 1.7M likes on TikTok</p>
           </div>
           <a class="review-product" href="product.html?id=dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt"><img class="review-product-image" src="assets/product-cards/dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt-front.webp" alt="Rodman Fck What They Think Tee" loading="lazy" width="56" height="70"><span><small>Shop the tee</small><strong>Rodman Fck What They Think Tee</strong></span><img class="review-product-arrow" src="assets/ui/arrow-right.svg" alt=""></a>
         </article>
@@ -358,23 +358,26 @@
   <div class="signup-modal-backdrop" data-signup-close></div>
   <section class="signup-modal-panel" role="dialog" aria-modal="true" aria-labelledby="signup-modal-title" aria-describedby="signup-modal-description">
     <div class="signup-modal-image">
-      <picture><source media="(max-width:600px)" srcset="assets/ui/campaign-mobile.webp"><img src="assets/ui/street-campaign-mobile.webp" alt="Ball For Life tee worn on the street" width="960" height="540" decoding="async"></picture>
+      <img class="signup-christmas-image" src="assets/ui/christmas-draw-santa-dunk.png" alt="Santa in Ball For Life kit dunking a basketball for the Christmas Draw" width="1122" height="1400" decoding="async">
     </div>
     <div class="signup-modal-content">
       <button class="signup-modal-close" type="button" data-signup-close aria-label="Close signup popup">
         <img src="assets/ui/x.svg" alt="" width="20" height="20">
       </button>
       <img class="signup-modal-logo" src="assets/ui/brand-logo-black.png" alt="Ball For Life" width="112" height="63">
-      <h2 id="signup-modal-title">Stay in the loop.</h2>
-      <p id="signup-modal-description" class="signup-modal-description">New drops, member discounts and Ball For Life updates. Straight to your inbox.</p>
-      <form class="signup-modal-form" data-signup-form>
+      <p class="signup-kicker">CHRISTMAS 2026</p>
+      <h2 id="signup-modal-title">Win your tee<br>for Christmas.</h2>
+      <p id="signup-modal-description" class="signup-modal-description">Three winners. One Ball For Life tee each. Enter before 24 December, 23:59 London time.</p>
+      <form class="signup-modal-form" data-signup-form data-campaign="christmas_2026">
         <label for="signup-email">Email address</label>
         <input id="signup-email" type="email" name="email" placeholder="you@example.com" autocomplete="email" inputmode="email" required>
-        <button type="submit">Join the list <img src="assets/ui/arrow-right.svg" alt="" width="18" height="18"></button>
+        <label class="signup-check"><input type="checkbox" name="draw_terms" required><span>I agree to the <a href="terms-conditions.html#christmas-draw">Christmas Draw Terms</a>.</span></label>
+        <label class="signup-check"><input type="checkbox" name="marketing_opt_in"><span>Email me early drops, offers and Ball For Life news.</span></label>
+        <button type="submit">Enter the draw <img src="assets/ui/arrow-right.svg" alt="" width="18" height="18"></button>
       </form>
       <p class="signup-status" data-signup-status aria-live="polite"></p>
       <button class="signup-continue" type="button" data-signup-close>Continue shopping</button>
-      <p class="signup-modal-terms">By joining, you agree to receive marketing emails. Unsubscribe any time. <a href="privacy-policy.html#marketing">Privacy policy</a></p>
+      <p class="signup-modal-terms">No purchase necessary. A paid order placed during the draw using this email adds three bonus entries. Marketing is optional. <a href="privacy-policy.html#marketing">Privacy policy</a></p>
     </div>
   </section>
 </div>
@@ -382,8 +385,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="supabase-core.js"></script>
-<script src="privacy-controls.js?v=privacy3"></script>
-<script src="script.js?v=rodman-sale1"></script>
+<script src="privacy-controls.js?v=california1"></script>
+<script src="script.js?v=christmas26"></script>
 
 <script src="assets/ui/icons.js?v=redesign2"></script>
 <script src="assets/ui/catalog.js?v=fashion1"></script>

@@ -10,6 +10,10 @@
   const analyticsStatus = document.querySelector('[data-analytics-status]');
   const creatorStatsEl = document.querySelector('[data-creator-stats]');
   const creatorCodeForm = document.querySelector('[data-creator-code-form]');
+  const productForm = document.querySelector('[data-product-form]');
+  const productListEl = document.querySelector('[data-admin-products]');
+  const productFeedback = document.querySelector('[data-product-feedback]');
+  const productFormReset = document.querySelector('[data-product-form-reset]');
   const adminPage = document.body.dataset.adminPage || 'overview';
   const orderMode = document.body.dataset.orderMode || 'all';
   const orderSearchInput = document.querySelector('[data-admin-order-search]');
@@ -31,6 +35,7 @@
   let latestNewsletterRows = [];
   let newsletterRequest = 0;
   let latestAccountRows = [];
+  let latestProductRows = [];
   const TAPSTITCH_SHIPPING_RATES_GBP = Object.freeze({
     'United Kingdom': { first: 3.02, additional: 1.22 },
     Austria: { first: 4.25, additional: 1.49 },
@@ -54,6 +59,12 @@
     if (!message) return;
     message.textContent = text;
     message.dataset.type = type || '';
+  }
+
+  function setProductFeedback(text, type) {
+    if (!productFeedback) return;
+    productFeedback.textContent = text || '';
+    productFeedback.dataset.type = type || '';
   }
 
   function money(value) {
@@ -404,6 +415,7 @@
             </label>
             <button type="button" class="btn btn-solid-dark" data-admin-save>Save</button>
             <button type="button" class="btn btn-outline-dark" data-admin-send-tracking>Email customer</button>
+            <a class="btn btn-outline-dark" href="order-created.html?order=${encodeURIComponent(order.order_number || '')}" target="_blank" rel="noopener">View tracking page</a>
           </div>
         </article>
       `;
@@ -626,6 +638,19 @@
 
   let analyticsRequest = 0;
   async function loadAnalytics() {
+    if (window.BFLAnalytics?.localTesting && app) {
+      let panel = app.querySelector('[data-local-analytics]');
+      if (!panel) {
+        panel = document.createElement('details');
+        panel.className = 'insights-recent'; panel.dataset.localAnalytics = '';
+        panel.innerHTML = '<summary>Local test activity — this browser only</summary><p>Includes actions after Reject analytics in local previews. These records are never sent to Supabase. The store metrics below are separate live data.</p><button type="button" class="btn btn-outline-dark" data-local-export>Export test activity</button><button type="button" class="btn btn-outline-dark" data-local-clear>Clear test activity</button><div data-local-log></div>';
+        app.prepend(panel);
+        panel.querySelector('[data-local-export]').addEventListener('click', () => window.BFLAnalytics.exportLocalEvents());
+        panel.querySelector('[data-local-clear]').addEventListener('click', () => { window.BFLAnalytics.clearLocalEvents(); loadAnalytics(); });
+      }
+      const rows = window.BFLAnalytics.getLocalEvents();
+      panel.querySelector('[data-local-log]').innerHTML = rows.slice(-100).reverse().map(row => `<p>${escapeHtml(row.created_at)} · ${escapeHtml(row.event_type)} · ${escapeHtml(row.page)}${row.product_id ? ' · ' + escapeHtml(row.product_id) : ''} · quantity ${Number(row.quantity) || 1}${row.device ? ' · device: ' + escapeHtml(row.device) : ''}</p>`).join('') || '<p>No local test activity yet. Browse the local shop in this same browser.</p>';
+    }
     if (!client || !analyticsStatus) return;
     const request = ++analyticsRequest;
     const days = Number(analyticsPeriod?.value || 1);
@@ -708,7 +733,7 @@
       return;
     }
     if (adminPage === 'overview') {
-      await Promise.all([loadOrders(), loadAnalytics()]);
+      await Promise.all([loadOrders(), loadAnalytics(), loadProducts()]);
       return;
     }
     await loadOrders();
@@ -760,6 +785,149 @@
     creatorCodeForm.elements.commission_percent.value = '20';
     setMessage(`${code} created for ${creatorName}.`, 'success');
     loadOrders();
+  }
+
+  function resetProductForm() {
+    if (!productForm) return;
+    productForm.reset();
+    productForm.elements.product_id.value = '';
+    productForm.elements.id.readOnly = false;
+    productForm.elements.active.checked = true;
+    productForm.querySelector('button[type="submit"]').textContent = 'Publish product';
+    productFormReset.hidden = true;
+    setProductFeedback('', '');
+  }
+
+  function slugify(value) {
+    return String(value || '').toLowerCase().trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+      .slice(0, 96);
+  }
+
+  function productPublicUrl(path) {
+    if (!path) return '';
+    const { data } = client.storage.from('product-images').getPublicUrl(path);
+    return data.publicUrl;
+  }
+
+  async function uploadProductImage(file, productId, side) {
+    if (!file) return null;
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) throw new Error('Use a JPG, PNG or WebP image.');
+    if (file.size > 10 * 1024 * 1024) throw new Error('Each product image must be 10MB or less.');
+    const extension = file.name.split('.').pop().toLowerCase();
+    const path = `${productId}/${side}-${Date.now()}.${extension}`;
+    const { error } = await client.storage.from('product-images').upload(path, file, { upsert: false, contentType: file.type, cacheControl: '31536000' });
+    if (error) throw error;
+    return productPublicUrl(path);
+  }
+
+  function renderProducts(rows) {
+    if (!productListEl) return;
+    if (!rows.length) {
+      productListEl.innerHTML = '<div class="auth-empty">No admin-added products yet. Use the form above to publish your first one.</div>';
+      return;
+    }
+    productListEl.innerHTML = rows.map((item) => `
+      <article class="admin-product-row" data-managed-product-id="${escapeHtml(item.id)}">
+        <img src="${escapeHtml(item.front_image || '')}" alt="" loading="lazy">
+        <div>
+          <strong>${escapeHtml(item.name)}</strong>
+          <span>${escapeHtml(item.category)} · ${money(item.price_gbp)} · ${(item.sizes || []).map(escapeHtml).join(', ')}</span>
+          <span class="admin-product-status ${item.active ? '' : 'is-draft'}">${item.active ? 'Live on shop' : 'Hidden from customers'}</span>
+        </div>
+        <div class="admin-product-row-actions">
+          <button class="btn btn-outline-dark" type="button" data-product-edit="${escapeHtml(item.id)}">Edit</button>
+          <button class="btn btn-outline-dark" type="button" data-product-toggle="${escapeHtml(item.id)}">${item.active ? 'Hide' : 'Publish'}</button>
+        </div>
+      </article>`).join('');
+
+    productListEl.querySelectorAll('[data-product-edit]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const item = latestProductRows.find(row => row.id === button.dataset.productEdit);
+        if (!item || !productForm) return;
+        productForm.elements.product_id.value = item.id;
+        productForm.elements.id.value = item.id;
+        productForm.elements.id.readOnly = true;
+        productForm.elements.name.value = item.name || '';
+        productForm.elements.category.value = item.category || 'Graphic Tees';
+        productForm.elements.kind.value = item.kind || 'tee';
+        productForm.elements.price_gbp.value = Number(item.price_gbp || 0).toFixed(2);
+        productForm.elements.sizes.value = (item.sizes || []).join(', ');
+        productForm.elements.summary.value = item.summary || '';
+        productForm.elements.description.value = item.description || '';
+        productForm.elements.active.checked = item.active !== false;
+        productForm.querySelector('button[type="submit"]').textContent = 'Save product';
+        productFormReset.hidden = false;
+        setProductFeedback('Editing “' + item.name + '”. Upload a new image only if you want to replace it.', '');
+        document.getElementById('products')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+    productListEl.querySelectorAll('[data-product-toggle]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const item = latestProductRows.find(row => row.id === button.dataset.productToggle);
+        if (!item) return;
+        button.disabled = true;
+        const { error } = await client.from('store_products').update({ active: !item.active }).eq('id', item.id);
+        button.disabled = false;
+        if (error) { setProductFeedback(error.message, 'error'); return; }
+        setProductFeedback(item.active ? 'Product hidden from customers.' : 'Product published to customers.', 'success');
+        loadProducts();
+      });
+    });
+  }
+
+  async function loadProducts() {
+    if (!client || !productListEl) return;
+    const { data, error } = await client.from('store_products').select('*').order('created_at', { ascending: false });
+    if (error) {
+      productListEl.innerHTML = '<div class="auth-empty">Product manager needs setup. Run <a href="admin-products.sql" download>admin-products.sql</a> in Supabase SQL Editor, then refresh.</div>';
+      return;
+    }
+    latestProductRows = data || [];
+    renderProducts(latestProductRows);
+  }
+
+  async function saveProduct(event) {
+    event.preventDefault();
+    if (!client || !productForm) return;
+    const data = new FormData(productForm);
+    const existingId = String(data.get('product_id') || '').trim();
+    const productId = existingId || slugify(data.get('id'));
+    const name = String(data.get('name') || '').trim();
+    const price = Number(data.get('price_gbp'));
+    const sizes = String(data.get('sizes') || '').split(',').map(size => size.trim()).filter(Boolean);
+    const frontFile = data.get('front_image');
+    const backFile = data.get('back_image');
+    const submit = productForm.querySelector('button[type="submit"]');
+    if (!productId || !/^[a-z0-9-]{2,96}$/.test(productId)) { setProductFeedback('Use a product ID with lowercase letters, numbers and hyphens only.', 'error'); return; }
+    if (!name || !Number.isFinite(price) || price <= 0 || !sizes.length) { setProductFeedback('Add a name, valid price and at least one size.', 'error'); return; }
+    const existing = latestProductRows.find(item => item.id === productId);
+    if (!existingId && existing) { setProductFeedback('That product ID already exists. Choose another ID or edit the existing product.', 'error'); return; }
+    if (!existing && (!frontFile || !frontFile.name)) { setProductFeedback('Upload a front image before publishing a new product.', 'error'); return; }
+    submit.disabled = true;
+    submit.textContent = existingId ? 'Saving…' : 'Publishing…';
+    setProductFeedback('Uploading product details…', '');
+    try {
+      const frontImage = frontFile?.name ? await uploadProductImage(frontFile, productId, 'front') : existing?.front_image || null;
+      const backImage = backFile?.name ? await uploadProductImage(backFile, productId, 'back') : existing?.back_image || null;
+      const payload = {
+        id: productId, name, category: String(data.get('category')), kind: String(data.get('kind')),
+        price_gbp: price, sizes, summary: String(data.get('summary') || '').trim() || null,
+        description: String(data.get('description') || '').trim() || null,
+        front_image: frontImage, back_image: backImage, active: data.get('active') === 'on'
+      };
+      const { error } = await client.from('store_products').upsert(payload, { onConflict: 'id' });
+      if (error) throw error;
+      setProductFeedback(payload.active ? 'Product saved and live on the shop.' : 'Product saved as hidden.', 'success');
+      resetProductForm();
+      await loadProducts();
+    } catch (error) {
+      setProductFeedback(error.message || 'Could not save product. Check the Supabase product setup.', 'error');
+    } finally {
+      submit.disabled = false;
+      submit.textContent = productForm.elements.product_id.value ? 'Save product' : 'Publish product';
+    }
   }
 
   async function init() {
@@ -815,6 +983,8 @@
     }
   });
   creatorCodeForm?.addEventListener('submit', createCreatorCode);
+  productForm?.addEventListener('submit', saveProduct);
+  productFormReset?.addEventListener('click', resetProductForm);
   renderSaleAlertButton();
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
   else init();

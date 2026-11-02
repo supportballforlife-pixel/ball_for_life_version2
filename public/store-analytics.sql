@@ -8,7 +8,7 @@ create table if not exists public.store_analytics_sessions (
   first_seen_at timestamptz not null default now(),
   last_seen_at timestamptz not null default now(),
   page text not null,
-  device text not null check (device in ('mobile', 'tablet', 'desktop')),
+  device text not null check (device in ('mobile', 'tablet', 'desktop', 'not-collected')),
   referrer text,
   consent_version text not null default '2026-10-14',
   last_batch_at timestamptz
@@ -18,7 +18,7 @@ create table if not exists public.store_analytics_events (
   session_id uuid not null references public.store_analytics_sessions(session_id) on delete cascade,
   visitor_id uuid not null,
   created_at timestamptz not null default now(),
-  event_type text not null check (event_type in ('page_view','product_view','add_to_cart','remove_from_cart','checkout_start','payment_start','newsletter_signup')),
+  event_type text not null check (event_type in ('page_view','product_view','add_to_cart','remove_from_cart','checkout_start','payment_start','newsletter_signup','search','contact_click')),
   page text not null,
   product_id text,
   quantity smallint not null default 1 check (quantity between 1 and 99)
@@ -65,27 +65,28 @@ begin
   if p_consent is distinct from true then return; end if;
   if p_session_id is null or p_visitor_id is null
     or p_page is null or p_page not in ('/','/shop','/product','/checkout','/about-us','/contact','/faq','/shipping-returns','/size-guide','/privacy-policy','/terms-conditions','/reviews')
-    or p_device is null or p_device not in ('mobile','tablet','desktop')
+    or p_device is null or p_device not in ('mobile','tablet','desktop','not-collected')
     or p_events is null or jsonb_typeof(p_events) <> 'array'
     or octet_length(p_events::text) > 10000 then
     raise exception 'Invalid activity payload' using errcode = '22023';
   end if;
   if jsonb_array_length(p_events) > 20 then raise exception 'Too many events' using errcode = '22023'; end if;
-  if p_referrer is not null and (length(p_referrer) > 120 or p_referrer !~ '^[a-zA-Z0-9.-]+$') then p_referrer := null; end if;
+  -- This store does not collect external referrers or off-site activity.
+  p_referrer := null;
 
   insert into public.store_analytics_sessions(session_id, visitor_id, page, device, referrer)
-  values(p_session_id, p_visitor_id, p_page, p_device, nullif(p_referrer, ''))
+  values(p_session_id, p_visitor_id, p_page, p_device, null)
   on conflict (session_id) do nothing;
   select * into v_session from public.store_analytics_sessions where session_id = p_session_id for update;
   if v_session.visitor_id <> p_visitor_id then raise exception 'Session mismatch' using errcode = '22023'; end if;
   -- Bound writes per session; client-supplied events are engagement signals, never proof of a sale.
   if v_session.last_batch_at > now() - interval '1 second' then return; end if;
-  update public.store_analytics_sessions set last_seen_at = now(), page = p_page, last_batch_at = now()
+  update public.store_analytics_sessions set last_seen_at = now(), page = p_page, device = p_device, last_batch_at = now()
   where session_id = p_session_id;
   if (select count(*) from public.store_analytics_events where session_id = p_session_id and created_at > now() - interval '1 minute') < 120 then
     for v_event in select value from jsonb_array_elements(p_events) loop
       if jsonb_typeof(v_event) <> 'object' or coalesce(v_event->>'type','') not in
-        ('page_view','product_view','add_to_cart','remove_from_cart','checkout_start','payment_start','newsletter_signup') then continue; end if;
+        ('page_view','product_view','add_to_cart','remove_from_cart','checkout_start','payment_start','newsletter_signup','search','contact_click') then continue; end if;
       begin v_id := (v_event->>'id')::uuid; exception when invalid_text_representation then continue; end;
       if v_id is null then continue; end if;
       v_product := v_event->>'product_id';
@@ -132,7 +133,7 @@ begin
   with events as (
     select * from public.store_analytics_events where created_at >= v_start
   ), browsers as (
-    select distinct on (visitor_id) visitor_id, device, referrer
+    select distinct on (visitor_id) visitor_id, device
     from public.store_analytics_sessions where last_seen_at >= v_start order by visitor_id, first_seen_at
   ), paid as (
     select total_gbp from public.orders where payment_status = 'paid' and coalesce(paid_at,created_at) >= v_start
@@ -147,11 +148,12 @@ begin
     'checkouts', (select count(*) from events where event_type = 'checkout_start'),
     'payment_starts', (select count(*) from events where event_type = 'payment_start'),
     'signups', (select count(*) from events where event_type = 'newsletter_signup'),
+    'searches', (select count(*) from events where event_type = 'search'),
+    'contact_clicks', (select count(*) from events where event_type = 'contact_click'),
     'paid_orders', (select count(*) from paid),
     'revenue_gbp', (select coalesce(sum(total_gbp),0) from paid),
     'pages', coalesce((select jsonb_agg(row_to_json(t)) from (select page as label, count(*) as count from events where event_type = 'page_view' group by page order by count(*) desc, page limit 8) t),'[]'::jsonb),
     'products', coalesce((select jsonb_agg(row_to_json(t)) from (select product_id as label, count(*) filter(where event_type = 'product_view') as count, count(*) filter(where event_type = 'add_to_cart') as adds from events where product_id is not null and event_type in ('product_view','add_to_cart') group by product_id order by count(*) filter(where event_type = 'product_view') desc, product_id limit 8) t),'[]'::jsonb),
-    'sources', coalesce((select jsonb_agg(row_to_json(t)) from (select coalesce(referrer,'Direct / same site') as label, count(*) as count from browsers group by referrer order by count(*) desc limit 8) t),'[]'::jsonb),
     'devices', coalesce((select jsonb_agg(row_to_json(t)) from (select device as label, count(*) as count from browsers group by device order by count(*) desc) t),'[]'::jsonb),
     'recent', coalesce((select jsonb_agg(row_to_json(t)) from (select event_type, page, product_id, created_at from events order by created_at desc limit 12) t),'[]'::jsonb)
   ) into v_result;
@@ -159,4 +161,13 @@ begin
 end $$;
 revoke all on function public.get_store_analytics(integer) from public, anon;
 grant execute on function public.get_store_analytics(integer) to authenticated;
+
+-- Apply the expanded on-site event list when this runs against an existing project.
+-- Clear any historical referrer values so the database follows the new no-external-source rule too.
+update public.store_analytics_sessions set referrer = null where referrer is not null;
+alter table public.store_analytics_events drop constraint if exists store_analytics_events_event_type_check;
+alter table public.store_analytics_events add constraint store_analytics_events_event_type_check
+  check (event_type in ('page_view','product_view','add_to_cart','remove_from_cart','checkout_start','payment_start','newsletter_signup','search','contact_click'));
+alter table public.store_analytics_sessions drop constraint if exists store_analytics_sessions_device_check;
+alter table public.store_analytics_sessions add constraint store_analytics_sessions_device_check check (device in ('mobile','tablet','desktop','not-collected'));
 commit;

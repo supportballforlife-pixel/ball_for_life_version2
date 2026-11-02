@@ -49,7 +49,7 @@
     <div>
       <div class="eyebrow">Admin</div>
       <h1 class="display">Overview</h1>
-      <p>Quick view of traffic and creator code performance.</p>
+      <p>Run the shop from one place: products, orders, tracking and privacy-first store activity.</p>
     </div>
     <div class="admin-head-actions">
       <button type="button" class="btn btn-outline-dark" data-sale-alert-toggle>Enable sale alerts</button>
@@ -72,30 +72,32 @@
       <a href="admin-delivered.html">Delivered</a>
       <a href="admin-newsletter.html">Newsletter</a>
       <a href="admin-accounts.html">Accounts</a>
+      <a href="#products">Products</a>
     </nav>
 
     <section class="store-insights" aria-labelledby="insights-title">
-      <div class="insights-heading"><div><h2 id="insights-title">Store activity</h2><p>Total visits are anonymous page-load counts. Engagement detail is collected only after an analytics opt-in. Paid orders and revenue include all paid orders.</p></div><label>Period<select data-analytics-period><option value="1">Today</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select></label></div>
+      <div class="insights-heading"><div><h2 id="insights-title">Store activity</h2><p>California version: on-site analytics runs by default. Device category is optional. Total visits count public page loads; visitors estimate browsers with recorded activity.</p></div><label>Period<select data-analytics-period><option value="1">Today</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select></label></div>
       <p class="insights-status" data-analytics-status role="status">Loading store activity...</p>
       <div class="admin-analytics">
         <article class="admin-stat"><span>Live visitors</span><strong data-analytics-metric="live">-</strong><small>Active in the last minute</small></article>
         <article class="admin-stat"><span>Total visits</span><strong data-analytics-metric="total_visits">-</strong><small>Anonymous page-load count</small></article>
-        <article class="admin-stat"><span>Opted-in visitors</span><strong data-analytics-metric="visitors">-</strong><small>Unique opted-in browsers</small></article>
+        <article class="admin-stat"><span>Tracked browsers</span><strong data-analytics-metric="visitors">-</strong><small>Estimated unique browsers</small></article>
         <article class="admin-stat"><span>Page views</span><strong data-analytics-metric="page_views">-</strong><small>Not heartbeat requests</small></article>
         <article class="admin-stat"><span>Adds to bag</span><strong data-analytics-metric="add_to_cart">-</strong><small>Add-to-bag actions</small></article>
         <article class="admin-stat"><span>Checkout visits</span><strong data-analytics-metric="checkouts">-</strong><small>Checkout page views</small></article>
         <article class="admin-stat"><span>Payment starts</span><strong data-analytics-metric="payment_starts">-</strong><small>Successful payment redirects</small></article>
+        <article class="admin-stat"><span>Searches</span><strong data-analytics-metric="searches">-</strong><small>On-site product searches</small></article>
+        <article class="admin-stat"><span>Contact clicks</span><strong data-analytics-metric="contact_clicks">-</strong><small>Email or WhatsApp taps</small></article>
         <article class="admin-stat"><span>Paid orders</span><strong data-analytics-metric="paid_orders">-</strong><small>Confirmed payment status</small></article>
         <article class="admin-stat"><span>Paid revenue</span><strong data-analytics-metric="revenue_gbp">-</strong><small>GBP, including delivery</small></article>
       </div>
       <div class="insights-breakdowns">
         <section><h3>Top pages</h3><div class="insights-list" data-analytics-list="pages"></div></section>
         <section><h3>Top products</h3><p class="insights-legend">Product views / adds to bag</p><div class="insights-list" data-analytics-list="products"></div></section>
-        <section><h3>Traffic sources</h3><div class="insights-list" data-analytics-list="sources"></div></section>
         <section><h3>Devices</h3><div class="insights-list" data-analytics-list="devices"></div></section>
       </div>
       <details class="insights-recent"><summary>Recent activity</summary><div data-analytics-recent></div></details>
-      <p class="insights-note">Dates use UK time. Total visits contain no browser or journey data. Opted-in browser counts are estimates, not identified people. Ad blockers can reduce the activity shown. No form contents are recorded.</p>
+      <p class="insights-note">Dates use UK time. Total visits contain no browser or journey data. Opted-in browser counts are estimates, not identified people. No external browsing, external traffic-source data or form contents are recorded.</p>
     </section>
     <section class="admin-creators" aria-label="Creator code performance">
       <div class="admin-section-head">
@@ -127,6 +129,32 @@
         <div class="auth-empty">Loading creator code performance...</div>
       </div>
     </section>
+
+    <section class="admin-products" id="products" aria-labelledby="products-title">
+      <div class="admin-section-head">
+        <div>
+          <h2 id="products-title">Product manager</h2>
+          <small>Add a product, upload its front and back, edit the selling details or hide it from customers. Changes publish to the shop when the product is marked live.</small>
+        </div>
+      </div>
+      <form class="admin-product-form" data-product-form novalidate>
+        <input type="hidden" name="product_id" value="">
+        <label><span>Product name</span><input name="name" type="text" placeholder="e.g. Courtside Graphic Tee" required maxlength="120"></label>
+        <label><span>Product ID / link</span><input name="id" type="text" placeholder="courtside-graphic-tee" required pattern="[a-z0-9-]+" maxlength="96"><small>Lowercase letters, numbers and hyphens only.</small></label>
+        <label><span>Category</span><select name="category"><option>Graphic Tees</option><option>Tracksuits</option><option>Hoodies</option><option>Bottoms</option></select></label>
+        <label><span>Product type</span><select name="kind"><option value="tee">Tee</option><option value="hoodie">Hoodie</option><option value="bottoms">Bottoms</option><option value="set">Set</option></select></label>
+        <label><span>Price (GBP)</span><input name="price_gbp" type="number" min="0.01" step="0.01" placeholder="27.99" required></label>
+        <label><span>Sizes</span><input name="sizes" type="text" value="S, M, L, XL" required><small>Separate sizes with commas.</small></label>
+        <label class="admin-product-span-2"><span>Short product line</span><input name="summary" type="text" placeholder="Oversized fit · heavyweight cotton" maxlength="170"></label>
+        <label class="admin-product-span-2"><span>Description</span><textarea name="description" rows="3" placeholder="The product story and any confirmed details."></textarea></label>
+        <label><span>Front image</span><input name="front_image" type="file" accept="image/jpeg,image/png,image/webp"><small>JPG, PNG or WebP. 10MB maximum.</small></label>
+        <label><span>Back image</span><input name="back_image" type="file" accept="image/jpeg,image/png,image/webp"><small>Optional, but recommended for product-card hover.</small></label>
+        <label class="admin-product-check"><input name="active" type="checkbox" checked><span>Publish this product to customers</span></label>
+        <div class="admin-product-actions"><button class="btn btn-solid-dark" type="submit">Publish product</button><button class="btn btn-outline-dark" type="button" data-product-form-reset hidden>Cancel edit</button></div>
+        <p class="admin-product-feedback" data-product-feedback role="status"></p>
+      </form>
+      <div class="admin-product-list" data-admin-products><div class="auth-empty">Loading your products...</div></div>
+    </section>
   </section>
 </main>
 
@@ -143,9 +171,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="supabase-core.js"></script>
-<script src="privacy-controls.js?v=privacy3"></script>
-<script src="script.js?v=rodman-sale1"></script>
-<script src="supabase-admin.js?v=newsletter2"></script>
+<script src="privacy-controls.js?v=california1"></script>
+<script src="script.js?v=christmas26"></script>
+<script src="supabase-admin.js?v=local-test1"></script>
 
 <script src="assets/ui/icons.js?v=redesign2"></script>
 <script src="assets/ui/catalog.js?v=fashion1"></script>

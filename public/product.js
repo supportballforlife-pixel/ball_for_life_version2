@@ -135,7 +135,6 @@
   ];
 
   function currentProductPrice(normalPrice, saleEligible = true, productId = '') {
-    if (!saleEligible) return normalPrice;
     if (window.__bfl_getSalePrice) return window.__bfl_getSalePrice(normalPrice, productId);
     return normalPrice;
   }
@@ -309,6 +308,7 @@
   }
 
   function imagePath(item, color, side) {
+    if (item.frontImage) return side === 'back' && item.backImage ? item.backImage : item.frontImage;
     if (item.imageBase) return `${item.imageBase}/${side}.webp`;
     return `graphic tee/${item.folder}/${color}/${side}.png`;
   }
@@ -319,7 +319,7 @@
 
   function priceMarkup(item) {
     if (item.originalPrice && item.originalPrice > item.price) {
-      return `<span class="sale-price-pair"><s data-money-gbp="${item.originalPrice}">${money(item.originalPrice)}</s><b data-money-gbp="${item.price}">${money(item.price)}</b><em>1 week only</em></span>`;
+      return `<span class="sale-price-pair"><s data-money-gbp="${item.originalPrice}">${money(item.originalPrice)}</s><b data-money-gbp="${item.price}">${money(item.price)}</b><em>Christmas sale · 10% off</em></span>`;
     }
     return `<b data-money-gbp="${item.price}">${money(item.price)}</b>`;
   }
@@ -328,10 +328,14 @@
     return PRODUCTS.find((item) => item.id === id) || PRODUCTS.find((item) => item.id === ALIASES[id]);
   }
 
-  function getCurrentProduct() {
+  let remoteProduct = null;
+  function requestedProductId() {
     const params = new URLSearchParams(window.location.search);
-    const rawId = (params.get('id') || '').trim().toLowerCase();
-    return byId(rawId) || PRODUCTS[0];
+    return (params.get('id') || '').trim().toLowerCase();
+  }
+
+  function getCurrentProduct() {
+    return byId(requestedProductId()) || remoteProduct || PRODUCTS[0];
   }
 
   function render() {
@@ -512,7 +516,7 @@
     const wornBy = {
       'ball-for-life-graphic-tee': ['RST', 'Essex', 'assets/ui/rst-poster.jpg', 'review-rst-name'],
       'stephen-curry-variant-2-snow-washed-oversized-cotton-t-shirt': ['T-jay', 'Reading', 'assets/community/tjay-reading-fit-thumb.webp', 'review-tjay-name'],
-      'dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt': ['KadenBruney', 'Preston', 'assets/ui/kaden-poster.jpg', 'review-kaden-name'],
+      'dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt': ['Nao', 'TikTok creator', 'assets/product-cards/dennis-rodman-fck-what-they-think-snow-washed-oversized-cotton-t-shirt-front.webp', 'review-nao-name'],
     }[item.id];
     hero.prepend(gallery);
     purchase.append(info, buy);
@@ -713,10 +717,22 @@
   window.__bfl_catalog = PRODUCTS.map(item => ({ id: item.id, name: item.name, category: item.category, kind: item.kind || 'tee', sizes: item.sizes || SIZES, summary: item.summary || 'Oversized fit - 100% cotton', saleEligible: item.saleEligible !== false, colorCount: item.colors.length, colors: item.colors.slice(0, 4).map(color => ({ name: color, label: titleFromColor(color), swatch: SWATCHES[color] || '#ddd' })) }));
   window.__bfl_tee_measurements = TEE_MEASUREMENTS;
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', render);
-  } else {
+  async function boot() {
+    const id = requestedProductId();
+    if (id && !byId(id) && window.BFL_SUPABASE_CLIENT) {
+      const { data } = await window.BFL_SUPABASE_CLIENT.from('store_products').select('*').eq('id', id).eq('active', true).maybeSingle();
+      if (data) {
+        remoteProduct = {
+          id: data.id, name: data.name, category: data.category, kind: data.kind || 'tee',
+          colors: ['black'], sizes: data.sizes || SIZES, price: Number(data.price_gbp), normalPrice: Number(data.price_gbp),
+          summary: data.summary || '', description: data.description || '', frontImage: data.front_image, backImage: data.back_image,
+          details: [['Sizes', (data.sizes || []).join(', ')]], saleEligible: true
+        };
+      }
+    }
     render();
   }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
   document.addEventListener('bfl:sale-change', render);
 })();
